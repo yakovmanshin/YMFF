@@ -23,6 +23,78 @@ final class FeatureFlagResolverTests: XCTestCase {
     
 }
 
+// MARK: - Integrated Tests
+
+extension FeatureFlagResolverTests {
+    
+    // MARK: Int Values
+    
+    func testIntValueResolution() {
+        let expectedValue = 123
+        
+        XCTAssertEqual(try resolveIntValue(for: Constants.intKey), expectedValue)
+    }
+    
+    private func resolveIntValue(for key: FeatureFlagKey) throws -> Int {
+        try resolver._value(for: key)
+    }
+    
+    // MARK: String Values
+    
+    func testStringValueResolution() {
+        let expectedValue = "STRING_VALUE_REMOTE"
+        
+        XCTAssertEqual(try resolveStringValue(for: Constants.stringKey), expectedValue)
+    }
+    
+    private func resolveStringValue(for key: FeatureFlagKey) throws -> String {
+        try resolver._value(for: key)
+    }
+    
+    // MARK: Optional Values
+    
+    func testOptionalIntNilValueResolution() {
+        do {
+            _ = try resolveOptionalValue(for: Constants.optionalIntNilKey)
+            XCTFail()
+        } catch FeatureFlagResolverError.optionalValuesNotAllowed { } catch { XCTFail() }
+    }
+    
+    func testOptionalIntNonNilValueResolution() {
+        do {
+            _ = try resolveOptionalValue(for: Constants.optionalIntNonNilKey)
+            XCTFail()
+        } catch FeatureFlagResolverError.optionalValuesNotAllowed { } catch { XCTFail() }
+    }
+    
+    private func resolveOptionalValue(for key: FeatureFlagKey) throws -> Int? {
+        try resolver._value(for: key)
+    }
+    
+    // MARK: Nonexistent Values
+
+    func testNonexistentValueResolution() throws {
+        do {
+            _ = try resolveNonexistentValue(for: Constants.nonexistentKey)
+            XCTFail()
+        } catch FeatureFlagResolverError.valueNotFound { } catch { XCTFail() }
+    }
+    
+    private func resolveNonexistentValue(for key: FeatureFlagKey) throws -> Int {
+        try resolver._value(for: key)
+    }
+    
+    // MARK: Value Type Casting
+    
+    func testValueTypeCasting() {
+        do {
+            _ = try resolveStringValue(for: Constants.intKey)
+            XCTFail()
+        } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
+    }
+    
+}
+
 // MARK: - Units
 
 extension FeatureFlagResolverTests {
