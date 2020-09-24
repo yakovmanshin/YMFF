@@ -26,6 +26,25 @@ final public class FeatureFlagResolver {
 
 extension FeatureFlagResolver {
     
+    func _value<Value>(for key: FeatureFlagKey) throws -> Value {
+        let anyValueCandidate: Any
+        let expectedType = Value.self
+        let valueCandidate: Value
+        
+        if let anyRemoteValue = try? retrieveValue(forKey: key.remoteKey, from: configuration.remoteStore) {
+            anyValueCandidate = anyRemoteValue
+        } else {
+            let anyLocalValue = try retrieveValue(forKey: key.localKey, from: configuration.localStore)
+            anyValueCandidate = anyLocalValue
+        }
+        
+        try validateValue(anyValueCandidate)
+        
+        valueCandidate = try cast(anyValueCandidate, to: expectedType)
+        
+        return valueCandidate
+    }
+    
     func retrieveValue(forKey key: String, from store: FeatureFlagStoreProtocol) throws -> Any {
         guard let value = store.value(forKey: key) else { throw FeatureFlagResolverError.valueNotFound }
         return value
