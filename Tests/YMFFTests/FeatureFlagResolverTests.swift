@@ -27,6 +27,21 @@ final class FeatureFlagResolverTests: XCTestCase {
 
 extension FeatureFlagResolverTests {
     
+    // MARK: Value Retrieval
+    
+    func testValueRetrieval() {
+        let key = "int"
+        let localStore = resolver.configuration.localStore
+        let remoteStore = resolver.configuration.remoteStore
+        
+        XCTAssertNoThrow(try resolver.retrieveValue(forKey: key, from: localStore))
+        
+        do {
+            _ = try resolver.retrieveValue(forKey: key, from: remoteStore)
+            XCTFail()
+        } catch FeatureFlagResolverError.valueNotFound { } catch { XCTFail() }
+    }
+    
     // MARK: Value Validation
     
     func testValueValidation() {

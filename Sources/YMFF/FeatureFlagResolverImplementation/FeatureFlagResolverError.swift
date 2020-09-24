@@ -9,4 +9,5 @@
 public enum FeatureFlagResolverError: Error {
     case optionalValuesNotAllowed
     case typeMismatch
+    case valueNotFound
 }

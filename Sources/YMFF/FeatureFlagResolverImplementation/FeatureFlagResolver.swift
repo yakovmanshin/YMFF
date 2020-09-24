@@ -26,6 +26,11 @@ final public class FeatureFlagResolver {
 
 extension FeatureFlagResolver {
     
+    func retrieveValue(forKey key: String, from store: FeatureFlagStoreProtocol) throws -> Any {
+        guard let value = store.value(forKey: key) else { throw FeatureFlagResolverError.valueNotFound }
+        return value
+    }
+    
     func validateValue(_ value: Any) throws {
         if valueIsOptional(value) {
             throw FeatureFlagResolverError.optionalValuesNotAllowed
