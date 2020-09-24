@@ -179,7 +179,7 @@ extension FeatureFlagResolverTests {
         
         static var configuration = FeatureFlagResolverConfiguration(
             localStore: .transparent(localStore),
-            remoteStore: .transparent(remoteStore)
+            remoteStore: .opaque(OpaqueStoreStab(store: remoteStore))
         )
         
         private static var localStore: [String : Any] { [
@@ -200,6 +200,18 @@ extension FeatureFlagResolverTests {
         static var optionalIntNonNilKey: FeatureFlagKey { .init("optionalIntNonNil") }
         static var nonexistentKey: FeatureFlagKey { .init("nonexistent") }
         
+    }
+    
+}
+
+// MARK: - Supplementary Types
+
+fileprivate struct OpaqueStoreStab: FeatureFlagStoreProtocol {
+    
+    let store: TransparentFeatureFlagStore
+    
+    func value(forKey key: String) -> Any? {
+        store[key]
     }
     
 }
