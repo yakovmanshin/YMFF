@@ -27,6 +27,20 @@ final class FeatureFlagResolverTests: XCTestCase {
 
 extension FeatureFlagResolverTests {
     
+    // MARK: Value Validation
+    
+    func testValueValidation() {
+        let nonOptionalValue = 123
+        let optionalValue: Int? = 123
+        
+        XCTAssertNoThrow(try resolver.validateValue(nonOptionalValue))
+        
+        do {
+            _ = try resolver.validateValue(optionalValue as Any)
+            XCTFail()
+        } catch FeatureFlagResolverError.optionalValuesNotAllowed { } catch { XCTFail() }
+    }
+    
     // MARK: Optionality Check
     
     func testIfValueIsOptional() {

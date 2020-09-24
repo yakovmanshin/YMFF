@@ -26,6 +26,12 @@ final public class FeatureFlagResolver {
 
 extension FeatureFlagResolver {
     
+    func validateValue(_ value: Any) throws {
+        if valueIsOptional(value) {
+            throw FeatureFlagResolverError.optionalValuesNotAllowed
+        }
+    }
+    
     func valueIsOptional(_ value: Any) -> Bool {
         value is ExpressibleByNilLiteral
     }
