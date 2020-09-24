@@ -27,6 +27,16 @@ final class FeatureFlagResolverTests: XCTestCase {
 
 extension FeatureFlagResolverTests {
     
+    // MARK: Optionality Check
+    
+    func testIfValueIsOptional() {
+        let nonOptionalValue = 123
+        let optionalValue: Int? = 123
+        
+        XCTAssertFalse(resolver.valueIsOptional(nonOptionalValue))
+        XCTAssertTrue(resolver.valueIsOptional(optionalValue as Any))
+    }
+    
     // MARK: Value Type Casting
     
     func testValueTypeCastingSuccess() {

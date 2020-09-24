@@ -26,6 +26,10 @@ final public class FeatureFlagResolver {
 
 extension FeatureFlagResolver {
     
+    func valueIsOptional(_ value: Any) -> Bool {
+        value is ExpressibleByNilLiteral
+    }
+    
     func cast<T>(_ anyValue: Any, to expectedType: T.Type) throws -> T {
         guard let value = anyValue as? T else { throw FeatureFlagResolverError.typeMismatch }
         return value
