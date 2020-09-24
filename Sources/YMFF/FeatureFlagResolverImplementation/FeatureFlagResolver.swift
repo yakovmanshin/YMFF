@@ -22,6 +22,16 @@ final public class FeatureFlagResolver {
     
 }
 
+// MARK: - FeatureFlagResolverProtocol
+
+extension FeatureFlagResolver: FeatureFlagResolverProtocol {
+    
+    func value<Value>(for key: FeatureFlagKey) -> Value? {
+        try? _value(for: key)
+    }
+    
+}
+
 // MARK: Value Resolution
 
 extension FeatureFlagResolver {

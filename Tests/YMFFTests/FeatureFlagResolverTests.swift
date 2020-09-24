@@ -32,6 +32,7 @@ extension FeatureFlagResolverTests {
     func testIntValueResolution() {
         let expectedValue = 123
         
+        XCTAssertEqual(resolver.value(for: Constants.intKey), expectedValue)
         XCTAssertEqual(try resolveIntValue(for: Constants.intKey), expectedValue)
     }
     
@@ -44,6 +45,7 @@ extension FeatureFlagResolverTests {
     func testStringValueResolution() {
         let expectedValue = "STRING_VALUE_REMOTE"
         
+        XCTAssertEqual(resolver.value(for: Constants.stringKey), expectedValue)
         XCTAssertEqual(try resolveStringValue(for: Constants.stringKey), expectedValue)
     }
     
@@ -54,6 +56,9 @@ extension FeatureFlagResolverTests {
     // MARK: Optional Values
     
     func testOptionalIntNilValueResolution() {
+        let expectedValue: Int? = nil
+        
+        XCTAssertEqual(resolver.value(for: Constants.optionalIntNilKey), expectedValue)
         do {
             _ = try resolveOptionalValue(for: Constants.optionalIntNilKey)
             XCTFail()
@@ -61,6 +66,9 @@ extension FeatureFlagResolverTests {
     }
     
     func testOptionalIntNonNilValueResolution() {
+        let expectedValue: Int? = nil
+        
+        XCTAssertEqual(resolver.value(for: Constants.optionalIntNonNilKey), expectedValue)
         do {
             _ = try resolveOptionalValue(for: Constants.optionalIntNonNilKey)
             XCTFail()
@@ -74,6 +82,9 @@ extension FeatureFlagResolverTests {
     // MARK: Nonexistent Values
 
     func testNonexistentValueResolution() throws {
+        let expectedValue: Int? = nil
+        
+        XCTAssertEqual(resolver.value(for: Constants.nonexistentKey), expectedValue)
         do {
             _ = try resolveNonexistentValue(for: Constants.nonexistentKey)
             XCTFail()
