@@ -21,3 +21,14 @@ final public class FeatureFlagResolver {
     }
     
 }
+
+// MARK: Value Resolution
+
+extension FeatureFlagResolver {
+    
+    func cast<T>(_ anyValue: Any, to expectedType: T.Type) throws -> T {
+        guard let value = anyValue as? T else { throw FeatureFlagResolverError.typeMismatch }
+        return value
+    }
+    
+}

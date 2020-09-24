@@ -23,6 +23,32 @@ final class FeatureFlagResolverTests: XCTestCase {
     
 }
 
+// MARK: - Units
+
+extension FeatureFlagResolverTests {
+    
+    // MARK: Value Type Casting
+    
+    func testValueTypeCastingSuccess() {
+        let int = 123
+        let intAsAny = int as Any
+        let targetType = Int.self
+        
+        XCTAssertEqual(try resolver.cast(intAsAny, to: targetType), int)
+    }
+    
+    func testValueTypeCastingFailure() {
+        let int = 123
+        let intAsAny = int as Any
+        let targetType = String.self
+        
+        do {
+            _ = try resolver.cast(intAsAny, to: targetType)
+            XCTFail()
+        } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
+    }
+    
+}
 // MARK: - Constants
 
 extension FeatureFlagResolverTests {
