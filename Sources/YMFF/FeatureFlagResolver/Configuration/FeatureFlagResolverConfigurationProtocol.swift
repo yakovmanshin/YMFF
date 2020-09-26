@@ -12,4 +12,6 @@ public protocol FeatureFlagResolverConfigurationProtocol {
     
     var remoteStore: FeatureFlagStoreProtocol { get }
     
+    var runtimeStore: MutableFeatureFlagStoreProtocol { get }
+    
 }
