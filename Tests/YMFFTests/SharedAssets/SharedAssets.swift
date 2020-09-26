@@ -12,11 +12,13 @@ import YMFF
 
 enum SharedAssets {
     
-    static var configuration = FeatureFlagResolverConfiguration(
-        localStore: .transparent(localStore),
-        remoteStore: .opaque(OpaqueStoreStab(store: remoteStore)),
-        runtimeStore: RuntimeOverridesStore()
-    )
+    static var configuration: FeatureFlagResolverConfiguration {
+        .init(
+            localStore: .transparent(localStore),
+            remoteStore: .opaque(OpaqueStoreStab(store: remoteStore)),
+            runtimeStore: RuntimeOverridesStore()
+        )
+    }
     
     private static var localStore: [String : Any] { [
         "bool": false,
