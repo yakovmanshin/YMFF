@@ -30,6 +30,15 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         try? _value(for: key)
     }
     
+    public func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws {
+        try validateOverrideValue(newValue, forKey: key)
+        configuration.runtimeStore.setValue(newValue, forKey: key.localKey)
+    }
+    
+    public func removeRuntimeOverride(for key: FeatureFlagKey) {
+        configuration.runtimeStore.removeValue(forKey: key.localKey)
+    }
+    
 }
 
 // MARK: Value Resolution
@@ -41,7 +50,9 @@ extension FeatureFlagResolver {
         let expectedType = Value.self
         let valueCandidate: Value
         
-        if let anyRemoteValue = try? retrieveValue(forKey: key.remoteKey, from: configuration.remoteStore) {
+        if let anyRuntimeValue = try? retrieveValue(forKey: key.localKey, from: configuration.runtimeStore) {
+            anyValueCandidate = anyRuntimeValue
+        } else if let anyRemoteValue = try? retrieveValue(forKey: key.remoteKey, from: configuration.remoteStore) {
             anyValueCandidate = anyRemoteValue
         } else {
             let anyLocalValue = try retrieveValue(forKey: key.localKey, from: configuration.localStore)
@@ -73,6 +84,23 @@ extension FeatureFlagResolver {
     func cast<T>(_ anyValue: Any, to expectedType: T.Type) throws -> T {
         guard let value = anyValue as? T else { throw FeatureFlagResolverError.typeMismatch }
         return value
+    }
+    
+}
+
+// MARK: - Runtime Overriding
+
+extension FeatureFlagResolver {
+    
+    func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
+        try validateValue(value)
+        
+        let anyStoredValue = (try? retrieveValue(forKey: key.remoteKey, from: configuration.remoteStore))
+            ?? (try? retrieveValue(forKey: key.localKey, from: configuration.localStore))
+        
+        if let anyStoredValue = anyStoredValue {
+            _ = try cast(anyStoredValue, to: Value.self)
+        }
     }
     
 }
