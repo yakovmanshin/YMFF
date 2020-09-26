@@ -6,7 +6,7 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
-protocol FeatureFlagResolverConfigurationProtocol {
+public protocol FeatureFlagResolverConfigurationProtocol {
     
     var localStore: FeatureFlagStoreProtocol { get }
     
