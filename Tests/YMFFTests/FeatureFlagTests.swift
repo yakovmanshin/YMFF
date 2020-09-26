@@ -30,6 +30,12 @@ final class FeatureFlagTests: XCTestCase {
     @FeatureFlag(SharedAssets.nonexistentKey.localKey, default: 999, resolver: resolver)
     private var nonexistentIntFeatureFlag
     
+    @FeatureFlag(SharedAssets.intToOverrideKey.remoteKey, default: 999, resolver: resolver)
+    private var overrideFlag
+    
+    @FeatureFlag("NONEXISTENT_OVERRIDE_KEY", default: 999, resolver: resolver)
+    private var nonexistentOverrideFlag
+    
 }
 
 // MARK: - Wrapped Value Tests
@@ -54,6 +60,22 @@ extension FeatureFlagTests {
     
     func testNonexistentIntWrappedValue() {
         XCTAssertEqual(nonexistentIntFeatureFlag, 999)
+    }
+    
+    func testWrappedValueOverride() {
+        XCTAssertEqual(overrideFlag, 456)
+        
+        overrideFlag = 789
+        
+        XCTAssertEqual(overrideFlag, 789)
+    }
+    
+    func testNonexistentWrappedValueOverride() {
+        XCTAssertEqual(nonexistentOverrideFlag, 999)
+        
+        nonexistentOverrideFlag = 789
+        
+        XCTAssertEqual(nonexistentOverrideFlag, 789)
     }
     
 }
