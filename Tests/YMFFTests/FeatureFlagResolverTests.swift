@@ -18,7 +18,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        resolver = FeatureFlagResolver(configuration: Constants.configuration)
+        resolver = FeatureFlagResolver(configuration: SharedAssets.configuration)
     }
     
 }
@@ -32,8 +32,8 @@ extension FeatureFlagResolverTests {
     func testIntValueResolution() {
         let expectedValue = 123
         
-        XCTAssertEqual(resolver.value(for: Constants.intKey), expectedValue)
-        XCTAssertEqual(try resolveIntValue(for: Constants.intKey), expectedValue)
+        XCTAssertEqual(resolver.value(for: SharedAssets.intKey), expectedValue)
+        XCTAssertEqual(try resolveIntValue(for: SharedAssets.intKey), expectedValue)
     }
     
     private func resolveIntValue(for key: FeatureFlagKey) throws -> Int {
@@ -45,8 +45,8 @@ extension FeatureFlagResolverTests {
     func testStringValueResolution() {
         let expectedValue = "STRING_VALUE_REMOTE"
         
-        XCTAssertEqual(resolver.value(for: Constants.stringKey), expectedValue)
-        XCTAssertEqual(try resolveStringValue(for: Constants.stringKey), expectedValue)
+        XCTAssertEqual(resolver.value(for: SharedAssets.stringKey), expectedValue)
+        XCTAssertEqual(try resolveStringValue(for: SharedAssets.stringKey), expectedValue)
     }
     
     private func resolveStringValue(for key: FeatureFlagKey) throws -> String {
@@ -58,9 +58,9 @@ extension FeatureFlagResolverTests {
     func testOptionalIntNilValueResolution() {
         let expectedValue: Int? = nil
         
-        XCTAssertEqual(resolver.value(for: Constants.optionalIntNilKey), expectedValue)
+        XCTAssertEqual(resolver.value(for: SharedAssets.optionalIntNilKey), expectedValue)
         do {
-            _ = try resolveOptionalValue(for: Constants.optionalIntNilKey)
+            _ = try resolveOptionalValue(for: SharedAssets.optionalIntNilKey)
             XCTFail()
         } catch FeatureFlagResolverError.optionalValuesNotAllowed { } catch { XCTFail() }
     }
@@ -68,9 +68,9 @@ extension FeatureFlagResolverTests {
     func testOptionalIntNonNilValueResolution() {
         let expectedValue: Int? = nil
         
-        XCTAssertEqual(resolver.value(for: Constants.optionalIntNonNilKey), expectedValue)
+        XCTAssertEqual(resolver.value(for: SharedAssets.optionalIntNonNilKey), expectedValue)
         do {
-            _ = try resolveOptionalValue(for: Constants.optionalIntNonNilKey)
+            _ = try resolveOptionalValue(for: SharedAssets.optionalIntNonNilKey)
             XCTFail()
         } catch FeatureFlagResolverError.optionalValuesNotAllowed { } catch { XCTFail() }
     }
@@ -84,9 +84,9 @@ extension FeatureFlagResolverTests {
     func testNonexistentValueResolution() throws {
         let expectedValue: Int? = nil
         
-        XCTAssertEqual(resolver.value(for: Constants.nonexistentKey), expectedValue)
+        XCTAssertEqual(resolver.value(for: SharedAssets.nonexistentKey), expectedValue)
         do {
-            _ = try resolveNonexistentValue(for: Constants.nonexistentKey)
+            _ = try resolveNonexistentValue(for: SharedAssets.nonexistentKey)
             XCTFail()
         } catch FeatureFlagResolverError.valueNotFound { } catch { XCTFail() }
     }
@@ -99,7 +99,7 @@ extension FeatureFlagResolverTests {
     
     func testValueTypeCasting() {
         do {
-            _ = try resolveStringValue(for: Constants.intKey)
+            _ = try resolveStringValue(for: SharedAssets.intKey)
             XCTFail()
         } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
     }
@@ -168,50 +168,6 @@ extension FeatureFlagResolverTests {
             _ = try resolver.cast(intAsAny, to: targetType)
             XCTFail()
         } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
-    }
-    
-}
-// MARK: - Constants
-
-extension FeatureFlagResolverTests {
-    
-    private enum Constants {
-        
-        static var configuration = FeatureFlagResolverConfiguration(
-            localStore: .transparent(localStore),
-            remoteStore: .opaque(OpaqueStoreStab(store: remoteStore))
-        )
-        
-        private static var localStore: [String : Any] { [
-            "int": 123,
-            "string": "STRING_VALUE_LOCAL",
-            "optionalIntNonNil": Optional<Int>.some(123) as Any
-        ] }
-        
-        private static var remoteStore: [String : Any] { [
-            "string": "STRING_VALUE_REMOTE",
-            "optionalIntNil": Optional<Int>.none as Any,
-            "optionalIntNonNil": Optional<Int>.some(456) as Any
-        ] }
-        
-        static var intKey: FeatureFlagKey { .init("int") }
-        static var stringKey: FeatureFlagKey { .init("string") }
-        static var optionalIntNilKey: FeatureFlagKey { .init("optionalIntNil") }
-        static var optionalIntNonNilKey: FeatureFlagKey { .init("optionalIntNonNil") }
-        static var nonexistentKey: FeatureFlagKey { .init("nonexistent") }
-        
-    }
-    
-}
-
-// MARK: - Supplementary Types
-
-fileprivate struct OpaqueStoreStab: FeatureFlagStoreProtocol {
-    
-    let store: TransparentFeatureFlagStore
-    
-    func value(forKey key: String) -> Any? {
-        store[key]
     }
     
 }
