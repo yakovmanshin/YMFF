@@ -10,8 +10,8 @@
 
 public struct FeatureFlagResolverConfiguration {
     
-    let localStore: FeatureFlagStoreProtocol
-    let remoteStore: FeatureFlagStoreProtocol
+    public let localStore: FeatureFlagStoreProtocol
+    public let remoteStore: FeatureFlagStoreProtocol
     
     public init(localStore: FeatureFlagStore, remoteStore: FeatureFlagStore) {
         self.localStore = localStore

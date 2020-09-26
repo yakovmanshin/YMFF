@@ -12,7 +12,7 @@ final public class FeatureFlagResolver {
     
     // MARK: Properties
     
-    let configuration: FeatureFlagResolverConfigurationProtocol
+    public let configuration: FeatureFlagResolverConfigurationProtocol
     
     // MARK: Initializers
     
@@ -26,7 +26,7 @@ final public class FeatureFlagResolver {
 
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
-    func value<Value>(for key: FeatureFlagKey) -> Value? {
+    public func value<Value>(for key: FeatureFlagKey) -> Value? {
         try? _value(for: key)
     }
     
