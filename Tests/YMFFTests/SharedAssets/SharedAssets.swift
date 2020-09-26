@@ -12,23 +12,28 @@ import YMFF
 
 enum SharedAssets {
     
-    static var configuration = FeatureFlagResolverConfiguration(
-        localStore: .transparent(localStore),
-        remoteStore: .opaque(OpaqueStoreStab(store: remoteStore))
-    )
+    static var configuration: FeatureFlagResolverConfiguration {
+        .init(
+            localStore: .transparent(localStore),
+            remoteStore: .opaque(OpaqueStoreStab(store: remoteStore)),
+            runtimeStore: RuntimeOverridesStore()
+        )
+    }
     
     private static var localStore: [String : Any] { [
         "bool": false,
         "int": 123,
         "string": "STRING_VALUE_LOCAL",
-        "optionalIntNonNil": Optional<Int>.some(123) as Any
+        "optionalIntNonNil": Optional<Int>.some(123) as Any,
+        "intToOverride": 123,
     ] }
     
     private static var remoteStore: [String : Any] { [
         "bool": true,
         "string": "STRING_VALUE_REMOTE",
         "optionalIntNil": Optional<Int>.none as Any,
-        "optionalIntNonNil": Optional<Int>.some(456) as Any
+        "optionalIntNonNil": Optional<Int>.some(456) as Any,
+        "intToOverride": 456,
     ] }
     
     static var boolKey: FeatureFlagKey { .init("bool") }
@@ -37,6 +42,7 @@ enum SharedAssets {
     static var optionalIntNilKey: FeatureFlagKey { .init("optionalIntNil") }
     static var optionalIntNonNilKey: FeatureFlagKey { .init("optionalIntNonNil") }
     static var nonexistentKey: FeatureFlagKey { .init("nonexistent") }
+    static var intToOverrideKey: FeatureFlagKey { .init("intToOverride") }
     
 }
 

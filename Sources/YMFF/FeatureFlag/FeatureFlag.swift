@@ -30,7 +30,11 @@ public struct FeatureFlag<Value> {
     // MARK: Wrapped Value
     
     public var wrappedValue: Value {
-        resolver.value(for: key) ?? defaultValue
+        get {
+            resolver.value(for: key) ?? defaultValue
+        } set {
+            try? resolver.overrideInRuntime(key, with: newValue)
+        }
     }
     
 }

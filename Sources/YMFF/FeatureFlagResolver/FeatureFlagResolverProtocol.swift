@@ -12,4 +12,8 @@ public protocol FeatureFlagResolverProtocol {
     
     func value<Value>(for key: FeatureFlagKey) -> Value?
     
+    func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws
+    
+    func removeRuntimeOverride(for key: FeatureFlagKey)
+    
 }
