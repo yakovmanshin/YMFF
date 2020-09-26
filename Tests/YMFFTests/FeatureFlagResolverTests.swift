@@ -104,6 +104,49 @@ extension FeatureFlagResolverTests {
         } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
     }
     
+    // MARK: Runtime Override
+    
+    func testRuntimeOverrideSuccess() {
+        let key = SharedAssets.intKey
+        let originalValue = 123
+        let overrideValue = 789
+        
+        XCTAssertEqual(resolver.value(for: key), originalValue)
+        
+        XCTAssertNoThrow(try resolver.overrideInRuntime(key, with: overrideValue))
+        
+        XCTAssertEqual(resolver.value(for: key), overrideValue)
+        
+        resolver.removeRuntimeOverride(for: key)
+        
+        XCTAssertEqual(resolver.value(for: key), originalValue)
+    }
+    
+    func testRuntimeOverrideFailure() {
+        let key = SharedAssets.stringKey
+        let overrideValue = 789
+        
+        XCTAssertEqual(resolver.value(for: key), "STRING_VALUE_REMOTE")
+        
+        do {
+            _ = try resolver.overrideInRuntime(key, with: overrideValue)
+            XCTFail()
+        } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
+        
+        XCTAssertEqual(resolver.value(for: key), "STRING_VALUE_REMOTE")
+    }
+    
+    func testRuntimeOverrideForNewKeys() {
+        let key = FeatureFlagKey("NEW_KEY")
+        let overrideValue = 789
+        
+        XCTAssertNil(resolver.value(for: key))
+        
+        XCTAssertNoThrow(try resolver.overrideInRuntime(key, with: overrideValue))
+        
+        XCTAssertEqual(resolver.value(for: key), overrideValue)
+    }
+    
 }
 
 // MARK: - Units
@@ -168,6 +211,35 @@ extension FeatureFlagResolverTests {
             _ = try resolver.cast(intAsAny, to: targetType)
             XCTFail()
         } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
+    }
+    
+    // MARK: Override Value Validation
+    
+    func testOverrideValueValidationSuccess() {
+        let overrideValue = 789
+        let intKey = SharedAssets.intKey
+        
+        XCTAssertNoThrow(try resolver.validateOverrideValue(overrideValue, forKey: intKey))
+    }
+    
+    func testOverrideValueValidationFailureOptional() {
+        let overrideValue = 789
+        let stringKey = SharedAssets.stringKey
+        
+        do {
+            try resolver.validateOverrideValue(overrideValue, forKey: stringKey)
+            XCTFail()
+        } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
+    }
+    
+    func testOverrideValueValidationFailureTypeMismatch() {
+        let overrideValue: Int? = 789
+        let stringKey = SharedAssets.intKey
+        
+        do {
+            try resolver.validateOverrideValue(overrideValue, forKey: stringKey)
+            XCTFail()
+        } catch FeatureFlagResolverError.optionalValuesNotAllowed { } catch { XCTFail() }
     }
     
 }
