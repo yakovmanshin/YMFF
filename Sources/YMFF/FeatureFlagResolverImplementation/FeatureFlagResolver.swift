@@ -8,6 +8,7 @@
 
 // MARK: - FeatureFlagResolver
 
+/// A concrete, YMFF-supplied implementation of the feature flag resolver.
 final public class FeatureFlagResolver {
     
     // MARK: Properties
