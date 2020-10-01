@@ -8,6 +8,7 @@
 
 // MARK: - FeatureFlagStore
 
+/// An object that provides a number of ways to supply the feature flag store.
 public enum FeatureFlagStore {
     case opaque(FeatureFlagStoreProtocol)
     case transparent(TransparentFeatureFlagStore)
