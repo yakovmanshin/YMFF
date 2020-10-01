@@ -6,6 +6,7 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+/// An object that facilitates access to feature flag values.
 @propertyWrapper
 public struct FeatureFlag<Value> {
     
@@ -17,6 +18,12 @@ public struct FeatureFlag<Value> {
     
     // MARK: Initializers
     
+    /// Creates a new `FeatureFlag`.
+    ///
+    /// - Parameters:
+    ///   - keyString: *Required.* The string used to address feature flag values in both the local and remote stores.
+    ///   - defaultValue: *Required.* The value returned in case both the local and remote stores failed to provide values by the key.
+    ///   - resolver: *Required.* The resolver object used to retrieve values from the stores.
     public init(
         _ keyString: String,
         default defaultValue: Value,
@@ -29,6 +36,7 @@ public struct FeatureFlag<Value> {
     
     // MARK: Wrapped Value
     
+    /// The resolved value of the feature flag.
     public var wrappedValue: Value {
         get {
             resolver.value(for: key) ?? defaultValue
