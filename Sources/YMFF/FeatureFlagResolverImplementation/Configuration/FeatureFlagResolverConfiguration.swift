@@ -8,6 +8,7 @@
 
 // MARK: - FeatureFlagResolverConfiguration
 
+/// A YMFF-supplied object used to provide the feature flag resolver with its configuration.
 public struct FeatureFlagResolverConfiguration {
     
     public let localStore: FeatureFlagStoreProtocol
