@@ -9,11 +9,9 @@
 /// A structure that contains information about the keys used to retrieve feature flag values from the corresponding stores.
 public struct FeatureFlagKey {
     
-    let localKey: String
     let remoteKey: String
     
-    private init(local localKey: String, remote remoteKey: String) {
-        self.localKey = localKey
+    private init(remote remoteKey: String) {
         self.remoteKey = remoteKey
     }
     
@@ -21,7 +19,7 @@ public struct FeatureFlagKey {
     ///
     /// - Parameter key: *Required.* The key to use for value retrieval.
     public init(_ key: String) {
-        self.init(local: key, remote: key)
+        self.init(remote: key)
     }
     
 }
