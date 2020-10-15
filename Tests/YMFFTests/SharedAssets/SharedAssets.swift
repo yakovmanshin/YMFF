@@ -13,10 +13,7 @@ import YMFF
 enum SharedAssets {
     
     static var configuration: FeatureFlagResolverConfiguration {
-        .init(
-            localStore: .transparent(localStore),
-            remoteStore: .opaque(OpaqueStoreStab(store: remoteStore))
-        )
+        .init(persistentStores: [.opaque(OpaqueStoreStab(store: remoteStore)), .transparent(localStore)])
     }
     
     private static var localStore: [String : Any] { [

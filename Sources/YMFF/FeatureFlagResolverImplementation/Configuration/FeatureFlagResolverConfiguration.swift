@@ -11,17 +11,14 @@
 /// A YMFF-supplied object used to provide the feature flag resolver with its configuration.
 public struct FeatureFlagResolverConfiguration {
     
-    public let localStore: FeatureFlagStoreProtocol
-    public let remoteStore: FeatureFlagStoreProtocol
+    public let persistentStores: [FeatureFlagStoreProtocol]
     public let runtimeStore: MutableFeatureFlagStoreProtocol
     
     public init(
-        localStore: FeatureFlagStore,
-        remoteStore: FeatureFlagStore,
+        persistentStores: [FeatureFlagStore],
         runtimeStore: MutableFeatureFlagStoreProtocol = RuntimeOverridesStore()
     ) {
-        self.localStore = localStore
-        self.remoteStore = remoteStore
+        self.persistentStores = persistentStores
         self.runtimeStore = runtimeStore
     }
     
