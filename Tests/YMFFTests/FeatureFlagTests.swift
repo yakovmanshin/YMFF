@@ -15,19 +15,19 @@ final class FeatureFlagTests: XCTestCase {
     
     private static let resolver: FeatureFlagResolverProtocol = FeatureFlagResolver(configuration: SharedAssets.configuration)
     
-    @FeatureFlag(SharedAssets.boolKey.localKey, default: false, resolver: resolver)
+    @FeatureFlag(SharedAssets.boolKey.remoteKey, default: false, resolver: resolver)
     private var boolFeatureFlag
     
-    @FeatureFlag(SharedAssets.intKey.localKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.intKey.remoteKey, default: 999, resolver: resolver)
     private var intFeatureFlag
     
-    @FeatureFlag(SharedAssets.stringKey.localKey, default: "FALLBACK_STRING", resolver: resolver)
+    @FeatureFlag(SharedAssets.stringKey.remoteKey, default: "FALLBACK_STRING", resolver: resolver)
     private var stringFeatureFlag
     
-    @FeatureFlag(SharedAssets.optionalIntNonNilKey.localKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.optionalIntNonNilKey.remoteKey, default: 999, resolver: resolver)
     private var optionalIntFeatureFlag
     
-    @FeatureFlag(SharedAssets.nonexistentKey.localKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.nonexistentKey.remoteKey, default: 999, resolver: resolver)
     private var nonexistentIntFeatureFlag
     
     @FeatureFlag(SharedAssets.intToOverrideKey.remoteKey, default: 999, resolver: resolver)

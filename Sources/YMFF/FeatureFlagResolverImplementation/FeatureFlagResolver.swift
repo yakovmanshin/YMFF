@@ -33,11 +33,11 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws {
         try validateOverrideValue(newValue, forKey: key)
-        configuration.runtimeStore.setValue(newValue, forKey: key.localKey)
+        configuration.runtimeStore.setValue(newValue, forKey: key.remoteKey)
     }
     
     public func removeRuntimeOverride(for key: FeatureFlagKey) {
-        configuration.runtimeStore.removeValue(forKey: key.localKey)
+        configuration.runtimeStore.removeValue(forKey: key.remoteKey)
     }
     
 }
@@ -51,10 +51,10 @@ extension FeatureFlagResolver {
         let expectedType = Value.self
         let valueCandidate: Value
         
-        if let anyRuntimeValue = try? retrieveValue(forKey: key.localKey, from: configuration.runtimeStore) {
+        if let anyRuntimeValue = try? retrieveValue(forKey: key.remoteKey, from: configuration.runtimeStore) {
             anyValueCandidate = anyRuntimeValue
         } else {
-            let anyPersistentValue = try retrieveValueFromFirstStore(of: configuration.persistentStores, containingKey: key.localKey)
+            let anyPersistentValue = try retrieveValueFromFirstStore(of: configuration.persistentStores, containingKey: key.remoteKey)
             anyValueCandidate = anyPersistentValue
         }
         
@@ -104,7 +104,7 @@ extension FeatureFlagResolver {
     func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
         try validateValue(value)
         
-        let anyPersistentValue = try? retrieveValueFromFirstStore(of: configuration.persistentStores, containingKey: key.localKey)
+        let anyPersistentValue = try? retrieveValueFromFirstStore(of: configuration.persistentStores, containingKey: key.remoteKey)
         
         if let anyPersistentValue = anyPersistentValue {
             _ = try cast(anyPersistentValue, to: Value.self)
