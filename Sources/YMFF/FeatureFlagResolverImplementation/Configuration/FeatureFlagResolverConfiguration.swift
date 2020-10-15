@@ -18,7 +18,7 @@ public struct FeatureFlagResolverConfiguration {
     public init(
         localStore: FeatureFlagStore,
         remoteStore: FeatureFlagStore,
-        runtimeStore: MutableFeatureFlagStoreProtocol
+        runtimeStore: MutableFeatureFlagStoreProtocol = RuntimeOverridesStore()
     ) {
         self.localStore = localStore
         self.remoteStore = remoteStore
