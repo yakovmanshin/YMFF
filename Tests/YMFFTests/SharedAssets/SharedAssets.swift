@@ -16,6 +16,10 @@ enum SharedAssets {
         .init(persistentStores: [.opaque(OpaqueStoreStab(store: remoteStore)), .transparent(localStore)])
     }
     
+    static var configurationWithNoPersistentStores: FeatureFlagResolverConfiguration {
+        .init(persistentStores: [])
+    }
+    
     private static var localStore: [String : Any] { [
         "bool": false,
         "int": 123,

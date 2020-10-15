@@ -71,6 +71,8 @@ extension FeatureFlagResolver {
     }
     
     func retrieveValueFromFirstStore(of stores: [FeatureFlagStoreProtocol], containingKey key: String) throws -> Any {
+        guard !stores.isEmpty else { throw FeatureFlagResolverError.persistentStoresIsEmpty }
+        
         for store in stores {
             if let value = store.value(forKey: key) {
                 return value
