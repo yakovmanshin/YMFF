@@ -88,7 +88,7 @@ extension FeatureFlagResolverTests {
         do {
             _ = try resolveNonexistentValue(for: SharedAssets.nonexistentKey)
             XCTFail()
-        } catch FeatureFlagResolverError.valueNotFound { } catch { XCTFail() }
+        } catch FeatureFlagResolverError.noStoreContainsValueForKey { } catch { XCTFail() }
     }
     
     private func resolveNonexistentValue(for key: FeatureFlagKey) throws -> Int {
@@ -157,15 +157,8 @@ extension FeatureFlagResolverTests {
     
     func testValueRetrieval() {
         let key = "int"
-        let localStore = resolver.configuration.localStore
-        let remoteStore = resolver.configuration.remoteStore
         
-        XCTAssertNoThrow(try resolver.retrieveValue(forKey: key, from: localStore))
-        
-        do {
-            _ = try resolver.retrieveValue(forKey: key, from: remoteStore)
-            XCTFail()
-        } catch FeatureFlagResolverError.valueNotFound { } catch { XCTFail() }
+        XCTAssertNoThrow(try resolver.retrieveValueFromFirstStore(of: resolver.configuration.persistentStores, containingKey: key))
     }
     
     // MARK: Value Validation
