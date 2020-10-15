@@ -15,8 +15,7 @@ enum SharedAssets {
     static var configuration: FeatureFlagResolverConfiguration {
         .init(
             localStore: .transparent(localStore),
-            remoteStore: .opaque(OpaqueStoreStab(store: remoteStore)),
-            runtimeStore: RuntimeOverridesStore()
+            remoteStore: .opaque(OpaqueStoreStab(store: remoteStore))
         )
     }
     
