@@ -68,7 +68,7 @@ extension FeatureFlagResolver {
     }
     
     func retrieveValue(forKey key: String, from store: FeatureFlagStoreProtocol) throws -> Any {
-        guard let value = store.value(forKey: key) else { throw FeatureFlagResolverError.valueNotFound }
+        guard let value = store.value(forKey: key) else { throw FeatureFlagResolverError.valueNotFoundInSpecificStore }
         return value
     }
     
