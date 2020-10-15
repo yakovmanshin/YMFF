@@ -8,7 +8,9 @@
 
 /// Errors returned by `FeatureFlagResolver`.
 public enum FeatureFlagResolverError: Error {
+    case noStoreContainsValueForKey
     case optionalValuesNotAllowed
+    case persistentStoresIsEmpty
     case typeMismatch
-    case valueNotFound
+    case valueNotFoundInSpecificStore
 }

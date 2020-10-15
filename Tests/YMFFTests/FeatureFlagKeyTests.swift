@@ -16,7 +16,6 @@ final class FeatureFlagKeyTests: XCTestCase {
         
         let featureFlagKey = FeatureFlagKey(keyString)
         
-        XCTAssertEqual(featureFlagKey.localKey, keyString)
         XCTAssertEqual(featureFlagKey.remoteKey, keyString)
     }
     
