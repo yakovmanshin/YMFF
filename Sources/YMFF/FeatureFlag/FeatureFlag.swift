@@ -21,15 +21,15 @@ public struct FeatureFlag<Value> {
     /// Creates a new `FeatureFlag`.
     ///
     /// - Parameters:
-    ///   - keyString: *Required.* The string used to address feature flag values in both the local and remote stores.
+    ///   - key: *Required.* The string used to address feature flag values in both the local and remote stores.
     ///   - defaultValue: *Required.* The value returned in case both the local and remote stores failed to provide values by the key.
     ///   - resolver: *Required.* The resolver object used to retrieve values from the stores.
     public init(
-        _ keyString: String,
+        _ key: String,
         default defaultValue: Value,
         resolver: FeatureFlagResolverProtocol
     ) {
-        self.key = FeatureFlagKey(keyString)
+        self.key = key
         self.defaultValue = defaultValue
         self.resolver = resolver
     }
