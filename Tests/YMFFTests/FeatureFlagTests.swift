@@ -15,22 +15,22 @@ final class FeatureFlagTests: XCTestCase {
     
     private static let resolver: FeatureFlagResolverProtocol = FeatureFlagResolver(configuration: SharedAssets.configuration)
     
-    @FeatureFlag(SharedAssets.boolKey.remoteKey, default: false, resolver: resolver)
+    @FeatureFlag(SharedAssets.boolKey, default: false, resolver: resolver)
     private var boolFeatureFlag
     
-    @FeatureFlag(SharedAssets.intKey.remoteKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.intKey, default: 999, resolver: resolver)
     private var intFeatureFlag
     
-    @FeatureFlag(SharedAssets.stringKey.remoteKey, default: "FALLBACK_STRING", resolver: resolver)
+    @FeatureFlag(SharedAssets.stringKey, default: "FALLBACK_STRING", resolver: resolver)
     private var stringFeatureFlag
     
-    @FeatureFlag(SharedAssets.optionalIntNonNilKey.remoteKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.optionalIntNonNilKey, default: 999, resolver: resolver)
     private var optionalIntFeatureFlag
     
-    @FeatureFlag(SharedAssets.nonexistentKey.remoteKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.nonexistentKey, default: 999, resolver: resolver)
     private var nonexistentIntFeatureFlag
     
-    @FeatureFlag(SharedAssets.intToOverrideKey.remoteKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.intToOverrideKey, default: 999, resolver: resolver)
     private var overrideFlag
     
     @FeatureFlag("NONEXISTENT_OVERRIDE_KEY", default: 999, resolver: resolver)

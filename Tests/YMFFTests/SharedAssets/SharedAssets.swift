@@ -36,13 +36,13 @@ enum SharedAssets {
         "intToOverride": 456,
     ] }
     
-    static var boolKey: FeatureFlagKey { .init("bool") }
-    static var intKey: FeatureFlagKey { .init("int") }
-    static var stringKey: FeatureFlagKey { .init("string") }
-    static var optionalIntNilKey: FeatureFlagKey { .init("optionalIntNil") }
-    static var optionalIntNonNilKey: FeatureFlagKey { .init("optionalIntNonNil") }
-    static var nonexistentKey: FeatureFlagKey { .init("nonexistent") }
-    static var intToOverrideKey: FeatureFlagKey { .init("intToOverride") }
+    static var boolKey: FeatureFlagKey { "bool" }
+    static var intKey: FeatureFlagKey { "int" }
+    static var stringKey: FeatureFlagKey { "string" }
+    static var optionalIntNilKey: FeatureFlagKey { "optionalIntNil" }
+    static var optionalIntNonNilKey: FeatureFlagKey { "optionalIntNonNil" }
+    static var nonexistentKey: FeatureFlagKey { "nonexistent" }
+    static var intToOverrideKey: FeatureFlagKey { "intToOverride" }
     
 }
 
