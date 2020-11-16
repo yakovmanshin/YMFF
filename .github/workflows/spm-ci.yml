@@ -5,11 +5,11 @@ on: [pull_request, push]
 jobs:
   test:
     
-    runs-on: macos-latest
+    runs-on: macos-11.0
     
     steps:
     - uses: actions/checkout@v2
     - name: Select Xcode version
-      run: sudo xcode-select -switch /Applications/Xcode_12.app
+      run: sudo xcode-select -switch /Applications/Xcode_12.2.app
     - name: Run tests
       run: swift test -v
