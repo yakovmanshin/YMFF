@@ -66,7 +66,7 @@ extension FeatureFlagResolver {
     }
     
     func retrieveValue(forKey key: String, from store: FeatureFlagStoreProtocol) throws -> Any {
-        guard let value = store.value(forKey: key) else { throw FeatureFlagResolverError.valueNotFoundInSpecificStore }
+        guard let value: Any = store.value(forKey: key) else { throw FeatureFlagResolverError.valueNotFoundInSpecificStore }
         return value
     }
     
@@ -74,7 +74,7 @@ extension FeatureFlagResolver {
         guard !stores.isEmpty else { throw FeatureFlagResolverError.persistentStoresIsEmpty }
         
         for store in stores {
-            if let value = store.value(forKey: key) {
+            if let value: Any = store.value(forKey: key) {
                 return value
             }
         }

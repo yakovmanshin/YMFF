@@ -18,12 +18,12 @@ public enum FeatureFlagStore {
 
 extension FeatureFlagStore: FeatureFlagStoreProtocol {
     
-    public func value(forKey key: String) -> Any? {
+    public func value<Value>(forKey key: String) -> Value? {
         switch self {
         case .opaque(let store):
             return store.value(forKey: key)
         case .transparent(let store):
-            return store[key]
+            return store[key] as? Value
         }
     }
     
