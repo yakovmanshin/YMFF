@@ -24,7 +24,7 @@ final class FeatureFlagTests: XCTestCase {
     @FeatureFlag(SharedAssets.stringKey, default: "FALLBACK_STRING", resolver: resolver)
     private var stringFeatureFlag
     
-    @FeatureFlag(SharedAssets.optionalIntNonNilKey, default: 999, resolver: resolver)
+    @FeatureFlag(SharedAssets.optionalIntKey, default: 999 as Int?, resolver: resolver)
     private var optionalIntFeatureFlag
     
     @FeatureFlag(SharedAssets.nonexistentKey, default: 999, resolver: resolver)

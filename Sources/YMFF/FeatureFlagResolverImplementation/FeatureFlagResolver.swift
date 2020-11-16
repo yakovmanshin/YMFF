@@ -27,8 +27,11 @@ final public class FeatureFlagResolver {
 
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
-    public func value<Value>(for key: FeatureFlagKey) -> Value? {
-        try? _value(for: key)
+    public func value<Value>(for key: FeatureFlagKey) throws -> Value {
+        let retrievedValue: Value = try retrieveValue(forKey: key)
+        try validateValue(retrievedValue)
+        
+        return retrievedValue
     }
     
     public func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws {
@@ -46,55 +49,38 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 
 extension FeatureFlagResolver {
     
-    func _value<Value>(for key: FeatureFlagKey) throws -> Value {
-        let anyValueCandidate: Any
-        let expectedType = Value.self
-        let valueCandidate: Value
-        
-        if let anyRuntimeValue = try? retrieveValue(forKey: key, from: configuration.runtimeStore) {
-            anyValueCandidate = anyRuntimeValue
-        } else {
-            let anyPersistentValue = try retrieveValueFromFirstStore(of: configuration.persistentStores, containingKey: key)
-            anyValueCandidate = anyPersistentValue
+    func retrieveValue<Value>(forKey key: String) throws -> Value {
+        if let runtimeValue: Value = configuration.runtimeStore.value(forKey: key) {
+            return runtimeValue
         }
         
-        try validateValue(anyValueCandidate)
-        
-        valueCandidate = try cast(anyValueCandidate, to: expectedType)
-        
-        return valueCandidate
+        return try retrieveFirstValueFoundInPersistentStores(byKey: key)
     }
     
-    func retrieveValue(forKey key: String, from store: FeatureFlagStoreProtocol) throws -> Any {
-        guard let value = store.value(forKey: key) else { throw FeatureFlagResolverError.valueNotFoundInSpecificStore }
-        return value
-    }
-    
-    func retrieveValueFromFirstStore(of stores: [FeatureFlagStoreProtocol], containingKey key: String) throws -> Any {
-        guard !stores.isEmpty else { throw FeatureFlagResolverError.persistentStoresIsEmpty }
+    func retrieveFirstValueFoundInPersistentStores<Value>(byKey key: String) throws -> Value {
+        let stores = configuration.persistentStores
+        
+        guard !stores.isEmpty else {
+            throw FeatureFlagResolverError.noPersistentStoreAvailable
+        }
         
         for store in stores {
-            if let value = store.value(forKey: key) {
+            if let value: Value = store.value(forKey: key) {
                 return value
             }
         }
         
-        throw FeatureFlagResolverError.noStoreContainsValueForKey
+        throw FeatureFlagResolverError.valueNotFoundInPersistentStores(key: key)
     }
     
-    func validateValue(_ value: Any) throws {
+    func validateValue<Value>(_ value: Value) throws {
         if valueIsOptional(value) {
             throw FeatureFlagResolverError.optionalValuesNotAllowed
         }
     }
     
-    func valueIsOptional(_ value: Any) -> Bool {
+    func valueIsOptional<Value>(_ value: Value) -> Bool {
         value is ExpressibleByNilLiteral
-    }
-    
-    func cast<T>(_ anyValue: Any, to expectedType: T.Type) throws -> T {
-        guard let value = anyValue as? T else { throw FeatureFlagResolverError.typeMismatch }
-        return value
     }
     
 }
@@ -106,10 +92,11 @@ extension FeatureFlagResolver {
     func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
         try validateValue(value)
         
-        let anyPersistentValue = try? retrieveValueFromFirstStore(of: configuration.persistentStores, containingKey: key)
         
-        if let anyPersistentValue = anyPersistentValue {
-            _ = try cast(anyPersistentValue, to: Value.self)
+        if let anyPersistentValue: Any = try retrieveFirstValueFoundInPersistentStores(byKey: key),
+           (anyPersistentValue as? Value) == nil
+        {
+            throw FeatureFlagResolverError.typeMismatch
         }
     }
     

@@ -24,23 +24,21 @@ enum SharedAssets {
         "bool": false,
         "int": 123,
         "string": "STRING_VALUE_LOCAL",
-        "optionalIntNonNil": Optional<Int>.some(123) as Any,
+        "optionalInt": Optional<Int>.some(123) as Any,
         "intToOverride": 123,
     ] }
     
     private static var remoteStore: [String : Any] { [
         "bool": true,
         "string": "STRING_VALUE_REMOTE",
-        "optionalIntNil": Optional<Int>.none as Any,
-        "optionalIntNonNil": Optional<Int>.some(456) as Any,
+        "optionalInt": Optional<Int>.none as Any,
         "intToOverride": 456,
     ] }
     
     static var boolKey: FeatureFlagKey { "bool" }
     static var intKey: FeatureFlagKey { "int" }
     static var stringKey: FeatureFlagKey { "string" }
-    static var optionalIntNilKey: FeatureFlagKey { "optionalIntNil" }
-    static var optionalIntNonNilKey: FeatureFlagKey { "optionalIntNonNil" }
+    static var optionalIntKey: FeatureFlagKey { "optionalInt" }
     static var nonexistentKey: FeatureFlagKey { "nonexistent" }
     static var intToOverrideKey: FeatureFlagKey { "intToOverride" }
     
@@ -52,8 +50,8 @@ fileprivate struct OpaqueStoreStab: FeatureFlagStoreProtocol {
     
     let store: TransparentFeatureFlagStore
     
-    func value(forKey key: String) -> Any? {
-        store[key]
+    func value<Value>(forKey key: String) -> Value? {
+        store[key] as? Value
     }
     
 }

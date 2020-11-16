@@ -14,7 +14,7 @@ public protocol MutableFeatureFlagStoreProtocol: AnyObject, FeatureFlagStoreProt
     /// - Parameters:
     ///   - value: *Required.* The value to record.
     ///   - key: *Required.* The key used to address the value.
-    func setValue(_ value: Any, forKey key: String)
+    func setValue<Value>(_ value: Value, forKey key: String)
     
     /// Removes the value from the store.
     ///

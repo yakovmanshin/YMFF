@@ -12,6 +12,6 @@ public protocol FeatureFlagStoreProtocol {
     /// Retrieves feature flag value by its key.
     ///
     /// - Parameter key: *Required.* The key that points to a feature flag value in the store.
-    func value(forKey key: String) -> Any?
+    func value<Value>(forKey key: String) -> Value?
     
 }
