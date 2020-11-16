@@ -32,10 +32,10 @@ extension RuntimeOverridesStoreTests {
         let overrideValue = 123
         
         mutableStore.setValue(overrideValue, forKey: overrideKey)
-        let retrievedOverrideValue = mutableStore.value(forKey: overrideKey)
+        let retrievedOverrideValue: Int? = mutableStore.value(forKey: overrideKey)
         
         XCTAssertNotNil(retrievedOverrideValue)
-        XCTAssertEqual(retrievedOverrideValue as? Int, overrideValue)
+        XCTAssertEqual(retrievedOverrideValue, overrideValue)
     }
     
     func testRuntimeOverrideRemoval() {
@@ -43,13 +43,14 @@ extension RuntimeOverridesStoreTests {
         let overrideValue = 123
         
         mutableStore.setValue(overrideValue, forKey: overrideKey)
-        let retrievedOverrideValue = mutableStore.value(forKey: overrideKey)
+        let retrievedOverrideValue: Int? = mutableStore.value(forKey: overrideKey)
         
         XCTAssertNotNil(retrievedOverrideValue)
         
         mutableStore.removeValue(forKey: overrideKey)
         
-        XCTAssertNil(mutableStore.value(forKey: overrideKey))
+        let retrievedOverrideValueAfterRemoval: Int? = mutableStore.value(forKey: overrideKey)
+        XCTAssertNil(retrievedOverrideValueAfterRemoval)
     }
     
 }

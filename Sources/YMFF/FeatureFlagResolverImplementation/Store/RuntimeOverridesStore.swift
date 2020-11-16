@@ -23,11 +23,11 @@ final public class RuntimeOverridesStore {
 
 extension RuntimeOverridesStore: MutableFeatureFlagStoreProtocol {
     
-    public func value(forKey key: String) -> Any? {
-        store[key]
+    public func value<Value>(forKey key: String) -> Value? {
+        store[key] as? Value
     }
     
-    public func setValue(_ value: Any, forKey key: String) {
+    public func setValue<Value>(_ value: Value, forKey key: String) {
         store[key] = value
     }
     

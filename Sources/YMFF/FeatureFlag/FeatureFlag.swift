@@ -39,7 +39,7 @@ public struct FeatureFlag<Value> {
     /// The resolved value of the feature flag.
     public var wrappedValue: Value {
         get {
-            resolver.value(for: key) ?? defaultValue
+            (try? (resolver.value(for: key) as Value)) ?? defaultValue
         } set {
             try? resolver.overrideInRuntime(key, with: newValue)
         }

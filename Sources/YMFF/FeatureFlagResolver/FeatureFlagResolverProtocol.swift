@@ -15,7 +15,7 @@ public protocol FeatureFlagResolverProtocol {
     /// Returns a value for the specified key.
     ///
     /// - Parameter key: *Required.* The feature flag key.
-    func value<Value>(for key: FeatureFlagKey) -> Value?
+    func value<Value>(for key: FeatureFlagKey) throws -> Value
     
     /// Sets a new feature flag value that's available in the runtime, within a single app session, and overrides values from other stores.
     ///
