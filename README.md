@@ -16,3 +16,41 @@ You’re then prompted to select the version to install and indicate the desired
 
 ## Setup
 All you need to start managing features with YMFF is at least one feature flag *store*—an object which conforms to `FeatureFlagStoreProtocol` and provides values that correspond to feature flag keys. `FeatureFlagStoreProtocol` has a single required method, `value(forKey:)`.
+
+## Usage
+Here’s the most basic way to use YMFF.
+
+```swift
+// For convenience, use an enum to create a namespace.
+enum FeatureFlags {
+    
+    // `resolver` references one or more feature flag stores.
+    // `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.
+    private static var resolver: FeatureFlagResolverProtocol = {
+        FeatureFlagResolver(configuration: .init(persistentStores: [
+            .opaque(MyFeatureFlagStore.shared)
+        ]))
+    }
+    
+    // Feature flags are initialized with three pieces of data:
+    // a key string, the default value (used as fallback
+    // when all feature flag stores fail to provide one), and the resolver.
+    @FeatureFlag("promo_enabled", default: false, resolver: resolver)
+    static var promoEnabled
+    
+    // Feature flags aren't limited to booleans. You can use any type of value.
+    @FeatureFlag("number_of_banners", default: 3, resolver: resolver)
+    static var numberOfBanners
+    
+}
+```
+
+To the code that makes use of a feature flag, the flag acts just like the type of its value:
+
+```swift
+if FeatureFlags.promoEnabled {
+    displayPromoBanners(count: FeatureFlags.numberOfBanners)
+}
+```
+
+You can browse the source files to learn more about the options available to you. An extended documentation is coming later.
