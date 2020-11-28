@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FeatureFlag Structure Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Struct/FeatureFlag" class="dashAnchor"></a>
+    <a title="FeatureFlag Structure Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">YMFF Docs</a></p>
+        <p class="header-right"><a href="https://github.com/yakovmanshin/YMFF"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">YMFF Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        FeatureFlag Structure Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/FeatureFlagResolver.html">FeatureFlagResolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RuntimeOverridesStore.html">RuntimeOverridesStore</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/FeatureFlagResolverError.html">FeatureFlagResolverError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/FeatureFlagStore.html">FeatureFlagStore</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/FeatureFlagResolverConfigurationProtocol.html">FeatureFlagResolverConfigurationProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeatureFlagResolverProtocol.html">FeatureFlagResolverProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeatureFlagStoreProtocol.html">FeatureFlagStoreProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MutableFeatureFlagStoreProtocol.html">MutableFeatureFlagStoreProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/FeatureFlag.html">FeatureFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FeatureFlagResolverConfiguration.html">FeatureFlagResolverConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4YMFF14FeatureFlagKeya">FeatureFlagKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4YMFF27TransparentFeatureFlagStorea">TransparentFeatureFlagStore</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>FeatureFlag</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">@propertyWrapper</span>
+<span class="kd">public</span> <span class="kd">struct</span> <span class="kt">FeatureFlag</span><span class="o">&lt;</span><span class="kt">Value</span><span class="o">&gt;</span></code></pre>
+
+                </div>
+              </div>
+            <p>An object that facilitates access to feature flag values.</p>
+
+              <div class="slightly-smaller">
+                <a href="https://github.com/yakovmanshin/YMFF/tree/master/Sources/YMFF/FeatureFlag/FeatureFlag.swift#L11-L48">Show on GitHub</a>
+              </div>
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Initializers"></a>
+                <a name="//apple_ref/swift/Section/Initializers" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Initializers"></a>
+                  <h3 class="section-name"><p>Initializers</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4YMFF11FeatureFlagV_7default8resolverACyxGSS_xAA0bC16ResolverProtocol_ptcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(_:default:resolver:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4YMFF11FeatureFlagV_7default8resolverACyxGSS_xAA0bC16ResolverProtocol_ptcfc">init(_:<wbr>default:<wbr>resolver:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a new <code>FeatureFlag</code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">(</span>
+    <span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="k">default</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="kt">Value</span><span class="p">,</span>
+    <span class="nv">resolver</span><span class="p">:</span> <span class="kt"><a href="../Protocols/FeatureFlagResolverProtocol.html">FeatureFlagResolverProtocol</a></span>
+<span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><em>Required.</em> The string used to address feature flag values in both the local and remote stores.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>defaultValue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><em>Required.</em> The value returned in case both the local and remote stores failed to provide values by the key.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>resolver</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><em>Required.</em> The resolver object used to retrieve values from the stores.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/yakovmanshin/YMFF/tree/master/Sources/YMFF/FeatureFlag/FeatureFlag.swift#L27-L35">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Wrapped%20Value"></a>
+                <a name="//apple_ref/swift/Section/Wrapped Value" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Wrapped%20Value"></a>
+                  <h3 class="section-name"><p>Wrapped Value</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4YMFF11FeatureFlagV12wrappedValuexvp"></a>
+                    <a name="//apple_ref/swift/Property/wrappedValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4YMFF11FeatureFlagV12wrappedValuexvp">wrappedValue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The resolved value of the feature flag.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="kt">Value</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/yakovmanshin/YMFF/tree/master/Sources/YMFF/FeatureFlag/FeatureFlag.swift#L40-L46">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2020 <a class="link" href="https://yakovmanshin.com/" target="_blank" rel="external">Yakov Manshin</a>. Available under <a class="link" href="https://github.com/yakovmanshin/YMFF/blob/main/LICENSE" target="_blank" rel="external">Apache License v2</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
