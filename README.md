@@ -54,3 +54,8 @@ if FeatureFlags.promoEnabled {
 ```
 
 You can browse the source files to learn more about the options available to you. An extended documentation is coming later.
+
+## Contributing
+Contributions are welcome!
+
+Have a look at [issues](https://github.com/yakovmanshin/YMFF/issues) to see the project’s current needs. Don’t hesitate to create new issues, especially if you intend to work on them yourself.
