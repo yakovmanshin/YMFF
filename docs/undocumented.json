@@ -1,0 +1,68 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/Configuration/FeatureFlagResolverConfiguration.swift",
+      "line": 17,
+      "symbol": "FeatureFlagResolverConfiguration.init(persistentStores:runtimeStore:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/FeatureFlagResolver.swift",
+      "line": 20,
+      "symbol": "FeatureFlagResolver.init(configuration:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/FeatureFlagResolverError.swift",
+      "line": 11,
+      "symbol": "FeatureFlagResolverError.noPersistentStoreAvailable",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/FeatureFlagResolverError.swift",
+      "line": 12,
+      "symbol": "FeatureFlagResolverError.optionalValuesNotAllowed",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/FeatureFlagResolverError.swift",
+      "line": 13,
+      "symbol": "FeatureFlagResolverError.typeMismatch",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/FeatureFlagResolverError.swift",
+      "line": 14,
+      "symbol": "FeatureFlagResolverError.valueNotFoundInPersistentStores(key:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/Store/FeatureFlagStore.swift",
+      "line": 13,
+      "symbol": "FeatureFlagStore.opaque(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/Store/FeatureFlagStore.swift",
+      "line": 14,
+      "symbol": "FeatureFlagStore.transparent(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/Yakov/Developer/YMFF/Sources/YMFF/FeatureFlagResolverImplementation/Store/RuntimeOverridesStore.swift",
+      "line": 16,
+      "symbol": "RuntimeOverridesStore.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/Yakov/Developer/YMFF"
+}

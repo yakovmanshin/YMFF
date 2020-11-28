@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FeatureFlagStoreProtocol Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/FeatureFlagStoreProtocol" class="dashAnchor"></a>
+    <a title="FeatureFlagStoreProtocol Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">YMFF Docs</a></p>
+        <p class="header-right"><a href="https://github.com/yakovmanshin/YMFF"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">YMFF Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        FeatureFlagStoreProtocol Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/FeatureFlagResolver.html">FeatureFlagResolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RuntimeOverridesStore.html">RuntimeOverridesStore</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/FeatureFlagResolverError.html">FeatureFlagResolverError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/FeatureFlagStore.html">FeatureFlagStore</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/FeatureFlagResolverConfigurationProtocol.html">FeatureFlagResolverConfigurationProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeatureFlagResolverProtocol.html">FeatureFlagResolverProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/FeatureFlagStoreProtocol.html">FeatureFlagStoreProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/MutableFeatureFlagStoreProtocol.html">MutableFeatureFlagStoreProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/FeatureFlag.html">FeatureFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/FeatureFlagResolverConfiguration.html">FeatureFlagResolverConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4YMFF14FeatureFlagKeya">FeatureFlagKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:4YMFF27TransparentFeatureFlagStorea">TransparentFeatureFlagStore</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>FeatureFlagStoreProtocol</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">FeatureFlagStoreProtocol</span></code></pre>
+
+                </div>
+              </div>
+            <p>An object that stores feature flag values, and provides them at the resolver&rsquo;s request.</p>
+
+              <div class="slightly-smaller">
+                <a href="https://github.com/yakovmanshin/YMFF/tree/master/Sources/YMFF/FeatureFlagResolver/Store/FeatureFlagStoreProtocol.swift#L10-L17">Show on GitHub</a>
+              </div>
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4YMFF24FeatureFlagStoreProtocolP5value6forKeyqd__SgSS_tlF"></a>
+                    <a name="//apple_ref/swift/Method/value(forKey:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4YMFF24FeatureFlagStoreProtocolP5value6forKeyqd__SgSS_tlF">value(forKey:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Retrieves a feature flag value by its key.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">value</span><span class="o">&lt;</span><span class="kt">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>key</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p><em>Required.</em> The key that points to a feature flag value in the store.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/yakovmanshin/YMFF/tree/master/Sources/YMFF/FeatureFlagResolver/Store/FeatureFlagStoreProtocol.swift#L15">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2020 <a class="link" href="https://yakovmanshin.com/" target="_blank" rel="external">Yakov Manshin</a>. Available under <a class="link" href="https://github.com/yakovmanshin/YMFF/blob/main/LICENSE" target="_blank" rel="external">Apache License v2</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
