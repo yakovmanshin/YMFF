@@ -1,5 +1,4 @@
-# YMFF
-## Feature management made easy
+# YMFF: Feature management made easy
 
 Every company I worked at needed a way to manage feature availability in shipped apps, without changing code. Surprisingly enough, [feature flags](https://en.wikipedia.org/wiki/Feature_toggle) (a.k.a. feature toggles a.k.a. feature switches) tend to cause a lot of struggle.
 
