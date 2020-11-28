@@ -16,6 +16,43 @@ You’re then prompted to select the version to install and indicate the desired
 ## Setup
 All you need to start managing features with YMFF is at least one feature flag *store*—an object which conforms to `FeatureFlagStoreProtocol` and provides values that correspond to feature flag keys. `FeatureFlagStoreProtocol` has a single required method, `value(forKey:)`.
 
+### Firebase Remote Config
+Firebase’s Remote Config is one of the most popular tools to manage feature flags on the back-end side. Remote Config’s `RemoteConfigValue` requires use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite simple.
+
+```swift
+import FirebaseRemoteConfig
+
+extension RemoteConfig: FeatureFlagStoreProtocol {
+    
+    public func value<Value>(forKey key: String) -> Value? {
+        // Remote Config returns a default value if the requested key doesn't exist,
+        // so you need to check the key for existence explicitly.
+        guard self.allKeys(from: .remote).contains(key) else { return nil }
+        
+        let remoteConfigValue = self[key]
+        
+        // You need to use different RemoteConfigValue methods, depending on the return type.
+        switch Value.self {
+        case is Bool.Type:
+            return remoteConfigValue.boolValue as? Value
+        case is Data.Type:
+            return remoteConfigValue.dataValue as? Value
+        case is Double.Type:
+            return remoteConfigValue.numberValue.doubleValue as? Value
+        case is Int.Type:
+            return remoteConfigValue.numberValue.intValue as? Value
+        case is String.Type:
+            return remoteConfigValue.stringValue as? Value
+        default:
+            return nil
+        }
+    }
+    
+}
+```
+
+Now `RemoteConfig` is a valid feature flag store.
+
 ## Usage
 Here’s the most basic way to use YMFF.
 
