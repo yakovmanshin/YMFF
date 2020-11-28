@@ -1,0 +1,12 @@
+author: Yakov Manshin
+author_url: https://yakovmanshin.com/
+clean: true
+copyright: © 2020 [Yakov Manshin](https://yakovmanshin.com/). Available under [Apache License v2](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE).
+disable_search: true
+github_file_prefix: https://github.com/yakovmanshin/YMFF/tree/master
+github_url: https://github.com/yakovmanshin/YMFF
+hide_documentation_coverage: true
+module: YMFF
+module_version: 1.0.0
+title: YMFF Docs
+undocumented_text: Documentation Coming Soon…
