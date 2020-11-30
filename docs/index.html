@@ -98,7 +98,9 @@
 
 <p>Every company I worked at needed a way to manage feature availability in shipped apps, without changing code. Surprisingly enough, <a href="https://en.wikipedia.org/wiki/Feature_toggle">feature flags</a> (a.k.a. feature toggles a.k.a. feature switches) tend to cause a lot of struggle.</p>
 
-<p>YMFF is a nice little library that makes management of features with feature flags—and management of the feature flags themselves—a bliss, thanks to <a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617">property wrappers</a>. YMFF provides a complete implementation of the mechanism: you get everything you need to start in just a few minutes. But since YMFF is protocol-based, you can replace nearly any component of the system with your own, customized implementation.</p>
+<p>YMFF is a nice little library that makes management of features with feature flags—and management of the feature flags themselves—a bliss, thanks to Swift’s <a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617">property wrappers</a>.</p>
+
+<p>YMFF provides a complete implementation of the mechanism: you get everything you need to start in just a few minutes. But since YMFF is protocol-based, you can replace nearly any component of the system with your own, customized implementation.</p>
 <h2 id='installation' class='heading'>Installation</h2>
 
 <p>To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Swift Packages → Add Package Dependency, and paste the following URL into the search field:</p>
@@ -106,6 +108,10 @@
 </code></pre>
 
 <p>You’re then prompted to select the version to install and indicate the desired update policy. I recommend starting with the latest version (it’s selected automatically), and choosing “up to next major” as the preferred update rule. Once you click Next, the package is fetched. Then select the target you’re going to use YMFF in. Click Finish, and you’re ready to go.</p>
+
+<p>If you need to use YMFF in another Swift package, add it as a dependency:</p>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/yakovmanshin/YMFF"</span><span class="p">,</span> <span class="o">.</span><span class="nf">upToNextMajor</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="s">"1.0.0"</span><span class="p">))</span>
+</code></pre>
 <h2 id='setup' class='heading'>Setup</h2>
 
 <p>All you need to start managing features with YMFF is at least one feature flag <em>store</em>—an object which conforms to <code><a href="Protocols/FeatureFlagStoreProtocol.html">FeatureFlagStoreProtocol</a></code> and provides values that correspond to feature flag keys. <code><a href="Protocols/FeatureFlagStoreProtocol.html">FeatureFlagStoreProtocol</a></code> has a single required method, <code>value(forKey:)</code>.</p>
@@ -113,6 +119,7 @@
 
 <p>Firebase’s Remote Config is one of the most popular tools to manage feature flags on the back-end side. Remote Config’s <code>RemoteConfigValue</code> requires use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite simple.</p>
 <pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">FirebaseRemoteConfig</span>
+<span class="kd">import</span> <span class="kt">YMFF</span>
 
 <span class="kd">extension</span> <span class="kt">RemoteConfig</span><span class="p">:</span> <span class="kt">FeatureFlagStoreProtocol</span> <span class="p">{</span>
 
