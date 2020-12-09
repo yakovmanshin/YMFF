@@ -49,7 +49,7 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 
 extension FeatureFlagResolver {
     
-    func retrieveValue<Value>(forKey key: String) throws -> Value {
+    private func retrieveValue<Value>(forKey key: String) throws -> Value {
         if let runtimeValue: Value = configuration.runtimeStore.value(forKey: key) {
             return runtimeValue
         }

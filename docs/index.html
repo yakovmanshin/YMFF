@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>YMFF  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="YMFF  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">YMFF Docs</a></p>
+        <p class="header-right"><a href="https://github.com/yakovmanshin/YMFF"><img src="img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">YMFF Reference</a>
+        <img id="carat" src="img/carat.png" />
+        YMFF  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/FeatureFlagResolver.html">FeatureFlagResolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/RuntimeOverridesStore.html">RuntimeOverridesStore</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/FeatureFlagResolverError.html">FeatureFlagResolverError</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/FeatureFlagStore.html">FeatureFlagStore</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/FeatureFlagResolverConfigurationProtocol.html">FeatureFlagResolverConfigurationProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/FeatureFlagResolverProtocol.html">FeatureFlagResolverProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/FeatureFlagStoreProtocol.html">FeatureFlagStoreProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/MutableFeatureFlagStoreProtocol.html">MutableFeatureFlagStoreProtocol</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/FeatureFlag.html">FeatureFlag</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/FeatureFlagResolverConfiguration.html">FeatureFlagResolverConfiguration</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Type Aliases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4YMFF14FeatureFlagKeya">FeatureFlagKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:4YMFF27TransparentFeatureFlagStorea">TransparentFeatureFlagStore</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='ymff-feature-management-made-easy' class='heading'>YMFF: Feature management made easy</h1>
+
+<p>Every company I worked at needed a way to manage feature availability in shipped apps, without changing code. Surprisingly enough, <a href="https://en.wikipedia.org/wiki/Feature_toggle">feature flags</a> (a.k.a. feature toggles a.k.a. feature switches) tend to cause a lot of struggle.</p>
+
+<p>YMFF is a nice little library that makes management of features with feature flags—and management of the feature flags themselves—a bliss, thanks to Swift’s <a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617">property wrappers</a>.</p>
+
+<p>YMFF provides a complete implementation of the mechanism: you get everything you need to start in just a few minutes. But since YMFF is protocol-based, you can replace nearly any component of the system with your own, customized implementation.</p>
+<h2 id='installation' class='heading'>Installation</h2>
+
+<p>To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Swift Packages → Add Package Dependency, and paste the following URL into the search field:</p>
+<pre class="highlight plaintext"><code>https://github.com/yakovmanshin/YMFF
+</code></pre>
+
+<p>You’re then prompted to select the version to install and indicate the desired update policy. I recommend starting with the latest version (it’s selected automatically), and choosing “up to next major” as the preferred update rule. Once you click Next, the package is fetched. Then select the target you’re going to use YMFF in. Click Finish, and you’re ready to go.</p>
+
+<p>If you need to use YMFF in another Swift package, add it as a dependency:</p>
+<pre class="highlight swift"><code><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/yakovmanshin/YMFF"</span><span class="p">,</span> <span class="o">.</span><span class="nf">upToNextMajor</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="s">"1.0.0"</span><span class="p">))</span>
+</code></pre>
+<h2 id='setup' class='heading'>Setup</h2>
+
+<p>All you need to start managing features with YMFF is at least one feature flag <em>store</em>—an object which conforms to <code><a href="Protocols/FeatureFlagStoreProtocol.html">FeatureFlagStoreProtocol</a></code> and provides values that correspond to feature flag keys. <code><a href="Protocols/FeatureFlagStoreProtocol.html">FeatureFlagStoreProtocol</a></code> has a single required method, <code>value(forKey:)</code>.</p>
+<h3 id='firebase-remote-config' class='heading'>Firebase Remote Config</h3>
+
+<p>Firebase’s Remote Config is one of the most popular tools to manage feature flags on the back-end side. Remote Config’s <code>RemoteConfigValue</code> requires use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite simple.</p>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">FirebaseRemoteConfig</span>
+<span class="kd">import</span> <span class="kt">YMFF</span>
+
+<span class="kd">extension</span> <span class="kt">RemoteConfig</span><span class="p">:</span> <span class="kt">FeatureFlagStoreProtocol</span> <span class="p">{</span>
+
+    <span class="kd">public</span> <span class="kd">func</span> <span class="n">value</span><span class="o">&lt;</span><span class="kt">Value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Value</span><span class="p">?</span> <span class="p">{</span>
+        <span class="c1">// Remote Config returns a default value if the requested key doesn't exist,</span>
+        <span class="c1">// so you need to check the key for existence explicitly.</span>
+        <span class="k">guard</span> <span class="k">self</span><span class="o">.</span><span class="nf">allKeys</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="o">.</span><span class="n">remote</span><span class="p">)</span><span class="o">.</span><span class="nf">contains</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">nil</span> <span class="p">}</span>
+
+        <span class="k">let</span> <span class="nv">remoteConfigValue</span> <span class="o">=</span> <span class="k">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="c1">// You need to use different RemoteConfigValue methods, depending on the return type.</span>
+        <span class="k">switch</span> <span class="kt">Value</span><span class="o">.</span><span class="k">self</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="k">is</span> <span class="kt">Bool</span><span class="o">.</span><span class="k">Type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">remoteConfigValue</span><span class="o">.</span><span class="n">boolValue</span> <span class="k">as?</span> <span class="kt">Value</span>
+        <span class="k">case</span> <span class="k">is</span> <span class="kt">Data</span><span class="o">.</span><span class="k">Type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">remoteConfigValue</span><span class="o">.</span><span class="n">dataValue</span> <span class="k">as?</span> <span class="kt">Value</span>
+        <span class="k">case</span> <span class="k">is</span> <span class="kt">Double</span><span class="o">.</span><span class="k">Type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">remoteConfigValue</span><span class="o">.</span><span class="n">numberValue</span><span class="o">.</span><span class="n">doubleValue</span> <span class="k">as?</span> <span class="kt">Value</span>
+        <span class="k">case</span> <span class="k">is</span> <span class="kt">Int</span><span class="o">.</span><span class="k">Type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">remoteConfigValue</span><span class="o">.</span><span class="n">numberValue</span><span class="o">.</span><span class="n">intValue</span> <span class="k">as?</span> <span class="kt">Value</span>
+        <span class="k">case</span> <span class="k">is</span> <span class="kt">String</span><span class="o">.</span><span class="k">Type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">remoteConfigValue</span><span class="o">.</span><span class="n">stringValue</span> <span class="k">as?</span> <span class="kt">Value</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">nil</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre>
+
+<p>Now <code>RemoteConfig</code> is a valid feature flag store.</p>
+<h2 id='usage' class='heading'>Usage</h2>
+
+<p>Here’s the most basic way to use YMFF.</p>
+<pre class="highlight swift"><code><span class="c1">// For convenience, use an enum to create a namespace.</span>
+<span class="kd">enum</span> <span class="kt">FeatureFlags</span> <span class="p">{</span>
+
+    <span class="c1">// `resolver` references one or more feature flag stores.</span>
+    <span class="c1">// `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">resolver</span><span class="p">:</span> <span class="kt">FeatureFlagResolverProtocol</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kt">FeatureFlagResolver</span><span class="p">(</span><span class="nv">configuration</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">persistentStores</span><span class="p">:</span> <span class="p">[</span>
+            <span class="o">.</span><span class="nf">opaque</span><span class="p">(</span><span class="kt">MyFeatureFlagStore</span><span class="o">.</span><span class="n">shared</span><span class="p">)</span>
+        <span class="p">]))</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Feature flags are initialized with three pieces of data:</span>
+    <span class="c1">// a key string, the default value (used as fallback</span>
+    <span class="c1">// when all feature flag stores fail to provide one), and the resolver.</span>
+    <span class="kd">@FeatureFlag</span><span class="p">(</span><span class="s">"promo_enabled"</span><span class="p">,</span> <span class="k">default</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">resolver</span><span class="p">:</span> <span class="n">resolver</span><span class="p">)</span>
+    <span class="kd">static</span> <span class="k">var</span> <span class="nv">promoEnabled</span>
+
+    <span class="c1">// Feature flags aren't limited to booleans. You can use any type of value.</span>
+    <span class="kd">@FeatureFlag</span><span class="p">(</span><span class="s">"number_of_banners"</span><span class="p">,</span> <span class="k">default</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nv">resolver</span><span class="p">:</span> <span class="n">resolver</span><span class="p">)</span>
+    <span class="kd">static</span> <span class="k">var</span> <span class="nv">numberOfBanners</span>
+
+<span class="p">}</span>
+</code></pre>
+
+<p>To the code that makes use of a feature flag, the flag acts just like the type of its value:</p>
+<pre class="highlight swift"><code><span class="k">if</span> <span class="kt">FeatureFlags</span><span class="o">.</span><span class="n">promoEnabled</span> <span class="p">{</span>
+    <span class="nf">displayPromoBanners</span><span class="p">(</span><span class="nv">count</span><span class="p">:</span> <span class="kt">FeatureFlags</span><span class="o">.</span><span class="n">numberOfBanners</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>You can browse the source files to learn more about the options available to you. An extended documentation is coming later.</p>
+<h2 id='contributing' class='heading'>Contributing</h2>
+
+<p>Contributions are welcome!</p>
+
+<p>Have a look at <a href="https://github.com/yakovmanshin/YMFF/issues">issues</a> to see the project’s current needs. Don’t hesitate to create new issues, especially if you intend to work on them yourself.</p>
+
+<p>If you’d like to discuss something else regarding YMFF (or not), contact <a href="https://github.com/yakovmanshin">me</a> via email (the address is in the profile).</p>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>© 2020 <a class="link" href="https://yakovmanshin.com/" target="_blank" rel="external">Yakov Manshin</a>. Available under <a class="link" href="https://github.com/yakovmanshin/YMFF/blob/main/LICENSE" target="_blank" rel="external">Apache License v2</a>.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

@@ -6,7 +6,7 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
-/// A service that resolves feature flag values by their keys.
+/// A service that resolves feature flag values with their keys.
 public protocol FeatureFlagResolverProtocol {
     
     /// The object used to configure the resolver.
@@ -17,7 +17,7 @@ public protocol FeatureFlagResolverProtocol {
     /// - Parameter key: *Required.* The feature flag key.
     func value<Value>(for key: FeatureFlagKey) throws -> Value
     
-    /// Sets a new feature flag value that's available in the runtime, within a single app session, and overrides values from other stores.
+    /// Sets a new feature flag value that's available in runtime, within a single app session, and takes precedence over values from other stores.
     ///
     /// - Parameters:
     ///   - key: *Required.* The feature flag key.
