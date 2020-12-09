@@ -25,7 +25,7 @@ public struct FeatureFlag<Value> {
     ///   - defaultValue: *Required.* The value returned in case both the local and remote stores failed to provide values by the key.
     ///   - resolver: *Required.* The resolver object used to retrieve values from the stores.
     public init(
-        _ key: String,
+        _ key: FeatureFlagKey,
         default defaultValue: Value,
         resolver: FeatureFlagResolverProtocol
     ) {
