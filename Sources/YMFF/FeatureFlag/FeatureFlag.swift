@@ -8,7 +8,7 @@
 
 /// An object that facilitates access to feature flag values.
 @propertyWrapper
-public struct FeatureFlag<Value> {
+final public class FeatureFlag<Value> {
     
     // MARK: Properties
     
