@@ -45,4 +45,8 @@ final public class FeatureFlag<Value> {
         }
     }
     
+    // MARK: Projected Value
+    
+    public var projectedValue: FeatureFlag<Value> { self }
+    
 }
