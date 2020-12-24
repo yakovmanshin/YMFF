@@ -68,6 +68,10 @@ extension FeatureFlagTests {
         overrideFlag = 789
         
         XCTAssertEqual(overrideFlag, 789)
+        
+        $overrideFlag.removeRuntimeOverride()
+        
+        XCTAssertEqual(overrideFlag, 456)
     }
     
     func testNonexistentWrappedValueOverride() {
@@ -76,6 +80,10 @@ extension FeatureFlagTests {
         nonexistentOverrideFlag = 789
         
         XCTAssertEqual(nonexistentOverrideFlag, 789)
+        
+        $nonexistentOverrideFlag.removeRuntimeOverride()
+        
+        XCTAssertEqual(nonexistentOverrideFlag, 999)
     }
     
 }
