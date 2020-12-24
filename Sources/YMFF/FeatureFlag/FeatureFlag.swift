@@ -49,4 +49,11 @@ final public class FeatureFlag<Value> {
     
     public var projectedValue: FeatureFlag<Value> { self }
     
+    // MARK: Runtime Overrides
+    
+    /// Removes the feature flag value that overrides persistent values in runtime.
+    public func removeRuntimeOverride() {
+        resolver.removeRuntimeOverride(for: key)
+    }
+    
 }
