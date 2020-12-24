@@ -79,3 +79,33 @@ extension FeatureFlagTests {
     }
     
 }
+
+// MARK: - Projected Value Tests
+
+extension FeatureFlagTests {
+    
+    func testBoolProjectedValue() {
+        XCTAssertTrue(value($boolFeatureFlag, isOfType: FeatureFlag<Bool>.self))
+    }
+    
+    func testIntProjectedValue() {
+        XCTAssertTrue(value($intFeatureFlag, isOfType: FeatureFlag<Int>.self))
+    }
+    
+    func testStringProjectedValue() {
+        XCTAssertTrue(value($stringFeatureFlag, isOfType: FeatureFlag<String>.self))
+    }
+    
+    func testOptionalIntProjectedValue() {
+        XCTAssertTrue(value($optionalIntFeatureFlag, isOfType: FeatureFlag<Int?>.self))
+    }
+    
+    func testNonexistentIntProjectedValue() {
+        XCTAssertTrue(value($nonexistentIntFeatureFlag, isOfType: FeatureFlag<Int>.self))
+    }
+    
+    private func value<T>(_ value: Any, isOfType type: T.Type) -> Bool {
+        value is T
+    }
+    
+}
