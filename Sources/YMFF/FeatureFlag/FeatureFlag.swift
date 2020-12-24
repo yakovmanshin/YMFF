@@ -8,7 +8,7 @@
 
 /// An object that facilitates access to feature flag values.
 @propertyWrapper
-public struct FeatureFlag<Value> {
+final public class FeatureFlag<Value> {
     
     // MARK: Properties
     
@@ -44,5 +44,9 @@ public struct FeatureFlag<Value> {
             try? resolver.overrideInRuntime(key, with: newValue)
         }
     }
+    
+    // MARK: Projected Value
+    
+    public var projectedValue: FeatureFlag<Value> { self }
     
 }
