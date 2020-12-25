@@ -68,6 +68,10 @@ extension FeatureFlagTests {
         overrideFlag = 789
         
         XCTAssertEqual(overrideFlag, 789)
+        
+        $overrideFlag.removeRuntimeOverride()
+        
+        XCTAssertEqual(overrideFlag, 456)
     }
     
     func testNonexistentWrappedValueOverride() {
@@ -76,6 +80,40 @@ extension FeatureFlagTests {
         nonexistentOverrideFlag = 789
         
         XCTAssertEqual(nonexistentOverrideFlag, 789)
+        
+        $nonexistentOverrideFlag.removeRuntimeOverride()
+        
+        XCTAssertEqual(nonexistentOverrideFlag, 999)
+    }
+    
+}
+
+// MARK: - Projected Value Tests
+
+extension FeatureFlagTests {
+    
+    func testBoolProjectedValue() {
+        XCTAssertTrue(value($boolFeatureFlag, isOfType: FeatureFlag<Bool>.self))
+    }
+    
+    func testIntProjectedValue() {
+        XCTAssertTrue(value($intFeatureFlag, isOfType: FeatureFlag<Int>.self))
+    }
+    
+    func testStringProjectedValue() {
+        XCTAssertTrue(value($stringFeatureFlag, isOfType: FeatureFlag<String>.self))
+    }
+    
+    func testOptionalIntProjectedValue() {
+        XCTAssertTrue(value($optionalIntFeatureFlag, isOfType: FeatureFlag<Int?>.self))
+    }
+    
+    func testNonexistentIntProjectedValue() {
+        XCTAssertTrue(value($nonexistentIntFeatureFlag, isOfType: FeatureFlag<Int>.self))
+    }
+    
+    private func value<T>(_ value: Any, isOfType type: T.Type) -> Bool {
+        value is T
     }
     
 }

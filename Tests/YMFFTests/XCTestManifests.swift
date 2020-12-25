@@ -28,11 +28,16 @@ extension FeatureFlagTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__FeatureFlagTests = [
+        ("testBoolProjectedValue", testBoolProjectedValue),
         ("testBoolWrappedValue", testBoolWrappedValue),
+        ("testIntProjectedValue", testIntProjectedValue),
         ("testIntWrappedValue", testIntWrappedValue),
+        ("testNonexistentIntProjectedValue", testNonexistentIntProjectedValue),
         ("testNonexistentIntWrappedValue", testNonexistentIntWrappedValue),
         ("testNonexistentWrappedValueOverride", testNonexistentWrappedValueOverride),
+        ("testOptionalIntProjectedValue", testOptionalIntProjectedValue),
         ("testOptionalIntValue", testOptionalIntValue),
+        ("testStringProjectedValue", testStringProjectedValue),
         ("testStringWrappedValue", testStringWrappedValue),
         ("testWrappedValueOverride", testWrappedValueOverride),
     ]
