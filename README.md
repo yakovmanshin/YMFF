@@ -98,6 +98,26 @@ if FeatureFlags.promoEnabled {
 }
 ```
 
+### Overriding Values in Runtime
+
+YMFF lets you override feature flag values in runtime. One particular use case for changing values locally is when you need to test a particular feature covered with the feature flag, and you cannot or don’t want to modify the back-end configuration.
+
+**Runtime overrides work within a single session. Once you restart the app, the override values are erased.** 
+
+Overriding a feature flag value in runtime is as simple as assigning the new value to the flag.
+
+```swift
+FeatureFlags.promoEnabled = true
+```
+
+To remove the override and revert to using values from persistent stores, you can restart the app or call the `removeRuntimeOverride()` method on `FeatureFlag`’s *projected value* (i.e. the `FeatureFlag` instance itself, as opposed to its *wrapped value*).
+
+```swift
+// Here `FeatureFlags.$promoEnabled` has the type `FeatureFlag<Bool>`, 
+// while `FeatureFlags.promoEnabled` is of type `Bool`.
+FeatureFlags.$promoEnabled.removeRuntimeOverride()
+```
+
 You can browse the source files to learn more about the options available to you. An extended documentation is coming later.
 
 ## Contributing
