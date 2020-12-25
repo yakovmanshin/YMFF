@@ -12,7 +12,10 @@ final public class FeatureFlag<Value> {
     
     // MARK: Properties
     
+    /// The key used to retrieve feature flag values.
     public let key: FeatureFlagKey
+    
+    /// The fallback value returned when no store is able to provide the real one.
     public let defaultValue: Value
     
     private let resolver: FeatureFlagResolverProtocol
@@ -22,9 +25,9 @@ final public class FeatureFlag<Value> {
     /// Creates a new `FeatureFlag`.
     ///
     /// - Parameters:
-    ///   - key: *Required.* The string used to address feature flag values in both the local and remote stores.
-    ///   - defaultValue: *Required.* The value returned in case both the local and remote stores failed to provide values by the key.
-    ///   - resolver: *Required.* The resolver object used to retrieve values from the stores.
+    ///   - key: *Required.* The key used to address feature flag values in stores.
+    ///   - defaultValue: *Required.* The value returned in case all stores fail to provide a value.
+    ///   - resolver: *Required.* The resolver object used to retrieve values from stores.
     public init(
         _ key: FeatureFlagKey,
         default defaultValue: Value,
@@ -48,6 +51,7 @@ final public class FeatureFlag<Value> {
     
     // MARK: Projected Value
     
+    /// The object returned when referencing the feature flag with a dollar sign (`$`).
     public var projectedValue: FeatureFlag<Value> { self }
     
     // MARK: Runtime Overrides
