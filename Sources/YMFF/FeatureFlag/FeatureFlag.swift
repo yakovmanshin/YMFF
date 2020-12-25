@@ -12,8 +12,9 @@ final public class FeatureFlag<Value> {
     
     // MARK: Properties
     
-    private let key: FeatureFlagKey
-    private let defaultValue: Value
+    public let key: FeatureFlagKey
+    public let defaultValue: Value
+    
     private let resolver: FeatureFlagResolverProtocol
     
     // MARK: Initializers
