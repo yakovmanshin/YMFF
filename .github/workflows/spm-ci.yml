@@ -10,6 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Select Xcode version
-      run: sudo xcode-select -switch /Applications/Xcode_12.3.app
+      run: sudo xcode-select -switch /Applications/Xcode_12.5.app
     - name: Run tests
       run: swift test -v
