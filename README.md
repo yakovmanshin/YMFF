@@ -71,11 +71,9 @@ enum FeatureFlags {
     
     // `resolver` references one or more feature flag stores.
     // `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.
-    private static var resolver: FeatureFlagResolverProtocol = {
-        FeatureFlagResolver(configuration: .init(persistentStores: [
-            .opaque(MyFeatureFlagStore.shared)
-        ]))
-    }
+    private static var resolver = FeatureFlagResolver(configuration: .init(
+        persistentStores: [.opaque(MyFeatureFlagStore.shared)]
+    ))
     
     // Feature flags are initialized with three pieces of data:
     // a key string, the default value (used as fallback
@@ -117,6 +115,25 @@ To remove the override and revert to using values from persistent stores, you ca
 // while `FeatureFlags.promoEnabled` is of type `Bool`.
 FeatureFlags.$promoEnabled.removeRuntimeOverride()
 ```
+
+### `UserDefaults`
+
+Since v1.2.0, you can use `UserDefaults` to read and write feature flag values. Just pass an instance of `UserDefaultsStore` as `runtimeStore` in `FeatureFlagResolverConfiguration`.
+
+For backward-compatibility reasons, **you can’t use `UserDefaultsStore` and the in-memory `RuntimeOverridesStore` at the same time**. But [it’ll get better in v2](https://github.com/yakovmanshin/YMFF/issues/41).
+
+```swift
+import Foundation
+
+// The `UserDefaultsStore` store must be both added in `persistentStores`
+// and, most importantly, set as the `runtimeStore`.
+private static var resolver = FeatureFlagResolver(configuration: .init(
+    persistentStores: [.userDefaults(UserDefaults.standard)],
+    runtimeStore: UserDefaultsStore()
+))
+```
+
+### More
 
 You can browse the source files to learn more about the options available to you. An extended documentation is coming later.
 
