@@ -12,10 +12,15 @@ import Foundation
 
 // MARK: - UserDefaultsStore
 
+/// An object that provides read and write access to feature flag values store in `UserDefaults`.
 final public class UserDefaultsStore {
     
     private let userDefaults: UserDefaults
     
+    /// Initializes a new `UserDefaultsStore`.
+    ///
+    /// - Parameter userDefaults: *Optional.* The `UserDefaults` object used to read and write values.
+    /// `UserDefaults.standard` is used by default.
     public init(userDefaults: UserDefaults = .standard) {
         self.userDefaults = userDefaults
     }
