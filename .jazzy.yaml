@@ -21,6 +21,7 @@ custom_categories:
           - FeatureFlagStore
           - TransparentFeatureFlagStore
           - RuntimeOverridesStore
+          - UserDefaultsStore
 disable_search: true
 github_file_prefix: https://github.com/yakovmanshin/YMFF/tree/master
 github_url: https://github.com/yakovmanshin/YMFF
