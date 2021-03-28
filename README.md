@@ -71,11 +71,9 @@ enum FeatureFlags {
     
     // `resolver` references one or more feature flag stores.
     // `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.
-    private static var resolver: FeatureFlagResolverProtocol = {
-        FeatureFlagResolver(configuration: .init(persistentStores: [
-            .opaque(MyFeatureFlagStore.shared)
-        ]))
-    }
+    private static var resolver = FeatureFlagResolver(configuration: .init(
+        persistentStores: [.opaque(MyFeatureFlagStore.shared)]
+    ))
     
     // Feature flags are initialized with three pieces of data:
     // a key string, the default value (used as fallback
