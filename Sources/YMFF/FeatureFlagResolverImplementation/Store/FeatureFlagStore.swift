@@ -6,12 +6,20 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if canImport(Foundation)
+import Foundation
+#endif
+
 // MARK: - FeatureFlagStore
 
 /// An object that provides a number of ways to supply the feature flag store.
 public enum FeatureFlagStore {
     case opaque(FeatureFlagStoreProtocol)
     case transparent(TransparentFeatureFlagStore)
+    
+    #if canImport(Foundation)
+    case userDefaults(UserDefaults)
+    #endif
 }
 
 // MARK: - FeatureFlagStoreProtocol
@@ -24,6 +32,10 @@ extension FeatureFlagStore: FeatureFlagStoreProtocol {
             return store.value(forKey: key)
         case .transparent(let store):
             return store[key] as? Value
+        #if canImport(Foundation)
+        case .userDefaults(let userDefaults):
+            return userDefaults.object(forKey: key) as? Value
+        #endif
         }
     }
     
