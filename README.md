@@ -120,7 +120,7 @@ FeatureFlags.$promoEnabled.removeRuntimeOverride()
 
 Since v1.2.0, you can use `UserDefaults` to read and write feature flag values. Just pass an instance of `UserDefaultsStore` as `runtimeStore` in `FeatureFlagResolverConfiguration`.
 
-For backward-compatibility reasons, **you can’t use `UserDefaultsStore` and the in-memory `RuntimeOverridesStore` at the same time**. But [it’ll get better in v2](yakovmanshin/YMFF#41).
+For backward-compatibility reasons, **you can’t use `UserDefaultsStore` and the in-memory `RuntimeOverridesStore` at the same time**. But [it’ll get better in v2](https://github.com/yakovmanshin/YMFF/issues/41).
 
 ```swift
 import Foundation
