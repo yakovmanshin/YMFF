@@ -7,6 +7,7 @@
 //
 
 import YMFF
+import YMFFProtocols
 
 // MARK: - Shared
 

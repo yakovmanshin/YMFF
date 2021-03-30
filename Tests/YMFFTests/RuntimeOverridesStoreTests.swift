@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import YMFFProtocols
 @testable import YMFF
 
 // MARK: - Configuration
