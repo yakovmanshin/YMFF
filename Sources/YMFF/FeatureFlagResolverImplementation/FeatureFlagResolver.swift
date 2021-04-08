@@ -95,11 +95,13 @@ extension FeatureFlagResolver {
     func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
         try validateValue(value)
         
-        
-        if let anyPersistentValue: Any = try retrieveFirstValueFoundInPersistentStores(byKey: key),
-           (anyPersistentValue as? Value) == nil
-        {
-            throw FeatureFlagResolverError.typeMismatch
+        do {
+            let _: Value = try retrieveFirstValueFoundInPersistentStores(byKey: key)
+        } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
+            // If none of the persistent stores contains a value for the key, then the client is attempting
+            // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
+        } catch {
+            throw error
         }
     }
     
