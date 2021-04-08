@@ -26,6 +26,19 @@ public enum FeatureFlagStore {
 
 extension FeatureFlagStore: FeatureFlagStoreProtocol {
     
+    public func containsValue(forKey key: String) -> Bool {
+        switch self {
+        case .opaque(let store):
+            return store.containsValue(forKey: key)
+        case .transparent(let store):
+            return store[key] != nil
+        #if canImport(Foundation)
+        case .userDefaults(let userDefaults):
+            return userDefaults.object(forKey: key) != nil
+        #endif
+        }
+    }
+    
     public func value<Value>(forKey key: String) -> Value? {
         switch self {
         case .opaque(let store):

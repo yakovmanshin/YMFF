@@ -13,7 +13,10 @@ import YMFF
 enum SharedAssets {
     
     static var configuration: FeatureFlagResolverConfiguration {
-        .init(persistentStores: [.opaque(OpaqueStoreStab(store: remoteStore)), .transparent(localStore)])
+        .init(persistentStores: [
+            .opaque(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
+            .transparent(localStore)
+        ])
     }
     
     static var configurationWithNoPersistentStores: FeatureFlagResolverConfiguration {
@@ -46,12 +49,32 @@ enum SharedAssets {
 
 // MARK: - Supplementary Types
 
-fileprivate struct OpaqueStoreStab: FeatureFlagStoreProtocol {
+private struct OpaqueStoreWithLimitedTypeSupport: FeatureFlagStoreProtocol {
     
-    let store: TransparentFeatureFlagStore
+    private let store: TransparentFeatureFlagStore
+    
+    init(store: TransparentFeatureFlagStore) {
+        self.store = store
+    }
+    
+    func containsValue(forKey key: String) -> Bool {
+        store[key] != nil
+    }
     
     func value<Value>(forKey key: String) -> Value? {
-        store[key] as? Value
+        let expectedValueType = Value.self
+        
+        switch expectedValueType {
+        case is Bool.Type:
+            return store[key] as? Value
+        case is Int.Type:
+            return store[key] as? Value
+        case is String.Type:
+            return store[key] as? Value
+        default:
+            assertionFailure("The expected feature flag value type (\(expectedValueType)) is not supported")
+            return nil
+        }
     }
     
 }

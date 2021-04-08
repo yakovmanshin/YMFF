@@ -31,6 +31,10 @@ final public class UserDefaultsStore {
 
 extension UserDefaultsStore: MutableFeatureFlagStoreProtocol {
     
+    public func containsValue(forKey key: String) -> Bool {
+        userDefaults.object(forKey: key) != nil
+    }
+    
     public func value<Value>(forKey key: String) -> Value? {
         userDefaults.value(forKey: key) as? Value
     }
