@@ -57,6 +57,10 @@ private struct OpaqueStoreWithLimitedTypeSupport: FeatureFlagStoreProtocol {
         self.store = store
     }
     
+    func containsValue(forKey key: String) -> Bool {
+        store[key] != nil
+    }
+    
     func value<Value>(forKey key: String) -> Value? {
         let expectedValueType = Value.self
         
