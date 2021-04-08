@@ -65,7 +65,10 @@ extension FeatureFlagResolver {
         }
         
         for store in stores {
-            if let value: Value = store.value(forKey: key) {
+            if store.containsValue(forKey: key) {
+                guard let value: Value = store.value(forKey: key)
+                else { throw FeatureFlagResolverError.typeMismatch }
+                
                 return value
             }
         }
