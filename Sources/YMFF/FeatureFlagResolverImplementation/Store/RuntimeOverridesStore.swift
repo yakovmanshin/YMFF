@@ -23,6 +23,10 @@ final public class RuntimeOverridesStore {
 
 extension RuntimeOverridesStore: MutableFeatureFlagStoreProtocol {
     
+    public func containsValue(forKey key: String) -> Bool {
+        store[key] != nil
+    }
+    
     public func value<Value>(forKey key: String) -> Value? {
         store[key] as? Value
     }
