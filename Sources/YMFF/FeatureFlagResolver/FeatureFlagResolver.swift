@@ -6,6 +6,8 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+import YMFFProtocols
+
 // MARK: - FeatureFlagResolver
 
 /// A concrete, YMFF-supplied implementation of the feature flag resolver.

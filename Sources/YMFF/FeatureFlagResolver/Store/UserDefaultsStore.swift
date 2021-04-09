@@ -9,6 +9,7 @@
 #if canImport(Foundation)
 
 import Foundation
+import YMFFProtocols
 
 // MARK: - UserDefaultsStore
 

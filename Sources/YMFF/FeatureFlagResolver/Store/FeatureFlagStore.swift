@@ -10,6 +10,8 @@
 import Foundation
 #endif
 
+import YMFFProtocols
+
 // MARK: - FeatureFlagStore
 
 /// An object that provides a number of ways to supply the feature flag store.
