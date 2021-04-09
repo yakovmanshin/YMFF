@@ -6,6 +6,8 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+import YMFFProtocols
+
 /// An object that facilitates access to feature flag values.
 @propertyWrapper
 final public class FeatureFlag<Value> {

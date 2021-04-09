@@ -6,6 +6,8 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+import YMFFProtocols
+
 // MARK: - RuntimeOverridesStore
 
 /// A YMFF-supplied implementation of the object that stores feature flag values used in runtime.

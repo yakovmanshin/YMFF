@@ -6,6 +6,8 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+import YMFFProtocols
+
 // MARK: - FeatureFlagResolverConfiguration
 
 /// A YMFF-supplied object used to provide the feature flag resolver with its configuration.
