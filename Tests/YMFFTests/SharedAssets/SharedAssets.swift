@@ -67,11 +67,12 @@ private struct OpaqueStoreWithLimitedTypeSupport: FeatureFlagStoreProtocol {
         let expectedValueType = Value.self
         
         switch expectedValueType {
-        case is Bool.Type:
-            return store[key] as? Value
-        case is Int.Type:
-            return store[key] as? Value
-        case is String.Type:
+        case is Bool.Type,
+             is Int.Type,
+             is String.Type,
+             is Optional<Bool>.Type,
+             is Optional<Int>.Type,
+             is Optional<String>.Type:
             return store[key] as? Value
         default:
             assertionFailure("The expected feature flag value type (\(expectedValueType)) is not supported")
