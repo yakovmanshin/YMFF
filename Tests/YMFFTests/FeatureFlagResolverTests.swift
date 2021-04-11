@@ -62,9 +62,9 @@ extension FeatureFlagResolverTests {
         } catch FeatureFlagResolverError.valueNotFoundInPersistentStores { } catch { XCTFail() }
     }
     
-    // MARK: Runtime Override
+    // MARK: Overriding
     
-    func testRuntimeOverrideSuccess() {
+    func testOverrideSuccess() {
         let key = SharedAssets.intKey
         let originalValue = 123
         let overrideValue = 789
@@ -80,7 +80,23 @@ extension FeatureFlagResolverTests {
         XCTAssertEqual(try resolver.value(for: key), originalValue)
     }
     
-    func testRuntimeOverrideFailure() {
+    func testOverrideFailureNoMutableStores() {
+        resolver = FeatureFlagResolver(configuration: SharedAssets.configurationWithNoMutableStores)
+        let key = SharedAssets.intKey
+        let originalValue = 123
+        let overrideValue = 789
+        
+        XCTAssertEqual(try resolver.value(for: key), originalValue)
+        
+        do {
+            _ = try resolver.overrideInRuntime(key, with: overrideValue)
+            XCTFail()
+        } catch FeatureFlagResolverError.noMutableStoreAvailable { } catch { XCTFail() }
+        
+        XCTAssertEqual(try resolver.value(for: key), originalValue)
+    }
+    
+    func testOverrideFailureTypeMismatch() {
         let key = SharedAssets.stringKey
         let overrideValue = 789
         
@@ -94,7 +110,7 @@ extension FeatureFlagResolverTests {
         XCTAssertEqual(try resolver.value(for: key), "STRING_VALUE_REMOTE")
     }
     
-    func testRuntimeOverrideForNewKeys() {
+    func testOverrideForNewKeys() {
         let key = FeatureFlagKey("NEW_KEY")
         let overrideValue = 789
         

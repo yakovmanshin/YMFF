@@ -25,6 +25,13 @@ enum SharedAssets {
         .init(stores: [.mutable(RuntimeOverridesStore())])
     }
     
+    static var configurationWithNoMutableStores: FeatureFlagResolverConfiguration {
+        .init(stores: [
+            .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
+            .immutable(FeatureFlagStore.transparent(localStore)),
+        ])
+    }
+    
     static var configurationWithNoStores: FeatureFlagResolverConfiguration {
         .init(stores: [])
     }
