@@ -6,6 +6,8 @@
 //  Copyright © 2021 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if canImport(Foundation)
+
 import XCTest
 @testable import YMFF
 
@@ -76,3 +78,5 @@ extension UserDefaultsStoreTests {
     }
     
 }
+
+#endif
