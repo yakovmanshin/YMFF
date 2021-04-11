@@ -80,7 +80,7 @@ extension FeatureFlagResolver {
     
 }
 
-// MARK: - Runtime Overriding
+// MARK: - Overriding
 
 extension FeatureFlagResolver {
     
@@ -95,6 +95,27 @@ extension FeatureFlagResolver {
         } catch {
             throw error
         }
+    }
+    
+    private func findFirstMutableStore() throws -> MutableFeatureFlagStoreProtocol {
+        let mutableStores = try findMutableStores()
+        return mutableStores[0]
+    }
+    
+    private func findMutableStores() throws -> [MutableFeatureFlagStoreProtocol] {
+        var stores = [MutableFeatureFlagStoreProtocol]()
+        
+        for store in configuration.stores {
+            if case .mutable(let mutableStore) = store {
+                stores.append(mutableStore)
+            }
+        }
+        
+        if stores.isEmpty {
+            throw FeatureFlagResolverError.noMutableStoreAvailable
+        }
+        
+        return stores
     }
     
 }
