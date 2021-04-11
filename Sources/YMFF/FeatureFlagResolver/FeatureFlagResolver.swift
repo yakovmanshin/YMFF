@@ -30,7 +30,7 @@ final public class FeatureFlagResolver {
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func value<Value>(for key: FeatureFlagKey) throws -> Value {
-        let retrievedValue: Value = try retrieveValue(forKey: key)
+        let retrievedValue: Value = try retrieveFirstValueFoundInPersistentStores(byKey: key)
         try validateValue(retrievedValue)
         
         return retrievedValue
@@ -50,14 +50,6 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 // MARK: Value Resolution
 
 extension FeatureFlagResolver {
-    
-    private func retrieveValue<Value>(forKey key: String) throws -> Value {
-        if let runtimeValue: Value = configuration.runtimeStore.value(forKey: key) {
-            return runtimeValue
-        }
-        
-        return try retrieveFirstValueFoundInPersistentStores(byKey: key)
-    }
     
     func retrieveFirstValueFoundInPersistentStores<Value>(byKey key: String) throws -> Value {
         let stores = configuration.persistentStores
