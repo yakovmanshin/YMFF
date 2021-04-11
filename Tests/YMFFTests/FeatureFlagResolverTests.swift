@@ -119,16 +119,16 @@ extension FeatureFlagResolverTests {
     func testValueRetrieval() {
         let key = "int"
         
-        XCTAssertNoThrow(try resolver.retrieveFirstValueFoundInPersistentStores(byKey: key) as Int)
+        XCTAssertNoThrow(try resolver.retrieveFirstValueFoundInStores(byKey: key) as Int)
     }
     
-    func testValueRetrievalFromEmptyPersistentStoresArray() {
+    func testValueRetrievalFromEmptyStoresArray() {
         resolver = FeatureFlagResolver(configuration: SharedAssets.configurationWithNoPersistentStores)
         
         let key = "int"
         
         do {
-            let _: Int = try resolver.retrieveFirstValueFoundInPersistentStores(byKey: key)
+            let _: Int = try resolver.retrieveFirstValueFoundInStores(byKey: key)
         } catch FeatureFlagResolverError.noPersistentStoreAvailable { } catch { XCTFail() }
     }
     

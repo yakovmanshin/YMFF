@@ -30,7 +30,7 @@ final public class FeatureFlagResolver {
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func value<Value>(for key: FeatureFlagKey) throws -> Value {
-        let retrievedValue: Value = try retrieveFirstValueFoundInPersistentStores(byKey: key)
+        let retrievedValue: Value = try retrieveFirstValueFoundInStores(byKey: key)
         try validateValue(retrievedValue)
         
         return retrievedValue
@@ -51,7 +51,7 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 
 extension FeatureFlagResolver {
     
-    func retrieveFirstValueFoundInPersistentStores<Value>(byKey key: String) throws -> Value {
+    func retrieveFirstValueFoundInStores<Value>(byKey key: String) throws -> Value {
         let stores = configuration.persistentStores
         
         guard !stores.isEmpty else {
@@ -90,7 +90,7 @@ extension FeatureFlagResolver {
         try validateValue(value)
         
         do {
-            let _: Value = try retrieveFirstValueFoundInPersistentStores(byKey: key)
+            let _: Value = try retrieveFirstValueFoundInStores(byKey: key)
         } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
             // If none of the persistent stores contains a value for the key, then the client is attempting
             // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
