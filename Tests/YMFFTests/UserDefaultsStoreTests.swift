@@ -31,7 +31,7 @@ extension UserDefaultsStoreTests {
         let key = "TEST_UserDefaults_key_123"
         let value = 123
         
-        userDefaults.setValue(value, forKey: key)
+        userDefaults.set(value, forKey: key)
         
         // FIXME: [#40] Can't use `retrievedValue: Int?` here
         let retrievedValue = try? resolver.value(for: key) as Int
@@ -45,7 +45,7 @@ extension UserDefaultsStoreTests {
         
         try? resolver.overrideInRuntime(key, with: value)
         
-        let retrievedValue = userDefaults.value(forKey: key) as? Int
+        let retrievedValue = userDefaults.object(forKey: key) as? Int
         
         XCTAssertEqual(retrievedValue, value)
     }
