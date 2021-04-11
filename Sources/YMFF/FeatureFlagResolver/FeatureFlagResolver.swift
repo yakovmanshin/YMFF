@@ -52,15 +52,13 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 extension FeatureFlagResolver {
     
     func retrieveFirstValueFoundInStores<Value>(byKey key: String) throws -> Value {
-        let stores = configuration.persistentStores
-        
-        guard !stores.isEmpty else {
-            throw FeatureFlagResolverError.noPersistentStoreAvailable
+        guard !configuration.stores.isEmpty else {
+            throw FeatureFlagResolverError.noStoreAvailable
         }
         
-        for store in stores {
-            if store.containsValue(forKey: key) {
-                guard let value: Value = store.value(forKey: key)
+        for store in configuration.stores {
+            if store.asImmutable.containsValue(forKey: key) {
+                guard let value: Value = store.asImmutable.value(forKey: key)
                 else { throw FeatureFlagResolverError.typeMismatch }
                 
                 return value
