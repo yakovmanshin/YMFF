@@ -62,4 +62,17 @@ extension UserDefaultsStoreTests {
         XCTAssertEqual(retrievedValue, value)
     }
     
+    func testRemoveValueWithResolver() {
+        let key = "TEST_UserDefaults_key_012"
+        let value = 012
+        
+        userDefaults.set(value, forKey: key)
+        
+        XCTAssertEqual(userDefaults.object(forKey: key) as? Int, value)
+        
+        resolver.removeRuntimeOverride(for: key)
+        
+        XCTAssertNil(userDefaults.object(forKey: key))
+    }
+    
 }
