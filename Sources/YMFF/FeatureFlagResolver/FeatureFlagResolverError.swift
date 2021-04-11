@@ -10,6 +10,7 @@
 public enum FeatureFlagResolverError: Error {
     case noMutableStoreAvailable
     case noPersistentStoreAvailable
+    case noStoreAvailable
     case optionalValuesNotAllowed
     case typeMismatch
     case valueNotFoundInPersistentStores(key: String)
