@@ -10,3 +10,16 @@ public enum FeatureFlagStore {
     case immutable(FeatureFlagStoreProtocol)
     case mutable(MutableFeatureFlagStoreProtocol)
 }
+
+public extension FeatureFlagStore {
+    
+    var asImmutable: FeatureFlagStoreProtocol {
+        switch self {
+        case .immutable(let store):
+            return store
+        case .mutable(let store):
+            return store
+        }
+    }
+    
+}
