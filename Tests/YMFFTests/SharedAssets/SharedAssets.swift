@@ -25,6 +25,10 @@ enum SharedAssets {
         .init(stores: [.mutable(RuntimeOverridesStore())])
     }
     
+    static var configurationWithNoStores: FeatureFlagResolverConfiguration {
+        .init(stores: [])
+    }
+    
     private static var localStore: [String : Any] { [
         "bool": false,
         "int": 123,

@@ -123,13 +123,13 @@ extension FeatureFlagResolverTests {
     }
     
     func testValueRetrievalFromEmptyStoresArray() {
-        resolver = FeatureFlagResolver(configuration: SharedAssets.configurationWithNoPersistentStores)
+        resolver = FeatureFlagResolver(configuration: SharedAssets.configurationWithNoStores)
         
         let key = "int"
         
         do {
             let _: Int = try resolver.retrieveFirstValueFoundInStores(byKey: key)
-        } catch FeatureFlagResolverError.noPersistentStoreAvailable { } catch { XCTFail() }
+        } catch FeatureFlagResolverError.noStoreAvailable { } catch { XCTFail() }
     }
     
     // MARK: Value Validation
