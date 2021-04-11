@@ -10,15 +10,16 @@ extension FeatureFlagResolverTests {
         ("testIntValueResolution", testIntValueResolution),
         ("testNonexistentValueResolution", testNonexistentValueResolution),
         ("testOptionalIntValueResolution", testOptionalIntValueResolution),
+        ("testOverrideFailureNoMutableStores", testOverrideFailureNoMutableStores),
+        ("testOverrideFailureTypeMismatch", testOverrideFailureTypeMismatch),
+        ("testOverrideForNewKeys", testOverrideForNewKeys),
+        ("testOverrideSuccess", testOverrideSuccess),
         ("testOverrideValueValidationFailureOptional", testOverrideValueValidationFailureOptional),
         ("testOverrideValueValidationFailureTypeMismatch", testOverrideValueValidationFailureTypeMismatch),
         ("testOverrideValueValidationSuccess", testOverrideValueValidationSuccess),
-        ("testRuntimeOverrideFailure", testRuntimeOverrideFailure),
-        ("testRuntimeOverrideForNewKeys", testRuntimeOverrideForNewKeys),
-        ("testRuntimeOverrideSuccess", testRuntimeOverrideSuccess),
         ("testStringValueResolution", testStringValueResolution),
         ("testValueRetrieval", testValueRetrieval),
-        ("testValueRetrievalFromEmptyPersistentStoresArray", testValueRetrievalFromEmptyPersistentStoresArray),
+        ("testValueRetrievalFromEmptyStoresArray", testValueRetrievalFromEmptyStoresArray),
         ("testValueValidation", testValueValidation),
     ]
 }
@@ -59,6 +60,7 @@ extension UserDefaultsStoreTests {
     // to regenerate.
     static let __allTests__UserDefaultsStoreTests = [
         ("testReadValueWithResolver", testReadValueWithResolver),
+        ("testRemoveValueWithResolver", testRemoveValueWithResolver),
         ("testWriteAndReadValueWithResolver", testWriteAndReadValueWithResolver),
         ("testWriteValueWithResolver", testWriteValueWithResolver),
     ]
