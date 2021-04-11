@@ -38,7 +38,9 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws {
         try validateOverrideValue(newValue, forKey: key)
-        configuration.runtimeStore.setValue(newValue, forKey: key)
+        
+        let mutableStore = try findFirstMutableStore()
+        mutableStore.setValue(newValue, forKey: key)
     }
     
     public func removeRuntimeOverride(for key: FeatureFlagKey) {
