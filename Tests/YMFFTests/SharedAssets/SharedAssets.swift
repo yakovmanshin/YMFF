@@ -14,14 +14,15 @@ import YMFFProtocols
 enum SharedAssets {
     
     static var configuration: FeatureFlagResolverConfiguration {
-        .init(persistentStores: [
-            .opaque(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
-            .transparent(localStore)
+        .init(stores: [
+            .mutable(RuntimeOverridesStore()),
+            .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
+            .immutable(FeatureFlagStore.transparent(localStore)),
         ])
     }
     
     static var configurationWithNoPersistentStores: FeatureFlagResolverConfiguration {
-        .init(persistentStores: [])
+        .init(stores: [.mutable(RuntimeOverridesStore())])
     }
     
     private static var localStore: [String : Any] { [
