@@ -44,7 +44,8 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     }
     
     public func removeRuntimeOverride(for key: FeatureFlagKey) {
-        configuration.runtimeStore.removeValue(forKey: key)
+        let mutableStores = try? findMutableStores()
+        mutableStores?.forEach({ $0.removeValue(forKey: key) })
     }
     
 }
