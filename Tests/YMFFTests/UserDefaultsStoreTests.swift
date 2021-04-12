@@ -6,6 +6,8 @@
 //  Copyright © 2021 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if canImport(Foundation)
+
 import XCTest
 @testable import YMFF
 
@@ -18,10 +20,9 @@ final class UserDefaultsStoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        resolver = FeatureFlagResolver(configuration: .init(
-            persistentStores: [.userDefaults(userDefaults)],
-            runtimeStore: UserDefaultsStore(userDefaults: userDefaults)
-        ))
+        resolver = FeatureFlagResolver(configuration: .init(stores: [
+            .mutable(UserDefaultsStore(userDefaults: userDefaults))
+        ]))
     }
     
 }
@@ -32,7 +33,7 @@ extension UserDefaultsStoreTests {
         let key = "TEST_UserDefaults_key_123"
         let value = 123
         
-        userDefaults.setValue(value, forKey: key)
+        userDefaults.set(value, forKey: key)
         
         // FIXME: [#40] Can't use `retrievedValue: Int?` here
         let retrievedValue = try? resolver.value(for: key) as Int
@@ -46,7 +47,7 @@ extension UserDefaultsStoreTests {
         
         try? resolver.overrideInRuntime(key, with: value)
         
-        let retrievedValue = userDefaults.value(forKey: key) as? Int
+        let retrievedValue = userDefaults.object(forKey: key) as? Int
         
         XCTAssertEqual(retrievedValue, value)
     }
@@ -63,4 +64,19 @@ extension UserDefaultsStoreTests {
         XCTAssertEqual(retrievedValue, value)
     }
     
+    func testRemoveValueWithResolver() {
+        let key = "TEST_UserDefaults_key_012"
+        let value = 012
+        
+        userDefaults.set(value, forKey: key)
+        
+        XCTAssertEqual(userDefaults.object(forKey: key) as? Int, value)
+        
+        resolver.removeRuntimeOverride(for: key)
+        
+        XCTAssertNil(userDefaults.object(forKey: key))
+    }
+    
 }
+
+#endif

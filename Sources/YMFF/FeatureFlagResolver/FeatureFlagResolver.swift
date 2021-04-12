@@ -30,7 +30,7 @@ final public class FeatureFlagResolver {
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func value<Value>(for key: FeatureFlagKey) throws -> Value {
-        let retrievedValue: Value = try retrieveValue(forKey: key)
+        let retrievedValue: Value = try retrieveFirstValueFoundInStores(byKey: key)
         try validateValue(retrievedValue)
         
         return retrievedValue
@@ -38,11 +38,14 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws {
         try validateOverrideValue(newValue, forKey: key)
-        configuration.runtimeStore.setValue(newValue, forKey: key)
+        
+        let mutableStore = try findFirstMutableStore()
+        mutableStore.setValue(newValue, forKey: key)
     }
     
     public func removeRuntimeOverride(for key: FeatureFlagKey) {
-        configuration.runtimeStore.removeValue(forKey: key)
+        let mutableStores = try? findMutableStores()
+        mutableStores?.forEach({ $0.removeValue(forKey: key) })
     }
     
 }
@@ -51,24 +54,14 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 
 extension FeatureFlagResolver {
     
-    private func retrieveValue<Value>(forKey key: String) throws -> Value {
-        if let runtimeValue: Value = configuration.runtimeStore.value(forKey: key) {
-            return runtimeValue
+    func retrieveFirstValueFoundInStores<Value>(byKey key: String) throws -> Value {
+        guard !configuration.stores.isEmpty else {
+            throw FeatureFlagResolverError.noStoreAvailable
         }
         
-        return try retrieveFirstValueFoundInPersistentStores(byKey: key)
-    }
-    
-    func retrieveFirstValueFoundInPersistentStores<Value>(byKey key: String) throws -> Value {
-        let stores = configuration.persistentStores
-        
-        guard !stores.isEmpty else {
-            throw FeatureFlagResolverError.noPersistentStoreAvailable
-        }
-        
-        for store in stores {
-            if store.containsValue(forKey: key) {
-                guard let value: Value = store.value(forKey: key)
+        for store in configuration.stores {
+            if store.asImmutable.containsValue(forKey: key) {
+                guard let value: Value = store.asImmutable.value(forKey: key)
                 else { throw FeatureFlagResolverError.typeMismatch }
                 
                 return value
@@ -90,7 +83,7 @@ extension FeatureFlagResolver {
     
 }
 
-// MARK: - Runtime Overriding
+// MARK: - Overriding
 
 extension FeatureFlagResolver {
     
@@ -98,13 +91,34 @@ extension FeatureFlagResolver {
         try validateValue(value)
         
         do {
-            let _: Value = try retrieveFirstValueFoundInPersistentStores(byKey: key)
+            let _: Value = try retrieveFirstValueFoundInStores(byKey: key)
         } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
             // If none of the persistent stores contains a value for the key, then the client is attempting
             // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
         } catch {
             throw error
         }
+    }
+    
+    private func findFirstMutableStore() throws -> MutableFeatureFlagStoreProtocol {
+        let mutableStores = try findMutableStores()
+        return mutableStores[0]
+    }
+    
+    private func findMutableStores() throws -> [MutableFeatureFlagStoreProtocol] {
+        var stores = [MutableFeatureFlagStoreProtocol]()
+        
+        for store in configuration.stores {
+            if case .mutable(let mutableStore) = store {
+                stores.append(mutableStore)
+            }
+        }
+        
+        if stores.isEmpty {
+            throw FeatureFlagResolverError.noMutableStoreAvailable
+        }
+        
+        return stores
     }
     
 }

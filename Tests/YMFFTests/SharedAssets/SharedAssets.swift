@@ -14,14 +14,22 @@ import YMFFProtocols
 enum SharedAssets {
     
     static var configuration: FeatureFlagResolverConfiguration {
-        .init(persistentStores: [
-            .opaque(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
-            .transparent(localStore)
+        .init(stores: [
+            .mutable(RuntimeOverridesStore()),
+            .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
+            .immutable(localStore),
         ])
     }
     
-    static var configurationWithNoPersistentStores: FeatureFlagResolverConfiguration {
-        .init(persistentStores: [])
+    static var configurationWithNoMutableStores: FeatureFlagResolverConfiguration {
+        .init(stores: [
+            .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
+            .immutable(localStore),
+        ])
+    }
+    
+    static var configurationWithNoStores: FeatureFlagResolverConfiguration {
+        .init(stores: [])
     }
     
     private static var localStore: [String : Any] { [
@@ -66,11 +74,12 @@ private struct OpaqueStoreWithLimitedTypeSupport: FeatureFlagStoreProtocol {
         let expectedValueType = Value.self
         
         switch expectedValueType {
-        case is Bool.Type:
-            return store[key] as? Value
-        case is Int.Type:
-            return store[key] as? Value
-        case is String.Type:
+        case is Bool.Type,
+             is Int.Type,
+             is String.Type,
+             is Optional<Bool>.Type,
+             is Optional<Int>.Type,
+             is Optional<String>.Type:
             return store[key] as? Value
         default:
             assertionFailure("The expected feature flag value type (\(expectedValueType)) is not supported")

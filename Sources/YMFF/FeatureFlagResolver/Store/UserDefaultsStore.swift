@@ -37,11 +37,11 @@ extension UserDefaultsStore: MutableFeatureFlagStoreProtocol {
     }
     
     public func value<Value>(forKey key: String) -> Value? {
-        userDefaults.value(forKey: key) as? Value
+        userDefaults.object(forKey: key) as? Value
     }
     
     public func setValue<Value>(_ value: Value, forKey key: String) {
-        userDefaults.setValue(value, forKey: key)
+        userDefaults.set(value, forKey: key)
     }
     
     public func removeValue(forKey key: String) {
