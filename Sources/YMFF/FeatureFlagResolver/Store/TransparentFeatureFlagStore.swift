@@ -8,8 +8,12 @@
 
 import YMFFProtocols
 
+// MARK: - TransparentFeatureFlagStore
+
 /// A simple dictionary used to store and retrieve feature flag values.
 public typealias TransparentFeatureFlagStore = [String : Any]
+
+// MARK: - FeatureFlagStoreProtocol
 
 extension TransparentFeatureFlagStore: FeatureFlagStoreProtocol {
     

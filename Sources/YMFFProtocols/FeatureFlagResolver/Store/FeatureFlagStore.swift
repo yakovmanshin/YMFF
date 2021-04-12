@@ -6,6 +6,8 @@
 //  Copyright © 2021 Yakov Manshin. See the LICENSE file for license info.
 //
 
+// MARK: - FeatureFlagStore
+
 /// The enum used to configure the feature flag resolver.
 public enum FeatureFlagStore {
     case immutable(FeatureFlagStoreProtocol)
