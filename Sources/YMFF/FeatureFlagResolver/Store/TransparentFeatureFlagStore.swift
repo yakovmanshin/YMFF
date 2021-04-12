@@ -6,5 +6,23 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+import YMFFProtocols
+
+// MARK: - TransparentFeatureFlagStore
+
 /// A simple dictionary used to store and retrieve feature flag values.
 public typealias TransparentFeatureFlagStore = [String : Any]
+
+// MARK: - FeatureFlagStoreProtocol
+
+extension TransparentFeatureFlagStore: FeatureFlagStoreProtocol {
+    
+    public func containsValue(forKey key: String) -> Bool {
+        self[key] != nil
+    }
+    
+    public func value<Value>(forKey key: String) -> Value? {
+        self[key] as? Value
+    }
+    
+}
