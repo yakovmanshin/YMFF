@@ -112,13 +112,7 @@ extension FeatureFlagResolver {
     }
     
     private func findMutableStores() throws -> [MutableFeatureFlagStoreProtocol] {
-        var stores = [MutableFeatureFlagStoreProtocol]()
-        
-        for store in configuration.stores {
-            if case .mutable(let mutableStore) = store {
-                stores.append(mutableStore)
-            }
-        }
+        let stores = configuration.stores.compactMap({ $0.asMutable })
         
         if stores.isEmpty {
             throw FeatureFlagResolverError.noMutableStoreAvailable
