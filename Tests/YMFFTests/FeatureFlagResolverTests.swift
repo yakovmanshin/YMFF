@@ -75,7 +75,7 @@ extension FeatureFlagResolverTests {
         
         XCTAssertEqual(try resolver.value(for: key), overrideValue)
         
-        resolver.removeRuntimeOverride(for: key)
+        XCTAssertNoThrow(try resolver.removeValueFromMutableStore(using: key))
         
         XCTAssertEqual(try resolver.value(for: key), originalValue)
     }

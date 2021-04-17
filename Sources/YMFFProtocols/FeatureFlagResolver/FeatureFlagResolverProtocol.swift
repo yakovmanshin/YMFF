@@ -24,9 +24,9 @@ public protocol FeatureFlagResolverProtocol {
     ///   - newValue: *Required.* The override value.
     func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws
     
-    /// Removes an override value for the specified key, and reverts to the default resolution scheme.
+    /// Removes the value from the first mutable feature flag store which has one for the specified key.
     ///
     /// - Parameter key: *Required.* The feature flag key.
-    func removeRuntimeOverride(for key: FeatureFlagKey)
+    func removeValueFromMutableStore(using key: FeatureFlagKey) throws
     
 }

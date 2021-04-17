@@ -55,7 +55,7 @@ final class MutableStoreTests: XCTestCase {
         XCTAssertEqual(overrideValueFromResolver, overrideValue)
         XCTAssertEqual(overrideValueFromStore, overrideValue)
         
-        resolver.removeRuntimeOverride(for: overrideKey)
+        XCTAssertNoThrow(try resolver.removeValueFromMutableStore(using: overrideKey))
         
         let removedValueFromResolver = try? resolver.value(for: overrideKey) as Int
         let removedValueFromStore: Int? = mutableStore.value(forKey: overrideKey)

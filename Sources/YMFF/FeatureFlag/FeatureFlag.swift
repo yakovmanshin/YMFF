@@ -60,7 +60,7 @@ final public class FeatureFlag<Value> {
     
     /// Removes the feature flag value that overrides persistent values in runtime.
     public func removeRuntimeOverride() {
-        resolver.removeRuntimeOverride(for: key)
+        try? resolver.removeValueFromMutableStore(using: key)
     }
     
 }

@@ -72,7 +72,7 @@ extension UserDefaultsStoreTests {
         
         XCTAssertEqual(userDefaults.object(forKey: key) as? Int, value)
         
-        resolver.removeRuntimeOverride(for: key)
+        XCTAssertNoThrow(try resolver.removeValueFromMutableStore(using: key))
         
         XCTAssertNil(userDefaults.object(forKey: key))
     }
