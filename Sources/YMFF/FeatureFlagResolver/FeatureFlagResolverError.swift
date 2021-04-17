@@ -9,6 +9,7 @@
 /// Errors returned by `FeatureFlagResolver`.
 public enum FeatureFlagResolverError: Error {
     case noMutableStoreAvailable
+    case noMutableStoreContainsValueForKey(key: String)
     case noStoreAvailable
     case optionalValuesNotAllowed
     case typeMismatch
