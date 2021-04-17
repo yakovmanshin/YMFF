@@ -23,6 +23,12 @@ final public class FeatureFlagResolver {
         self.configuration = configuration
     }
     
+    deinit {
+        configuration.stores
+            .compactMap({ $0.asMutable })
+            .forEach({ $0.saveChanges() })
+    }
+    
 }
 
 // MARK: - FeatureFlagResolverProtocol
