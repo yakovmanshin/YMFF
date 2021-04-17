@@ -47,7 +47,7 @@ final public class FeatureFlag<Value> {
         get {
             (try? (resolver.value(for: key) as Value)) ?? defaultValue
         } set {
-            try? resolver.overrideInRuntime(key, with: newValue)
+            try? resolver.setValue(newValue, toMutableStoreUsing: key)
         }
     }
     

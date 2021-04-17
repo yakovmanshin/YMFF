@@ -71,7 +71,7 @@ extension FeatureFlagResolverTests {
         
         XCTAssertEqual(try resolver.value(for: key), originalValue)
         
-        XCTAssertNoThrow(try resolver.overrideInRuntime(key, with: overrideValue))
+        XCTAssertNoThrow(try resolver.setValue(overrideValue, toMutableStoreUsing: key))
         
         XCTAssertEqual(try resolver.value(for: key), overrideValue)
         
@@ -89,7 +89,7 @@ extension FeatureFlagResolverTests {
         XCTAssertEqual(try resolver.value(for: key), originalValue)
         
         do {
-            _ = try resolver.overrideInRuntime(key, with: overrideValue)
+            _ = try resolver.setValue(overrideValue, toMutableStoreUsing: key)
             XCTFail()
         } catch FeatureFlagResolverError.noMutableStoreAvailable { } catch { XCTFail() }
         
@@ -103,7 +103,7 @@ extension FeatureFlagResolverTests {
         XCTAssertEqual(try resolver.value(for: key), "STRING_VALUE_REMOTE")
         
         do {
-            _ = try resolver.overrideInRuntime(key, with: overrideValue)
+            _ = try resolver.setValue(overrideValue, toMutableStoreUsing: key)
             XCTFail()
         } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
         
@@ -119,7 +119,7 @@ extension FeatureFlagResolverTests {
             XCTFail()
         } catch FeatureFlagResolverError.valueNotFoundInPersistentStores { } catch { XCTFail() }
         
-        XCTAssertNoThrow(try resolver.overrideInRuntime(key, with: overrideValue))
+        XCTAssertNoThrow(try resolver.setValue(overrideValue, toMutableStoreUsing: key))
         
         XCTAssertEqual(try resolver.value(for: key), overrideValue)
     }

@@ -42,10 +42,10 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         return retrievedValue
     }
     
-    public func overrideInRuntime<Value>(_ key: FeatureFlagKey, with newValue: Value) throws {
+    public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
         try validateOverrideValue(newValue, forKey: key)
         
-        let mutableStore = try findFirstMutableStore()
+        let mutableStore = try findMutableStores()[0]
         mutableStore.setValue(newValue, forKey: key)
     }
     
@@ -104,11 +104,6 @@ extension FeatureFlagResolver {
         } catch {
             throw error
         }
-    }
-    
-    private func findFirstMutableStore() throws -> MutableFeatureFlagStoreProtocol {
-        let mutableStores = try findMutableStores()
-        return mutableStores[0]
     }
     
     private func firstMutableStore(withValueForKey key: String) throws -> MutableFeatureFlagStoreProtocol {
