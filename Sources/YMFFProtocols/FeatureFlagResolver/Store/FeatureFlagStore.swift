@@ -25,4 +25,13 @@ public extension FeatureFlagStore {
         }
     }
     
+    var asMutable: MutableFeatureFlagStoreProtocol? {
+        switch self {
+        case .immutable:
+            return nil
+        case .mutable(let store):
+            return store
+        }
+    }
+    
 }
