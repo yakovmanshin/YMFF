@@ -48,6 +48,10 @@ extension UserDefaultsStore: MutableFeatureFlagStoreProtocol {
         userDefaults.removeObject(forKey: key)
     }
     
+    public func saveChanges() {
+        userDefaults.synchronize()
+    }
+    
 }
 
 #endif
