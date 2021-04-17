@@ -47,7 +47,7 @@ final public class FeatureFlag<Value> {
         get {
             (try? (resolver.value(for: key) as Value)) ?? defaultValue
         } set {
-            try? resolver.overrideInRuntime(key, with: newValue)
+            try? resolver.setValue(newValue, toMutableStoreUsing: key)
         }
     }
     
@@ -56,11 +56,13 @@ final public class FeatureFlag<Value> {
     /// The object returned when referencing the feature flag with a dollar sign (`$`).
     public var projectedValue: FeatureFlag<Value> { self }
     
-    // MARK: Runtime Overrides
+    // MARK: Mutable Value Removal
     
-    /// Removes the feature flag value that overrides persistent values in runtime.
-    public func removeRuntimeOverride() {
-        resolver.removeRuntimeOverride(for: key)
+    /// Removes the value from the first mutable feature flag store which contains one for `key`.
+    ///
+    /// + Errors thrown by `resolver` are ignored.
+    public func removeValueFromMutableStore() {
+        try? resolver.removeValueFromMutableStore(using: key)
     }
     
 }

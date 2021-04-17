@@ -45,7 +45,7 @@ extension UserDefaultsStoreTests {
         let key = "TEST_UserDefaults_key_456"
         let value = 456
         
-        try? resolver.overrideInRuntime(key, with: value)
+        try? resolver.setValue(value, toMutableStoreUsing: key)
         
         let retrievedValue = userDefaults.object(forKey: key) as? Int
         
@@ -56,7 +56,7 @@ extension UserDefaultsStoreTests {
         let key = "TEST_UserDefaults_key_789"
         let value = 789
         
-        try? resolver.overrideInRuntime(key, with: value)
+        try? resolver.setValue(value, toMutableStoreUsing: key)
         
         // FIXME: [#40] Can't use `retrievedValue: Int?` here
         let retrievedValue = try? resolver.value(for: key) as Int
@@ -72,7 +72,7 @@ extension UserDefaultsStoreTests {
         
         XCTAssertEqual(userDefaults.object(forKey: key) as? Int, value)
         
-        resolver.removeRuntimeOverride(for: key)
+        XCTAssertNoThrow(try resolver.removeValueFromMutableStore(using: key))
         
         XCTAssertNil(userDefaults.object(forKey: key))
     }
