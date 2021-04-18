@@ -3,10 +3,8 @@ name: SPM CI
 on: [pull_request, push]
 
 jobs:
-  test:
-    
+  macos-test:
     runs-on: macos-11.0
-    
     steps:
     - uses: actions/checkout@v2
     - name: Select Xcode version
