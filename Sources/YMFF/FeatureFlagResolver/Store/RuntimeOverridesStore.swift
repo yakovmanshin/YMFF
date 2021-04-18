@@ -6,6 +6,8 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+import YMFFProtocols
+
 // MARK: - RuntimeOverridesStore
 
 /// A YMFF-supplied implementation of the object that stores feature flag values used in runtime.
@@ -22,6 +24,10 @@ final public class RuntimeOverridesStore {
 // MARK: - MutableFeatureFlagStoreProtocol
 
 extension RuntimeOverridesStore: MutableFeatureFlagStoreProtocol {
+    
+    public func containsValue(forKey key: String) -> Bool {
+        store[key] != nil
+    }
     
     public func value<Value>(forKey key: String) -> Value? {
         store[key] as? Value

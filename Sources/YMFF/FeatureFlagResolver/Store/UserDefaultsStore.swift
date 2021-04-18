@@ -9,6 +9,7 @@
 #if canImport(Foundation)
 
 import Foundation
+import YMFFProtocols
 
 // MARK: - UserDefaultsStore
 
@@ -31,16 +32,24 @@ final public class UserDefaultsStore {
 
 extension UserDefaultsStore: MutableFeatureFlagStoreProtocol {
     
+    public func containsValue(forKey key: String) -> Bool {
+        userDefaults.object(forKey: key) != nil
+    }
+    
     public func value<Value>(forKey key: String) -> Value? {
-        userDefaults.value(forKey: key) as? Value
+        userDefaults.object(forKey: key) as? Value
     }
     
     public func setValue<Value>(_ value: Value, forKey key: String) {
-        userDefaults.setValue(value, forKey: key)
+        userDefaults.set(value, forKey: key)
     }
     
     public func removeValue(forKey key: String) {
         userDefaults.removeObject(forKey: key)
+    }
+    
+    public func saveChanges() {
+        userDefaults.synchronize()
     }
     
 }
