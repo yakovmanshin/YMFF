@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import YMFFProtocols
 @testable import YMFF
 
 // MARK: - Configuration
@@ -69,7 +70,7 @@ extension FeatureFlagTests {
         
         XCTAssertEqual(overrideFlag, 789)
         
-        $overrideFlag.removeRuntimeOverride()
+        $overrideFlag.removeValueFromMutableStore()
         
         XCTAssertEqual(overrideFlag, 456)
     }
@@ -81,7 +82,7 @@ extension FeatureFlagTests {
         
         XCTAssertEqual(nonexistentOverrideFlag, 789)
         
-        $nonexistentOverrideFlag.removeRuntimeOverride()
+        $nonexistentOverrideFlag.removeValueFromMutableStore()
         
         XCTAssertEqual(nonexistentOverrideFlag, 999)
     }

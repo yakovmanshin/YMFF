@@ -7,17 +7,29 @@
 //
 
 import YMFF
+import YMFFProtocols
 
 // MARK: - Shared
 
 enum SharedAssets {
     
     static var configuration: FeatureFlagResolverConfiguration {
-        .init(persistentStores: [.opaque(OpaqueStoreStab(store: remoteStore)), .transparent(localStore)])
+        .init(stores: [
+            .mutable(RuntimeOverridesStore()),
+            .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
+            .immutable(localStore),
+        ])
     }
     
-    static var configurationWithNoPersistentStores: FeatureFlagResolverConfiguration {
-        .init(persistentStores: [])
+    static var configurationWithNoMutableStores: FeatureFlagResolverConfiguration {
+        .init(stores: [
+            .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
+            .immutable(localStore),
+        ])
+    }
+    
+    static var configurationWithNoStores: FeatureFlagResolverConfiguration {
+        .init(stores: [])
     }
     
     private static var localStore: [String : Any] { [
@@ -46,12 +58,33 @@ enum SharedAssets {
 
 // MARK: - Supplementary Types
 
-fileprivate struct OpaqueStoreStab: FeatureFlagStoreProtocol {
+private struct OpaqueStoreWithLimitedTypeSupport: FeatureFlagStoreProtocol {
     
-    let store: TransparentFeatureFlagStore
+    private let store: TransparentFeatureFlagStore
+    
+    init(store: TransparentFeatureFlagStore) {
+        self.store = store
+    }
+    
+    func containsValue(forKey key: String) -> Bool {
+        store[key] != nil
+    }
     
     func value<Value>(forKey key: String) -> Value? {
-        store[key] as? Value
+        let expectedValueType = Value.self
+        
+        switch expectedValueType {
+        case is Bool.Type,
+             is Int.Type,
+             is String.Type,
+             is Optional<Bool>.Type,
+             is Optional<Int>.Type,
+             is Optional<String>.Type:
+            return store[key] as? Value
+        default:
+            assertionFailure("The expected feature flag value type (\(expectedValueType)) is not supported")
+            return nil
+        }
     }
     
 }
