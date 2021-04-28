@@ -1,31 +1,28 @@
 author: Yakov Manshin
 author_url: https://yakovmanshin.com/
 clean: true
-copyright: © 2020 [Yakov Manshin](https://yakovmanshin.com/). Available under [Apache License v2](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE).
+copyright: © 2020–2021 [Yakov Manshin](https://yakovmanshin.com/). Available under [Apache License v2](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE).
 custom_categories:
-    - name: FeatureFlag
+    - name: YMFF
       children:
           - FeatureFlag
-          - FeatureFlagKey
-    - name: Resolver
-      children:
-          - FeatureFlagResolverProtocol
           - FeatureFlagResolver
-          - FeatureFlagResolverConfigurationProtocol
-          - FeatureFlagResolverConfiguration
           - FeatureFlagResolverError
-    - name: Stores
-      children:
-          - FeatureFlagStoreProtocol
-          - MutableFeatureFlagStoreProtocol
-          - FeatureFlagStore
+          - FeatureFlagResolverConfiguration
           - TransparentFeatureFlagStore
           - RuntimeOverridesStore
           - UserDefaultsStore
+    - name: YMFFProtocols
+      children:
+          - FeatureFlagKey
+          - FeatureFlagResolverProtocol
+          - FeatureFlagResolverConfigurationProtocol
+          - FeatureFlagStore
+          - FeatureFlagStoreProtocol
+          - MutableFeatureFlagStoreProtocol
 disable_search: true
-github_file_prefix: https://github.com/yakovmanshin/YMFF/tree/master
+github_file_prefix: https://github.com/yakovmanshin/YMFF/tree/main
 github_url: https://github.com/yakovmanshin/YMFF
 hide_documentation_coverage: true
-module: YMFF
 title: YMFF Docs
 undocumented_text: Documentation Coming Soon…
