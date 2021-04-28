@@ -77,6 +77,17 @@ extension UserDefaultsStoreTests {
         XCTAssertNil(userDefaults.object(forKey: key))
     }
     
+    func testChangeSaving() {
+        let key = "TEST_UserDefaults_key_345"
+        let value = 345
+        
+        try? resolver.setValue(value, toMutableStoreUsing: key)
+        
+        resolver = nil
+        
+        XCTAssertEqual(userDefaults.object(forKey: key) as? Int, value)
+    }
+    
 }
 
 #endif
