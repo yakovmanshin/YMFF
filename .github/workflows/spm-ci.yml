@@ -3,13 +3,18 @@ name: SPM CI
 on: [pull_request, push]
 
 jobs:
-  test:
-    
+  macos-test:
     runs-on: macos-11.0
-    
     steps:
     - uses: actions/checkout@v2
     - name: Select Xcode version
       run: sudo xcode-select -switch /Applications/Xcode_12.5.app
+    - name: Run tests
+      run: swift test -v
+
+  linux-test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
     - name: Run tests
       run: swift test -v

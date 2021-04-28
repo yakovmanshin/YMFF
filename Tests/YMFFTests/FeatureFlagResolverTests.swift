@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import YMFFProtocols
 @testable import YMFF
 
 // MARK: - Configuration
@@ -61,39 +62,55 @@ extension FeatureFlagResolverTests {
         } catch FeatureFlagResolverError.valueNotFoundInPersistentStores { } catch { XCTFail() }
     }
     
-    // MARK: Runtime Override
+    // MARK: Overriding
     
-    func testRuntimeOverrideSuccess() {
+    func testOverrideSuccess() {
         let key = SharedAssets.intKey
         let originalValue = 123
         let overrideValue = 789
         
         XCTAssertEqual(try resolver.value(for: key), originalValue)
         
-        XCTAssertNoThrow(try resolver.overrideInRuntime(key, with: overrideValue))
+        XCTAssertNoThrow(try resolver.setValue(overrideValue, toMutableStoreUsing: key))
         
         XCTAssertEqual(try resolver.value(for: key), overrideValue)
         
-        resolver.removeRuntimeOverride(for: key)
+        XCTAssertNoThrow(try resolver.removeValueFromMutableStore(using: key))
         
         XCTAssertEqual(try resolver.value(for: key), originalValue)
     }
     
-    func testRuntimeOverrideFailure() {
+    func testOverrideFailureNoMutableStores() {
+        resolver = FeatureFlagResolver(configuration: SharedAssets.configurationWithNoMutableStores)
+        let key = SharedAssets.intKey
+        let originalValue = 123
+        let overrideValue = 789
+        
+        XCTAssertEqual(try resolver.value(for: key), originalValue)
+        
+        do {
+            _ = try resolver.setValue(overrideValue, toMutableStoreUsing: key)
+            XCTFail()
+        } catch FeatureFlagResolverError.noMutableStoreAvailable { } catch { XCTFail() }
+        
+        XCTAssertEqual(try resolver.value(for: key), originalValue)
+    }
+    
+    func testOverrideFailureTypeMismatch() {
         let key = SharedAssets.stringKey
         let overrideValue = 789
         
         XCTAssertEqual(try resolver.value(for: key), "STRING_VALUE_REMOTE")
         
         do {
-            _ = try resolver.overrideInRuntime(key, with: overrideValue)
+            _ = try resolver.setValue(overrideValue, toMutableStoreUsing: key)
             XCTFail()
         } catch FeatureFlagResolverError.typeMismatch { } catch { XCTFail() }
         
         XCTAssertEqual(try resolver.value(for: key), "STRING_VALUE_REMOTE")
     }
     
-    func testRuntimeOverrideForNewKeys() {
+    func testOverrideForNewKeys() {
         let key = FeatureFlagKey("NEW_KEY")
         let overrideValue = 789
         
@@ -102,9 +119,20 @@ extension FeatureFlagResolverTests {
             XCTFail()
         } catch FeatureFlagResolverError.valueNotFoundInPersistentStores { } catch { XCTFail() }
         
-        XCTAssertNoThrow(try resolver.overrideInRuntime(key, with: overrideValue))
+        XCTAssertNoThrow(try resolver.setValue(overrideValue, toMutableStoreUsing: key))
         
         XCTAssertEqual(try resolver.value(for: key), overrideValue)
+    }
+    
+    func testOverrideRemovalFailureNoMutableStoreContainsValue() {
+        let key = FeatureFlagKey("KEY_WITH_NO_VALUE_IN_MUTABLE_STORES")
+        
+        do {
+            try resolver.removeValueFromMutableStore(using: key)
+            XCTFail()
+        } catch FeatureFlagResolverError.noMutableStoreContainsValueForKey(key: let errorKey) {
+            XCTAssertEqual(errorKey, key)
+        } catch { XCTFail() }
     }
     
 }
@@ -118,17 +146,17 @@ extension FeatureFlagResolverTests {
     func testValueRetrieval() {
         let key = "int"
         
-        XCTAssertNoThrow(try resolver.retrieveFirstValueFoundInPersistentStores(byKey: key) as Int)
+        XCTAssertNoThrow(try resolver.retrieveFirstValueFoundInStores(byKey: key) as Int)
     }
     
-    func testValueRetrievalFromEmptyPersistentStoresArray() {
-        resolver = FeatureFlagResolver(configuration: SharedAssets.configurationWithNoPersistentStores)
+    func testValueRetrievalFromEmptyStoresArray() {
+        resolver = FeatureFlagResolver(configuration: SharedAssets.configurationWithNoStores)
         
         let key = "int"
         
         do {
-            let _: Int = try resolver.retrieveFirstValueFoundInPersistentStores(byKey: key)
-        } catch FeatureFlagResolverError.noPersistentStoreAvailable { } catch { XCTFail() }
+            let _: Int = try resolver.retrieveFirstValueFoundInStores(byKey: key)
+        } catch FeatureFlagResolverError.noStoreAvailable { } catch { XCTFail() }
     }
     
     // MARK: Value Validation

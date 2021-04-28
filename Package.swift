@@ -12,8 +12,10 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "YMFF"
+            name: "YMFF",
+            dependencies: ["YMFFProtocols"]
         ),
+        .target(name: "YMFFProtocols"),
         .testTarget(
             name: "YMFFTests",
             dependencies: ["YMFF"]
