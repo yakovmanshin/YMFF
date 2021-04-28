@@ -16,6 +16,7 @@ public enum FeatureFlagStore {
 
 public extension FeatureFlagStore {
     
+    /// Returns the underlying feature flag store as an immutable, regardless of its actual type.
     var asImmutable: FeatureFlagStoreProtocol {
         switch self {
         case .immutable(let store):
@@ -25,6 +26,7 @@ public extension FeatureFlagStore {
         }
     }
     
+    /// Returns the underlying feature flag store if it’s mutable; otherwise, `nil`.
     var asMutable: MutableFeatureFlagStoreProtocol? {
         switch self {
         case .immutable:
