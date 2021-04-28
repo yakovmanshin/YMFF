@@ -124,6 +124,17 @@ extension FeatureFlagResolverTests {
         XCTAssertEqual(try resolver.value(for: key), overrideValue)
     }
     
+    func testOverrideRemovalFailureNoMutableStoreContainsValue() {
+        let key = FeatureFlagKey("KEY_WITH_NO_VALUE_IN_MUTABLE_STORES")
+        
+        do {
+            try resolver.removeValueFromMutableStore(using: key)
+            XCTFail()
+        } catch FeatureFlagResolverError.noMutableStoreContainsValueForKey(key: let errorKey) {
+            XCTAssertEqual(errorKey, key)
+        } catch { XCTFail() }
+    }
+    
 }
 
 // MARK: - Units
