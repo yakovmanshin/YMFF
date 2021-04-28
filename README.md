@@ -151,3 +151,8 @@ Contributions are welcome!
 Have a look at [issues](https://github.com/yakovmanshin/YMFF/issues) to see the project’s current needs. Don’t hesitate to create new issues, especially if you intend to work on them yourself.
 
 If you’d like to discuss something else regarding YMFF (or not), contact [me](https://github.com/yakovmanshin) via email (the address is in the profile).
+
+## License and Copyright
+YMFF is available under the terms of the Apache License, version 2.0. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
+
+© 2020–2021 Yakov Manshin
