@@ -13,6 +13,7 @@ extension FeatureFlagResolverTests {
         ("testOverrideFailureNoMutableStores", testOverrideFailureNoMutableStores),
         ("testOverrideFailureTypeMismatch", testOverrideFailureTypeMismatch),
         ("testOverrideForNewKeys", testOverrideForNewKeys),
+        ("testOverrideRemovalFailureNoMutableStoreContainsValue", testOverrideRemovalFailureNoMutableStoreContainsValue),
         ("testOverrideSuccess", testOverrideSuccess),
         ("testOverrideValueValidationFailureOptional", testOverrideValueValidationFailureOptional),
         ("testOverrideValueValidationFailureTypeMismatch", testOverrideValueValidationFailureTypeMismatch),
@@ -70,6 +71,7 @@ extension UserDefaultsStoreTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__UserDefaultsStoreTests = [
+        ("testChangeSaving", testChangeSaving),
         ("testReadValueWithResolver", testReadValueWithResolver),
         ("testRemoveValueWithResolver", testRemoveValueWithResolver),
         ("testWriteAndReadValueWithResolver", testWriteAndReadValueWithResolver),
