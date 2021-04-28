@@ -1,6 +1,6 @@
 //
 //  FeatureFlagResolverConfigurationProtocol.swift
-//  YMFF
+//  YMFFProtocols
 //
 //  Created by Yakov Manshin on 9/20/20.
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
@@ -11,10 +11,8 @@ public protocol FeatureFlagResolverConfigurationProtocol {
     
     /// An array of stores which may contain feature flag values.
     ///
+    /// + The array may include both mutable and immutable stores.
     /// + The stores are examined in order. The first value found for a key will be used.
-    var persistentStores: [FeatureFlagStoreProtocol] { get }
-    
-    /// An object that provides feature flag values used in the runtime, within a single app session.
-    var runtimeStore: MutableFeatureFlagStoreProtocol { get }
+    var stores: [FeatureFlagStore] { get }
     
 }
