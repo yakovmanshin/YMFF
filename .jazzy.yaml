@@ -24,5 +24,5 @@ disable_search: true
 github_file_prefix: https://github.com/yakovmanshin/YMFF/tree/main
 github_url: https://github.com/yakovmanshin/YMFF
 hide_documentation_coverage: true
-title: YMFF Docs
+title: YMFF v2 Docs
 undocumented_text: Documentation Coming Soon…
