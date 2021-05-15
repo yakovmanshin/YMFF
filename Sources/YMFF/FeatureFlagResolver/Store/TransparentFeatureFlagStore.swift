@@ -6,7 +6,9 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if !COCOAPODS
 import YMFFProtocols
+#endif
 
 // MARK: - TransparentFeatureFlagStore
 
