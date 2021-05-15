@@ -1,0 +1,11 @@
+name: CocoaPods CI
+
+on: [pull_request, push]
+
+jobs:
+  podspec-lint:
+    runs-on: macos-11.0
+    steps:
+    - uses: actions/checkout@v2
+    - name: Lint Podspec
+      run: pod lib lint --verbose
