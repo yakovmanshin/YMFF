@@ -4,7 +4,7 @@ on: [pull_request, push]
 
 jobs:
   
-  macos-test:
+  spm-macos-test:
     runs-on: macos-11.0
     steps:
     - uses: actions/checkout@v2
@@ -13,14 +13,14 @@ jobs:
     - name: Run tests
       run: swift test -v
   
-  linux-test:
+  spm-linux-test:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
       run: swift test -v
   
-  podspec-lint:
+  cocoapods-podspec-lint:
     runs-on: macos-11.0
     steps:
     - uses: actions/checkout@v2
