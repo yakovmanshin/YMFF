@@ -21,8 +21,13 @@ final public class FeatureFlagResolver {
     
     // MARK: Initializers
     
-    public init(configuration: FeatureFlagResolverConfiguration) {
+    public init(configuration: FeatureFlagResolverConfigurationProtocol) {
         self.configuration = configuration
+    }
+    
+    @available(*, deprecated, message: "Use init(stores:)")
+    public convenience init(configuration: FeatureFlagResolverConfiguration) {
+        self.init(configuration: configuration as FeatureFlagResolverConfigurationProtocol)
     }
     
     deinit {
