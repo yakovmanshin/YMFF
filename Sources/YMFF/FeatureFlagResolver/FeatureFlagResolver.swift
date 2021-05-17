@@ -30,6 +30,10 @@ final public class FeatureFlagResolver {
         self.init(configuration: configuration as FeatureFlagResolverConfigurationProtocol)
     }
     
+    public convenience init(stores: [FeatureFlagStore]) {
+        self.init(configuration: FeatureFlagResolverConfiguration(stores: stores))
+    }
+    
     deinit {
         configuration.stores
             .compactMap({ $0.asMutable })
