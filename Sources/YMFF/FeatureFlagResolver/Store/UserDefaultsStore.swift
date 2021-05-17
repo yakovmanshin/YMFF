@@ -9,7 +9,9 @@
 #if canImport(Foundation)
 
 import Foundation
+#if !COCOAPODS
 import YMFFProtocols
+#endif
 
 // MARK: - UserDefaultsStore
 
