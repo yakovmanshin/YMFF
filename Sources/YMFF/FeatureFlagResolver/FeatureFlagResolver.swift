@@ -21,6 +21,9 @@ final public class FeatureFlagResolver {
     
     // MARK: Initializers
     
+    /// Initializes the resolver with an object that conforms to `FeatureFlagResolverConfigurationProtocol`.
+    ///
+    /// - Parameter configuration: *Required.* The configuration used to read and write feature flag values.
     public init(configuration: FeatureFlagResolverConfigurationProtocol) {
         self.configuration = configuration
     }
@@ -30,6 +33,11 @@ final public class FeatureFlagResolver {
         self.init(configuration: configuration as FeatureFlagResolverConfigurationProtocol)
     }
     
+    /// Initializes the resolver with the list of feature flag stores.
+    ///
+    /// + Passing in an empty array will produce the `noStoreAvailable` error on next read attempt.
+    ///
+    /// - Parameter stores: *Required.* The array of feature flag stores.
     public convenience init(stores: [FeatureFlagStore]) {
         self.init(configuration: FeatureFlagResolverConfiguration(stores: stores))
     }
