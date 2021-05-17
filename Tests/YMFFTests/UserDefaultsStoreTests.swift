@@ -21,9 +21,9 @@ final class UserDefaultsStoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        resolver = FeatureFlagResolver(configuration: .init(stores: [
+        resolver = FeatureFlagResolver(stores: [
             .mutable(UserDefaultsStore(userDefaults: userDefaults))
-        ]))
+        ])
     }
     
 }
