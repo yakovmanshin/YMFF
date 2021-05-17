@@ -72,7 +72,7 @@ final class MutableStoreTests: XCTestCase {
         mutableStore = MutableFeatureFlagStore(store: .init()) {
             saveChangesCount += 1
         }
-        resolver = FeatureFlagResolver(configuration: .init(stores: [.mutable(mutableStore)]))
+        resolver = FeatureFlagResolver(stores: [.mutable(mutableStore)])
         
         resolver = nil
         
