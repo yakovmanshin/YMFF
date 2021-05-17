@@ -10,6 +10,7 @@ import XCTest
 #if !COCOAPODS
 import YMFFProtocols
 #endif
+
 @testable import YMFF
 
 // MARK: - Configuration
