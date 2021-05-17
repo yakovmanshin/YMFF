@@ -9,6 +9,8 @@ YMFF is a nice little library that makes management of features with feature fla
 YMFF ships completely ready for use, right out of the box: you get everything you need to start in just a few minutes. But you can also replace nearly any component of the system with your own, customized implementation. Since version 2.0, the implementation and the protocols are in two separate targets (YMFF and YMFFProtocols, respectively).
 
 ## Installation
+
+### Swift Package Manager (SPM)
 To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Swift Packages → Add Package Dependency, and paste the following URL into the search field:
 
 ```
@@ -21,6 +23,15 @@ If you need to use YMFF in another Swift package, add it as a dependency:
 
 ```swift
 .package(url: "https://github.com/yakovmanshin/YMFF", .upToNextMajor(from: "2.0.0"))
+```
+
+### CocoaPods
+YMFF now supports installation via [CocoaPods](https://youtu.be/iEAjvNRdZa0).
+
+Add the following to your Podfile:
+
+```ruby
+pod 'YMFF', '~> 2.1'
 ```
 
 ## Setup

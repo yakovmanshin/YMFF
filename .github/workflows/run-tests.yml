@@ -1,9 +1,10 @@
-name: SPM CI
+name: Run Tests
 
 on: [pull_request, push]
 
 jobs:
-  macos-test:
+  
+  spm-macos-test:
     runs-on: macos-11.0
     steps:
     - uses: actions/checkout@v2
@@ -11,10 +12,17 @@ jobs:
       run: sudo xcode-select -switch /Applications/Xcode_12.5.app
     - name: Run tests
       run: swift test -v
-
-  linux-test:
+  
+  spm-linux-test:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Run tests
       run: swift test -v
+  
+  cocoapods-podspec-lint:
+    runs-on: macos-11.0
+    steps:
+    - uses: actions/checkout@v2
+    - name: Lint Podspec
+      run: pod lib lint --verbose
