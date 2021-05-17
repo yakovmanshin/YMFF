@@ -7,7 +7,9 @@
 //
 
 import YMFF
+#if !COCOAPODS
 import YMFFProtocols
+#endif
 
 // MARK: - Shared
 
