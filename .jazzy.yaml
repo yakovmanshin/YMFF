@@ -9,6 +9,7 @@ custom_categories:
           - FeatureFlagResolver
           - FeatureFlagResolverError
           - FeatureFlagResolverConfiguration
+          - MutableFeatureFlagResolverConfiguration
           - TransparentFeatureFlagStore
           - RuntimeOverridesStore
           - UserDefaultsStore
