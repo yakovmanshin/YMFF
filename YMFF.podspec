@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   # Basic Info
   
   s.name              = "YMFF"
-  s.version           = "2.1.0"
+  s.version           = "2.2.0"
   s.summary           = "Feature management made easy."
   
   s.description       = <<-DESC
