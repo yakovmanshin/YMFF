@@ -22,7 +22,7 @@ final class MutableStoreTests: XCTestCase {
         super.setUp()
         
         mutableStore = MutableFeatureFlagStore(store: .init())
-        resolver = FeatureFlagResolver(configuration: .init(stores: [.mutable(mutableStore)]))
+        resolver = FeatureFlagResolver(stores: [.mutable(mutableStore)])
     }
     
     func testOverride() {
