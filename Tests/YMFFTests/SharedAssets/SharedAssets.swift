@@ -15,23 +15,23 @@ import YMFFProtocols
 
 enum SharedAssets {
     
-    static var configuration: FeatureFlagResolverConfiguration {
-        .init(stores: [
+    static var configuration: FeatureFlagResolverConfigurationProtocol {
+        FeatureFlagResolverConfiguration(stores: [
             .mutable(RuntimeOverridesStore()),
             .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
             .immutable(localStore),
         ])
     }
     
-    static var configurationWithNoMutableStores: FeatureFlagResolverConfiguration {
-        .init(stores: [
+    static var configurationWithNoMutableStores: FeatureFlagResolverConfigurationProtocol {
+        FeatureFlagResolverConfiguration(stores: [
             .immutable(OpaqueStoreWithLimitedTypeSupport(store: remoteStore)),
             .immutable(localStore),
         ])
     }
     
-    static var configurationWithNoStores: FeatureFlagResolverConfiguration {
-        .init(stores: [])
+    static var configurationWithNoStores: FeatureFlagResolverConfigurationProtocol {
+        FeatureFlagResolverConfiguration(stores: [])
     }
     
     private static var localStore: [String : Any] { [
