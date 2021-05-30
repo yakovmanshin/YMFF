@@ -12,8 +12,8 @@ import XCTest
 
 final class FeatureFlagResolverConfigurationTests: XCTestCase {
     
-    func testStoreAdditionToMutableConfiguration() {
-        let configuration = MutableFeatureFlagResolverConfiguration(stores: [])
+    func testStoreAdditionToConfiguration() {
+        let configuration = FeatureFlagResolverConfiguration(stores: [])
         
         XCTAssertEqual(configuration.stores.count, 0)
         
@@ -22,8 +22,8 @@ final class FeatureFlagResolverConfigurationTests: XCTestCase {
         XCTAssertEqual(configuration.stores.count, 1)
     }
     
-    func testStoreRemovalFromMutableConfiguration() {
-        let configuration = MutableFeatureFlagResolverConfiguration(stores: [.immutable(TransparentFeatureFlagStore())])
+    func testStoreRemovalFromConfiguration() {
+        let configuration = FeatureFlagResolverConfiguration(stores: [.immutable(TransparentFeatureFlagStore())])
         
         XCTAssertEqual(configuration.stores.count, 1)
         
