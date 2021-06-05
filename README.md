@@ -1,12 +1,12 @@
 # YMFF: Feature management made easy
 
-Every company I worked at needed a way to manage availability of features in the apps already shipped to customers. Surprisingly enough, [feature flags](https://en.wikipedia.org/wiki/Feature_toggle) (a.k.a. feature toggles a.k.a. feature switches) tend to cause a lot of struggle.
+Every company I worked for needed a way to manage availability of features in the apps already shipped to users. Surprisingly enough, [feature flags](https://en.wikipedia.org/wiki/Feature_toggle) (a.k.a. feature toggles a.k.a. feature switches) tend to cause a lot of struggle.
 
 I aspire to change that.
 
-YMFF is a nice little library that makes management of features with feature flags—and management of the feature flags themselves—a bliss, thanks to Swift’s [property wrappers](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617).
+YMFF is a nice little library that makes management of features with feature flags—and management of the feature flags themselves—a bliss, thanks to the power of Swift’s [property wrappers](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617).
 
-YMFF ships completely ready for use, right out of the box: you get everything you need to start in just a few minutes. But you can also replace nearly any component of the system with your own, customized implementation. Since version 2.0, the implementation and the protocols are in two separate targets (YMFF and YMFFProtocols, respectively).
+YMFF ships completely ready for use, right out of the box: you get everything you need to start in just a few minutes. But you can also replace nearly any component of the system with your own, customized implementation. The supplied implementation and the protocols are kept in two separate targets (YMFF and YMFFProtocols, respectively).
 
 ## Installation
 
@@ -82,22 +82,22 @@ extension RemoteConfig: FeatureFlagStoreProtocol {
 
 Now `RemoteConfig` is a valid feature flag store.
 
-Alternatively, instead of extending `RemoteConfig`, you can create a custom wrapper object. That’s what I prefer to do in my projects.
+Alternatively, you can create a custom wrapper object instead of extending `RemoteConfig`. That’s what I prefer to do in my projects for better flexibility.
 
 ## Usage
-Here’s the most basic way to use YMFF.
+Here’s the most basic way to use YMFF:
 
 ```swift
 import YMFF
 
-// For convenience, use an enum to create a namespace.
+// For convenience, organize feature flags in a separate namespace using an enum.
 enum FeatureFlags {
     
     // `resolver` references one or more feature flag stores.
-    // `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.
     private static var resolver = FeatureFlagResolver(configuration: .init(stores: [
         // If you want to change feature flag values from within your app, you’ll need at least one mutable store.
         .mutable(RuntimeOverridesStore()),
+        // `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.
         .immutable(MyFeatureFlagStore.shared),
     ]))
     
@@ -142,7 +142,7 @@ FeatureFlags.$promoEnabled.removeValueFromMutableStore()
 
 ### `UserDefaults`
 
-Since v1.2.0, you can use `UserDefaults` to read and write feature flag values. Your changes will persist when the app is restarted.
+You can use `UserDefaults` to read and write feature flag values. Your changes will persist when the app is restarted.
 
 ```swift
 import YMFF
