@@ -1,7 +1,7 @@
 author: Yakov Manshin
-author_url: https://yakovmanshin.com/
+author_url: https://me.ym.dev/
 clean: true
-copyright: © 2020–2021 [Yakov Manshin](https://yakovmanshin.com/). Available under [Apache License v2](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE).
+copyright: © 2020–2022 [Yakov Manshin](https://me.ym.dev/). Available under [Apache License v2](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE).
 custom_categories:
     - name: YMFF
       children:
