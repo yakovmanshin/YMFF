@@ -51,6 +51,9 @@ final class FeatureFlagValueTransformerTests: XCTestCase {
         XCTAssertTrue(transformer.valueFromRawValue(stringRawValueTrue) == true)
         XCTAssertTrue(transformer.valueFromRawValue(stringRawValueFalse) == false)
         XCTAssertTrue(transformer.valueFromRawValue(stringRawValueOther) == false)
+        
+        XCTAssertEqual(transformer.rawValueFromValue(true), stringRawValueTrue)
+        XCTAssertEqual(transformer.rawValueFromValue(false), stringRawValueFalse)
     }
     
     func testStringToEnumWithRawValueTransformation() {
