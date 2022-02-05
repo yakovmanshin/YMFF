@@ -66,9 +66,14 @@ final public class FeatureFlag<RawValue, Value> {
     /// The resolved value of the feature flag.
     public var wrappedValue: Value {
         get {
-            (try? (resolver.value(for: key) as Value)) ?? defaultValue
+            guard
+                let rawValue = try? (resolver.value(for: key) as RawValue),
+                let value = transformer.valueFromRawValue(rawValue)
+            else { return defaultValue }
+            
+            return value
         } set {
-            try? resolver.setValue(newValue, toMutableStoreUsing: key)
+            try? resolver.setValue(transformer.rawValueFromValue(newValue), toMutableStoreUsing: key)
         }
     }
     
