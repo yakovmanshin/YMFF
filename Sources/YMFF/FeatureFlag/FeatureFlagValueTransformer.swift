@@ -10,11 +10,11 @@
 
 public struct FeatureFlagValueTransformer<RawValue, Value> {
     
-    let valueFromRawValue: (RawValue) -> Value
+    let valueFromRawValue: (RawValue) -> Value?
     let rawValueFromValue: (Value) -> RawValue
     
     public init(
-        valueFromRawValue: @escaping (RawValue) -> Value,
+        valueFromRawValue: @escaping (RawValue) -> Value?,
         rawValueFromValue: @escaping (Value) -> RawValue
     ) {
         self.valueFromRawValue = valueFromRawValue

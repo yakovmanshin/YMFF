@@ -48,14 +48,14 @@ final class FeatureFlagValueTransformerTests: XCTestCase {
         let stringRawValueFalse = "false"
         let stringRawValueOther = "OTHER"
         
-        XCTAssertTrue(transformer.valueFromRawValue(stringRawValueTrue))
-        XCTAssertFalse(transformer.valueFromRawValue(stringRawValueFalse))
-        XCTAssertFalse(transformer.valueFromRawValue(stringRawValueOther))
+        XCTAssertTrue(transformer.valueFromRawValue(stringRawValueTrue) == true)
+        XCTAssertTrue(transformer.valueFromRawValue(stringRawValueFalse) == false)
+        XCTAssertTrue(transformer.valueFromRawValue(stringRawValueOther) == false)
     }
     
     func testStringToEnumWithRawValueTransformation() {
         let transformer = FeatureFlagValueTransformer { string in
-            AdType(rawValue: string) ?? .none
+            AdType(rawValue: string)
         } rawValueFromValue: { type in
             type.rawValue
         }
@@ -65,10 +65,10 @@ final class FeatureFlagValueTransformerTests: XCTestCase {
         let stringRawValueVideo = "video"
         let stringRawValueOther = "image"
         
-        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueNone), .none)
+        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueNone), AdType.none)
         XCTAssertEqual(transformer.valueFromRawValue(stringRawValueBanner), .banner)
         XCTAssertEqual(transformer.valueFromRawValue(stringRawValueVideo), .video)
-        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueOther), .none)
+        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueOther), nil)
         
         XCTAssertEqual(transformer.rawValueFromValue(.none), stringRawValueNone)
         XCTAssertEqual(transformer.rawValueFromValue(.banner), stringRawValueBanner)
