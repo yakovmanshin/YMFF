@@ -22,3 +22,13 @@ public struct FeatureFlagValueTransformer<RawValue, Value> {
     }
     
 }
+
+// MARK: - Identity
+
+extension FeatureFlagValueTransformer where RawValue == Value {
+    
+    static var identity: FeatureFlagValueTransformer {
+        .init(valueFromRawValue: { $0 }, rawValueFromValue: { $0 })
+    }
+    
+}
