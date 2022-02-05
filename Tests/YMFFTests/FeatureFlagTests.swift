@@ -40,6 +40,22 @@ final class FeatureFlagTests: XCTestCase {
     @FeatureFlag("NONEXISTENT_OVERRIDE_KEY", default: 999, resolver: resolver)
     private var nonexistentOverrideFlag
     
+    @FeatureFlag(
+        SharedAssets.stringToBoolKey,
+        transformer: .init(valueFromRawValue: { $0 == "true" }, rawValueFromValue: { $0 ? "true" : "false" }),
+        default: false,
+        resolver: resolver
+    )
+    private var stringToBoolFeatureFlag
+    
+    @FeatureFlag(
+        SharedAssets.stringToAdTypeKey,
+        transformer: .init(valueFromRawValue: { AdType(rawValue: $0) }, rawValueFromValue: { $0.rawValue }),
+        default: .none,
+        resolver: resolver
+    )
+    private var stringToAdTypeFeatureFlag
+    
 }
 
 // MARK: - Wrapped Value Tests
@@ -97,23 +113,23 @@ extension FeatureFlagTests {
 extension FeatureFlagTests {
     
     func testBoolProjectedValue() {
-        XCTAssertTrue(value($boolFeatureFlag, isOfType: FeatureFlag<Bool>.self))
+        XCTAssertTrue(value($boolFeatureFlag, isOfType: IdentityFeatureFlag<Bool>.self))
     }
     
     func testIntProjectedValue() {
-        XCTAssertTrue(value($intFeatureFlag, isOfType: FeatureFlag<Int>.self))
+        XCTAssertTrue(value($intFeatureFlag, isOfType: IdentityFeatureFlag<Int>.self))
     }
     
     func testStringProjectedValue() {
-        XCTAssertTrue(value($stringFeatureFlag, isOfType: FeatureFlag<String>.self))
+        XCTAssertTrue(value($stringFeatureFlag, isOfType: IdentityFeatureFlag<String>.self))
     }
     
     func testOptionalIntProjectedValue() {
-        XCTAssertTrue(value($optionalIntFeatureFlag, isOfType: FeatureFlag<Int?>.self))
+        XCTAssertTrue(value($optionalIntFeatureFlag, isOfType: IdentityFeatureFlag<Int?>.self))
     }
     
     func testNonexistentIntProjectedValue() {
-        XCTAssertTrue(value($nonexistentIntFeatureFlag, isOfType: FeatureFlag<Int>.self))
+        XCTAssertTrue(value($nonexistentIntFeatureFlag, isOfType: IdentityFeatureFlag<Int>.self))
     }
     
     private func value<T>(_ value: Any, isOfType type: T.Type) -> Bool {
@@ -121,3 +137,7 @@ extension FeatureFlagTests {
     }
     
 }
+
+// MARK: - Support Types
+
+fileprivate typealias IdentityFeatureFlag<Value> = FeatureFlag<Value, Value>
