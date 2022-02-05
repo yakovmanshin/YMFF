@@ -106,6 +106,37 @@ extension FeatureFlagTests {
         XCTAssertEqual(nonexistentOverrideFlag, 999)
     }
     
+    func testStringToBoolWrappedValue() {
+        XCTAssertTrue(stringToBoolFeatureFlag)
+    }
+    
+    func testStringToBoolWrappedValueOverride() {
+        XCTAssertTrue(stringToBoolFeatureFlag)
+        
+        stringToBoolFeatureFlag = false
+        XCTAssertFalse(stringToBoolFeatureFlag)
+        
+        $stringToBoolFeatureFlag.removeValueFromMutableStore()
+        XCTAssertTrue(stringToBoolFeatureFlag)
+    }
+    
+    func testStringToAdTypeWrappedValue() {
+        XCTAssertEqual(stringToAdTypeFeatureFlag, .video)
+    }
+    
+    func testStringToAdTypeWrappedValueOverride() {
+        XCTAssertEqual(stringToAdTypeFeatureFlag, .video)
+        
+        stringToAdTypeFeatureFlag = .banner
+        XCTAssertEqual(stringToAdTypeFeatureFlag, .banner)
+        
+        XCTAssertNoThrow(try Self.resolver.setValue("image", toMutableStoreUsing: SharedAssets.stringToAdTypeKey))
+        XCTAssertEqual(stringToAdTypeFeatureFlag, .none)
+        
+        $stringToAdTypeFeatureFlag.removeValueFromMutableStore()
+        XCTAssertEqual(stringToAdTypeFeatureFlag, .video)
+    }
+    
 }
 
 // MARK: - Projected Value Tests
@@ -132,6 +163,14 @@ extension FeatureFlagTests {
         XCTAssertTrue(value($nonexistentIntFeatureFlag, isOfType: IdentityFeatureFlag<Int>.self))
     }
     
+    func testStringToBoolProjectedValue() {
+        XCTAssertTrue(value($stringToBoolFeatureFlag, isOfType: FeatureFlag<String, Bool>.self))
+    }
+    
+    func testStringToAdTypeProjectedValue() {
+        XCTAssertTrue(value($stringToAdTypeFeatureFlag, isOfType: FeatureFlag<String, AdType>.self))
+    }
+    
     private func value<T>(_ value: Any, isOfType type: T.Type) -> Bool {
         value is T
     }
@@ -141,3 +180,9 @@ extension FeatureFlagTests {
 // MARK: - Support Types
 
 fileprivate typealias IdentityFeatureFlag<Value> = FeatureFlag<Value, Value>
+
+fileprivate enum AdType: String {
+    case none
+    case banner
+    case video
+}
