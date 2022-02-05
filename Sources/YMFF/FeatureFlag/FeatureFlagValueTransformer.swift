@@ -8,11 +8,13 @@
 
 // MARK: - Transformer
 
+/// An object used by `FeatureFlag` to transform raw values into native values, and vice versa.
 public struct FeatureFlagValueTransformer<RawValue, Value> {
     
     let valueFromRawValue: (RawValue) -> Value?
     let rawValueFromValue: (Value) -> RawValue
     
+    /// Creates a new instance of transformer using the specified transformation closures.
     public init(
         valueFromRawValue: @escaping (RawValue) -> Value?,
         rawValueFromValue: @escaping (Value) -> RawValue
