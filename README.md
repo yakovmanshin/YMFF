@@ -166,4 +166,4 @@ If you’d like to discuss something else regarding YMFF (or not), contact [me](
 ## License and Copyright
 YMFF is available under the terms of the Apache License, version 2.0. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
 
-© 2020–2021 Yakov Manshin
+© 2020–2022 Yakov Manshin
