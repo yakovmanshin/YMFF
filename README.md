@@ -111,6 +111,22 @@ enum FeatureFlags {
     @FeatureFlag("number_of_banners", default: 3, resolver: resolver)
     static var numberOfBanners
     
+    // Sometimes it may be convenient to transform the raw value—the one you receive from the store—
+    // to the native value—the one used in your app.
+    // In the following example, `MyFeatureFlagStore` stores values as strings, but the app uses an enum.
+    // To switch between the types, you use a `FeatureFlagValueTransformer`.
+    @FeatureFlag(
+        "promo_unit_kind",
+        FeatureFlagValueTransformer { string in
+            PromoUnitKind(rawValue: string)
+        } rawValueFromValue: { kind in
+            kind.rawValue
+        },
+        default: .image,
+        resolver: resolver
+    )
+    static var promoUnitKind
+    
 }
 ```
 
@@ -118,7 +134,14 @@ To the code that makes use of a feature flag, the flag acts just like the type o
 
 ```swift
 if FeatureFlags.promoEnabled {
-    displayPromoBanners(count: FeatureFlags.numberOfBanners)
+    switch FeatureFlags.promoUnitKind {
+    case .text:
+        displayPromoText()
+    case .image:
+        displayPromoBanners(count: FeatureFlags.numberOfBanners)
+    case .video:
+        playPromoVideo()
+    }
 }
 ```
 
