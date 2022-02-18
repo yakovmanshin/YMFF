@@ -26,7 +26,7 @@ If you need to use YMFF in another Swift package, add it as a dependency:
 ```
 
 ### CocoaPods
-YMFF now supports installation via [CocoaPods](https://youtu.be/iEAjvNRdZa0).
+YMFF alternatively supports installation via [CocoaPods](https://youtu.be/iEAjvNRdZa0).
 
 Add the following to your Podfile:
 
@@ -40,7 +40,7 @@ All you need to start managing features with YMFF is at least one feature flag *
 `FeatureFlagStoreProtocol` has two required methods: `containsValue(forKey:)` and `value(forKey:)`.
 
 ### Firebase Remote Config
-Firebase’s Remote Config is one of the most popular tools to manage feature flags on the back-end side. Remote Config’s `RemoteConfigValue` requires use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite simple.
+Firebase’s Remote Config is one of the most popular tools to manage feature flags on the server side. Remote Config’s `RemoteConfigValue` requires use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite simple.
 
 ```swift
 import FirebaseRemoteConfig
@@ -80,7 +80,7 @@ extension RemoteConfig: FeatureFlagStoreProtocol {
 }
 ```
 
-Now `RemoteConfig` is a valid feature flag store.
+Now, `RemoteConfig` is a valid feature flag store.
 
 Alternatively, you can create a custom wrapper object instead of extending `RemoteConfig`. That’s what I prefer to do in my projects for better flexibility.
 
