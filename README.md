@@ -128,6 +128,13 @@ enum FeatureFlags {
     static var promoUnitKind
     
 }
+
+// You can create feature flags of any type.
+enum PromoUnitKind: String {
+    case text
+    case image
+    case video
+}
 ```
 
 To the code that makes use of a feature flag, the flag acts just like the type of its value:
