@@ -1,12 +1,12 @@
 # YMFF: Feature management made easy
 
-Every company I worked for needed a way to manage availability of features in the apps already shipped to users. Surprisingly enough, [feature flags](https://en.wikipedia.org/wiki/Feature_toggle) (a.k.a. feature toggles a.k.a. feature switches) tend to cause a lot of struggle.
+Every company I worked for needed a way to manage availability of features in the apps already shipped to users. Surprisingly enough, [*feature flags*](https://en.wikipedia.org/wiki/Feature_toggle) (a.k.a. *feature toggles* a.k.a. *feature switches*) tend to cause a lot of struggle.
 
-I aspire to change that.
+**I aspire to change that.**
 
-YMFF is a nice little library that makes management of features with feature flags—and management of the feature flags themselves—a bliss, thanks to the power of Swift’s [property wrappers](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617).
+YMFF is a nice little library that makes managing features with feature flags—and managing feature flags themselves—a bliss, thanks mainly to the power of Swift’s [property wrappers](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617).
 
-YMFF ships completely ready for use, right out of the box: you get everything you need to start in just a few minutes. But you can also replace nearly any component of the system with your own, customized implementation. The supplied implementation and the protocols are kept in two separate targets (YMFF and YMFFProtocols, respectively).
+YMFF ships completely ready for use, right out of the box: you get everything you need to get started in just a few minutes. But you can also replace nearly any component of the system with your own, customized implementation. The supplied implementation and the protocols are kept in two separate targets (YMFF and YMFFProtocols, respectively).
 
 ## Installation
 
@@ -19,7 +19,7 @@ https://github.com/yakovmanshin/YMFF
 
 You’re then prompted to select the version to install and indicate the desired update policy. I recommend starting with the latest version (it’s selected automatically), and choosing “up to next major” as the preferred update rule. Once you click Next, the package is fetched. Then select the target you’re going to use YMFF in. Click Finish, and you’re ready to go.
 
-If you need to use YMFF in another Swift package, add it as a dependency:
+If you need to use YMFF in another Swift package, add it to the `Package.swift` file as a dependency:
 
 ```swift
 .package(url: "https://github.com/yakovmanshin/YMFF", .upToNextMajor(from: "3.0.0"))
@@ -35,12 +35,10 @@ pod 'YMFF', '~> 3.0'
 ```
 
 ## Setup
-All you need to start managing features with YMFF is at least one feature flag *store*—an object which conforms to `FeatureFlagStoreProtocol` and provides values that correspond to feature flag keys.
-
-`FeatureFlagStoreProtocol` has two required methods: `containsValue(forKey:)` and `value(forKey:)`.
+All you need to start managing features with YMFF is at least one *feature flag store*—an object which conforms to `FeatureFlagStoreProtocol` and provides values that correspond to feature flag keys.
 
 ### Firebase Remote Config
-Firebase’s Remote Config is one of the most popular tools to manage feature flags on the server side. Remote Config’s `RemoteConfigValue` requires use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite simple.
+Firebase’s Remote Config is one of the most popular tools to manage feature flags on the server side. Remote Config’s `RemoteConfigValue` requires the use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite straightforward.
 
 ```swift
 import FirebaseRemoteConfig
@@ -80,9 +78,9 @@ extension RemoteConfig: FeatureFlagStoreProtocol {
 }
 ```
 
-Now, `RemoteConfig` is a valid feature flag store.
+Now, `RemoteConfig` is a valid *feature flag store*.
 
-Alternatively, you can create a custom wrapper object instead of extending `RemoteConfig`. That’s what I prefer to do in my projects for better flexibility.
+Alternatively, you can create a custom wrapper object. That’s what I tend to do in my projects to achieve greater flexibility and avoid tight coupling.
 
 ## Usage
 Here’s the most basic way to use YMFF:
@@ -191,7 +189,7 @@ Contributions are welcome!
 
 Have a look at [issues](https://github.com/yakovmanshin/YMFF/issues) to see the project’s current needs. Don’t hesitate to create new issues, especially if you intend to work on them yourself.
 
-If you’d like to discuss something else regarding YMFF (or not), contact [me](https://github.com/yakovmanshin) via email (the address is in the profile).
+If you’d like to discuss something else, contact [me](https://github.com/yakovmanshin) via email (the address is in the profile).
 
 ## License and Copyright
 YMFF is available under the terms of the Apache License, version 2.0. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
