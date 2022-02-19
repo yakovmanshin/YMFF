@@ -1,5 +1,5 @@
 //
-//  MutableFeatureFlagStore.swift
+//  MutableFeatureFlagStoreMock.swift
 //  YMFF
 //
 //  Created by Yakov Manshin on 5/30/21.
@@ -11,7 +11,7 @@ import YMFF
 import YMFFProtocols
 #endif
 
-final class MutableFeatureFlagStore: MutableFeatureFlagStoreProtocol {
+final class MutableFeatureFlagStoreMock: MutableFeatureFlagStoreProtocol {
     
     private var store: TransparentFeatureFlagStore
     private var onSaveChangesClosure: () -> Void
