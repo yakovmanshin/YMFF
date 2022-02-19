@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
                         DESC
   
   s.homepage          = "https://github.com/yakovmanshin/YMFF"
+  s.readme            = "https://github.com/yakovmanshin/YMFF/blob/main/README.md"
   s.documentation_url = "https://opensource.ym.dev/YMFF/"
   
   s.license           = { :type => "Apache License, version 2.0", :file => "LICENSE" }
