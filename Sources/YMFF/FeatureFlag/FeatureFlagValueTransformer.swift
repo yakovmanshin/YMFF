@@ -15,6 +15,10 @@ public struct FeatureFlagValueTransformer<RawValue, Value> {
     let rawValueFromValue: (Value) -> RawValue
     
     /// Creates a new instance of transformer using the specified transformation closures.
+    ///
+    /// - Parameters:
+    ///   - valueFromRawValue: *Required.* The closure which attempts to transform a raw value into a value.
+    ///   - rawValueFromValue: *Required.* The closure which transforms a value into a raw value.
     public init(
         valueFromRawValue: @escaping (RawValue) -> Value?,
         rawValueFromValue: @escaping (Value) -> RawValue
@@ -29,6 +33,7 @@ public struct FeatureFlagValueTransformer<RawValue, Value> {
 
 extension FeatureFlagValueTransformer where RawValue == Value {
     
+    /// The transformer which converts between values of the same type.
     static var identity: FeatureFlagValueTransformer {
         .init(valueFromRawValue: { $0 }, rawValueFromValue: { $0 })
     }

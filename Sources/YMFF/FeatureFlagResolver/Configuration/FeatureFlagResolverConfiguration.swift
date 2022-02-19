@@ -17,6 +17,7 @@ final public class FeatureFlagResolverConfiguration {
     
     public var stores: [FeatureFlagStore]
     
+    /// Initializes a new configuration with the given array of feature flag stores.
     public init(stores: [FeatureFlagStore]) {
         self.stores = stores
     }
