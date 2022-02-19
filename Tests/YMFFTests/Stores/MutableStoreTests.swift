@@ -21,7 +21,7 @@ final class MutableStoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        mutableStore = MutableFeatureFlagStore(store: .init())
+        mutableStore = MutableFeatureFlagStoreMock(store: .init())
         resolver = FeatureFlagResolver(stores: [.mutable(mutableStore)])
     }
     
@@ -67,7 +67,7 @@ final class MutableStoreTests: XCTestCase {
     func testChangeSaving() {
         var saveChangesCount = 0
         
-        mutableStore = MutableFeatureFlagStore(store: .init()) {
+        mutableStore = MutableFeatureFlagStoreMock(store: .init()) {
             saveChangesCount += 1
         }
         resolver = FeatureFlagResolver(stores: [.mutable(mutableStore)])
