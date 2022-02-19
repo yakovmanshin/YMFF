@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.license           = { :type => "Apache License, version 2.0", :file => "LICENSE" }
   
   s.authors            = { "Yakov Manshin" => "git@yakovmanshin.com" }
-  s.social_media_url  = "https://github.com/yakovmanshin"
+  s.social_media_url  = "https://twitter.com/yakovmanshin"
   
   # Sources & Build Settings
   
