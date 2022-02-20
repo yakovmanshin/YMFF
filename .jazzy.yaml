@@ -6,6 +6,7 @@ custom_categories:
     - name: YMFF
       children:
           - FeatureFlag
+          - FeatureFlagValueTransformer
           - FeatureFlagResolver
           - FeatureFlagResolverError
           - FeatureFlagResolverConfiguration
