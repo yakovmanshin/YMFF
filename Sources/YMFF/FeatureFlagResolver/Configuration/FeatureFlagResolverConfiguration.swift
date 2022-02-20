@@ -12,11 +12,12 @@ import YMFFProtocols
 
 // MARK: - FeatureFlagResolverConfiguration
 
-/// A YMFF-supplied object used to provide the feature flag resolver with its configuration.
-public struct FeatureFlagResolverConfiguration {
+/// An object used to configure the resolver.
+final public class FeatureFlagResolverConfiguration {
     
-    public let stores: [FeatureFlagStore]
+    public var stores: [FeatureFlagStore]
     
+    /// Initializes a new configuration with the given array of feature flag stores.
     public init(stores: [FeatureFlagStore]) {
         self.stores = stores
     }

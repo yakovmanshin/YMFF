@@ -40,6 +40,7 @@ enum SharedAssets {
         "string": "STRING_VALUE_LOCAL",
         "optionalInt": Optional<Int>.some(123) as Any,
         "intToOverride": 123,
+        stringToAdTypeKey: "video",
     ] }
     
     private static var remoteStore: [String : Any] { [
@@ -47,6 +48,7 @@ enum SharedAssets {
         "string": "STRING_VALUE_REMOTE",
         "optionalInt": Optional<Int>.none as Any,
         "intToOverride": 456,
+        stringToBoolKey: "true",
     ] }
     
     static var boolKey: FeatureFlagKey { "bool" }
@@ -55,6 +57,8 @@ enum SharedAssets {
     static var optionalIntKey: FeatureFlagKey { "optionalInt" }
     static var nonexistentKey: FeatureFlagKey { "nonexistent" }
     static var intToOverrideKey: FeatureFlagKey { "intToOverride" }
+    static var stringToBoolKey: FeatureFlagKey { "stringToBool" }
+    static var stringToAdTypeKey: FeatureFlagKey { "stringToAdType" }
     
 }
 

@@ -28,11 +28,6 @@ final public class FeatureFlagResolver {
         self.configuration = configuration
     }
     
-    @available(*, deprecated, message: "Use init(stores:)")
-    public convenience init(configuration: FeatureFlagResolverConfiguration) {
-        self.init(configuration: configuration as FeatureFlagResolverConfigurationProtocol)
-    }
-    
     /// Initializes the resolver with the list of feature flag stores.
     ///
     /// + Passing in an empty array will produce the `noStoreAvailable` error on next read attempt.
