@@ -18,7 +18,7 @@ final public class FeatureFlag<RawValue, Value> {
     
     /// The key used to retrieve feature flag values.
     public let key: FeatureFlagKey
-
+    
     private let transformer: FeatureFlagValueTransformer<RawValue, Value>
     
     /// The fallback value returned when no store is able to provide the real one.
