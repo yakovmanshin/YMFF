@@ -57,7 +57,7 @@ extension FeatureFlagResolverTests {
     }
     
     // MARK: Nonexistent Values
-
+    
     func testNonexistentValueResolution() throws {
         do {
             let _: Int = try resolver.value(for: SharedAssets.nonexistentKey)
