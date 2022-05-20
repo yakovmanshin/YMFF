@@ -1,28 +1,24 @@
 name: Run Tests
-
-on: [pull_request, push]
-
+on: [push]
 jobs:
-  
   spm-macos-test:
-    runs-on: macos-11.0
+    runs-on: macOS-12
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Select Xcode version
-      run: sudo xcode-select -switch /Applications/Xcode_13.2.1.app
+      run: sudo xcode-select -switch /Applications/Xcode_13.4.app
     - name: Run tests
       run: swift test -v
-  
   spm-linux-test:
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Run tests
       run: swift test -v
-  
   cocoapods-podspec-lint:
-    runs-on: macos-11.0
+    runs-on: macOS-12
+    needs: [spm-macos-test, spm-linux-test]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Lint Podspec
       run: pod lib lint --verbose
