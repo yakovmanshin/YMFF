@@ -5,15 +5,15 @@ jobs:
     runs-on: macOS-12
     steps:
     - uses: actions/checkout@v3
-    - name: Select Xcode version
+    - name: Select Xcode Version
       run: sudo xcode-select -switch /Applications/Xcode_14.0.1.app
-    - name: Run tests
+    - name: Run Tests
       run: swift test -v
   spm-linux-test:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
-    - name: Run tests
+    - name: Run Tests
       run: swift test -v
   cocoapods-podspec-lint:
     runs-on: macOS-12
