@@ -6,6 +6,8 @@
 //  Copyright © 2022 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if swift(>=5.5)
+
 @testable import YMFF
 
 import XCTest
@@ -26,3 +28,5 @@ final class AsyncMutableStoreTests: XCTestCase {
     }
     
 }
+
+#endif

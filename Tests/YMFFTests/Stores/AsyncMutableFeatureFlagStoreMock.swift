@@ -6,6 +6,8 @@
 //  Copyright © 2022 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if swift(>=5.5)
+
 import YMFF
 #if !COCOAPODS
 import YMFFProtocols
@@ -72,3 +74,5 @@ fileprivate enum AsyncMutableFeatureFlagStoreMockError: Error {
     case valueNotFoundInStore
     case valueTypeMismatch
 }
+
+#endif
