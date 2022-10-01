@@ -1,5 +1,10 @@
 name: Common Checks
-on: [push]
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
 jobs:
   spm_tests_macos:
     name: SPM Tests (macOS)
@@ -20,6 +25,7 @@ jobs:
   cocoapods_podspec_lint:
     name: CocoaPods Podspec Linting
     runs-on: macOS-12
+    if: ${{ github.event_name == 'pull_request' }}
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
     - uses: actions/checkout@v3
