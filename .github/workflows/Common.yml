@@ -5,6 +5,8 @@ on:
     branches:
       - "main"
   workflow_dispatch:
+env:
+  XCODE_PATH: "/Applications/Xcode_14.0.1.app"
 jobs:
   spm_tests_macos:
     name: SPM Tests (macOS)
@@ -12,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Select Xcode Version
-      run: sudo xcode-select -switch /Applications/Xcode_14.0.1.app
+      run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
     - name: Run Tests
       run: swift test -v
   spm_tests_linux:
@@ -29,5 +31,7 @@ jobs:
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
     - uses: actions/checkout@v3
+    - name: Select Xcode Version
+      run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
     - name: Lint Podspec
       run: pod lib lint --verbose
