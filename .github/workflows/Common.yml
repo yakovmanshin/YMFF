@@ -1,4 +1,4 @@
-name: Run Tests
+name: Common Checks
 on: [push]
 jobs:
   spm_tests_macos:
