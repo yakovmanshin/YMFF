@@ -1,7 +1,7 @@
 name: Run Tests
 on: [push]
 jobs:
-  spm-macos-test:
+  spm_tests_macos:
     runs-on: macOS-12
     steps:
     - uses: actions/checkout@v3
@@ -9,7 +9,7 @@ jobs:
       run: sudo xcode-select -switch /Applications/Xcode_14.0.1.app
     - name: Run Tests
       run: swift test -v
-  spm-linux-test:
+  spm_tests_linux:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
@@ -17,7 +17,7 @@ jobs:
       run: swift test -v
   cocoapods-podspec-lint:
     runs-on: macOS-12
-    needs: [spm-macos-test, spm-linux-test]
+    needs: [spm_tests_macos, spm_tests_linux]
     steps:
     - uses: actions/checkout@v3
     - name: Lint Podspec
