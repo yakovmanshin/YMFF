@@ -2,6 +2,7 @@ name: Common Checks
 on: [push]
 jobs:
   spm_tests_macos:
+    name: SPM Tests (macOS)
     runs-on: macOS-12
     steps:
     - uses: actions/checkout@v3
@@ -10,12 +11,14 @@ jobs:
     - name: Run Tests
       run: swift test -v
   spm_tests_linux:
+    name: SPM Tests (Linux)
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
     - name: Run Tests
       run: swift test -v
-  cocoapods-podspec-lint:
+  cocoapods_podspec_lint:
+    name: CocoaPods Podspec Linting
     runs-on: macOS-12
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
