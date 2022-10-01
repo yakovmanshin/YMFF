@@ -1,0 +1,37 @@
+name: Common Checks
+on:
+  pull_request:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+env:
+  XCODE_PATH: "/Applications/Xcode_14.0.1.app"
+jobs:
+  spm_tests_macos:
+    name: SPM Tests (macOS)
+    runs-on: macOS-12
+    steps:
+    - uses: actions/checkout@v3
+    - name: Select Xcode Version
+      run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
+    - name: Run Tests
+      run: swift test -v
+  spm_tests_linux:
+    name: SPM Tests (Linux)
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run Tests
+      run: swift test -v
+  cocoapods_podspec_lint:
+    name: CocoaPods Podspec Linting
+    runs-on: macOS-12
+    if: ${{ github.event_name == 'pull_request' }}
+    needs: [spm_tests_macos, spm_tests_linux]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Select Xcode Version
+      run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
+    - name: Lint Podspec
+      run: pod lib lint --verbose
