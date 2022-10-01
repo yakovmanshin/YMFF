@@ -6,9 +6,9 @@
 //  Copyright © 2022 Yakov Manshin. See the LICENSE file for license info.
 //
 
-import XCTest
-
 @testable import YMFF
+
+import XCTest
 
 // MARK: - Tests
 

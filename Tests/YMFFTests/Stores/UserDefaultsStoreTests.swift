@@ -8,9 +8,9 @@
 
 #if canImport(Foundation)
 
-import XCTest
-
 @testable import YMFF
+
+import XCTest
 
 final class UserDefaultsStoreTests: XCTestCase {
     

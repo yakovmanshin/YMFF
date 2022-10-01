@@ -47,7 +47,7 @@ final class MutableFeatureFlagStoreMock: MutableFeatureFlagStoreProtocol {
     }
     
     func removeValue(forKey key: String) {
-        store.removeValue(forKey: key)
+        store[key] = nil
     }
     
     func saveChanges() {
@@ -55,4 +55,3 @@ final class MutableFeatureFlagStoreMock: MutableFeatureFlagStoreProtocol {
     }
     
 }
-

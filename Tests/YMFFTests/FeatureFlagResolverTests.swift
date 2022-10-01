@@ -6,12 +6,12 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+@testable import YMFF
+
 import XCTest
 #if !COCOAPODS
 import YMFFProtocols
 #endif
-
-@testable import YMFF
 
 // MARK: - Configuration
 
