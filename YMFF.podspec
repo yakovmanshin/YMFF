@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   # Root
   
   s.name              = "YMFF"
-  s.version           = "3.0.0"
+  s.version           = "3.1.0"
   s.swift_version     = "5.3"
   s.authors            = { "Yakov Manshin" => "git@yakovmanshin.com" }
   s.social_media_url  = "https://twitter.com/yakovmanshin"
