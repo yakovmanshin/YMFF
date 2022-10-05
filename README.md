@@ -195,6 +195,8 @@ You can browse the source files to learn more about the options available to you
 * [[#104](https://github.com/yakovmanshin/YMFF/issues/104)] Minimum compiler version: Swift 5.5 (Xcode 13)
 * [[#106](https://github.com/yakovmanshin/YMFF/issues/106)] Minimum deployment target: iOS 13, macOS 10.15
 
+YMFF v4 is expected to be released in late 2022.
+
 ## Contributing
 Contributions are welcome!
 
