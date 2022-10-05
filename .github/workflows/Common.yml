@@ -10,11 +10,24 @@ env:
 jobs:
   spm_tests_macos:
     name: SPM Tests (macOS)
-    runs-on: macOS-12
+    runs-on: ${{ matrix.OS }}
+    strategy:
+      matrix:
+        SWIFT_VERSION: ["5.7", "5.5", "5.3"]
+        include:
+          - SWIFT_VERSION: "5.7"
+            OS: macOS-12
+            XCODE_APP_NAME: "Xcode_14.0.1"
+          - SWIFT_VERSION: "5.5"
+            OS: macOS-12
+            XCODE_APP_NAME: "Xcode_13.2.1"
+          - SWIFT_VERSION: "5.3"
+            OS: macOS-11
+            XCODE_APP_NAME: "Xcode_12.4"
     steps:
     - uses: actions/checkout@v3
     - name: Select Xcode Version
-      run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
+      run: sudo xcode-select -switch "/Applications/${{ matrix.XCODE_APP_NAME }}.app"
     - name: Run Tests
       run: |
         swift --version
