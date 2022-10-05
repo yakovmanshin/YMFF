@@ -16,14 +16,18 @@ jobs:
     - name: Select Xcode Version
       run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
     - name: Run Tests
-      run: swift test -v
+      run: |
+        swift --version
+        swift test -v
   spm_tests_linux:
     name: SPM Tests (Linux)
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
     - name: Run Tests
-      run: swift test -v
+      run: |
+        swift --version
+        swift test -v
   cocoapods_podspec_lint:
     name: CocoaPods Podspec Linting
     runs-on: macOS-12
