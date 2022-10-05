@@ -1,6 +1,5 @@
 name: Release
 on:
-  push:
   release:
     types: [published]
 env:
