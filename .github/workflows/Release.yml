@@ -3,6 +3,8 @@ on:
   push:
   release:
     types: [published]
+env:
+  XCODE_PATH: "/Applications/Xcode_14.0.1.app"
 jobs:
   cocoapods_trunk_push:
     name: Push to CocoaPods Trunk
@@ -11,6 +13,8 @@ jobs:
       COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}
     steps:
     - uses: actions/checkout@v3
+    - name: Select Xcode Version
+      run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
     - name: Push
       run: |
         pod trunk push YMFF.podspec --verbose
