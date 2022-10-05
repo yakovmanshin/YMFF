@@ -41,6 +41,9 @@ All you need to start managing features with YMFF is at least one *feature flag 
 ### Firebase Remote Config
 Firebase’s Remote Config is one of the most popular tools to manage feature flags on the server side. Remote Config’s `RemoteConfigValue` requires the use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite straightforward.
 
+<details>
+<summary>Typical Setup</summary>
+
 ```swift
 import FirebaseRemoteConfig
 import YMFFProtocols
@@ -82,6 +85,8 @@ extension RemoteConfig: FeatureFlagStoreProtocol {
 Now, `RemoteConfig` is a valid *feature flag store*.
 
 Alternatively, you can create a custom wrapper object. That’s what I tend to do in my projects to achieve greater flexibility and avoid tight coupling.
+
+</details>
 
 ## Usage
 Here’s the most basic way to use YMFF:
