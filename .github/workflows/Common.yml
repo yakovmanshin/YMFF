@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "main"
+  workflow_call:
   workflow_dispatch:
 env:
   XCODE_PATH: "/Applications/Xcode_14.0.1.app"
