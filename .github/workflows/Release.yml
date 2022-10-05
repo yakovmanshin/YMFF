@@ -1,0 +1,15 @@
+name: Release
+on:
+  release:
+    types: [published]
+jobs:
+  cocoapods_trunk_push:
+    name: Push to CocoaPods Trunk
+    runs-on: macOS-12
+    env:
+      COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Push
+      run: |
+        pod trunk push YMFF.podspec --verbose
