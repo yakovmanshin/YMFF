@@ -9,7 +9,7 @@ env:
   XCODE_PATH: "/Applications/Xcode_14.0.1.app"
 jobs:
   spm_tests_macos:
-    name: SPM Tests (macOS)
+    name: SPM Tests (Swift ${{ matrix.SWIFT_VERSION }} on macOS)
     runs-on: ${{ matrix.OS }}
     strategy:
       matrix:
