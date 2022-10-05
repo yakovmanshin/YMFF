@@ -8,6 +8,8 @@ env:
 jobs:
   run_common_checks:
     uses: ./.github/workflows/Common.yml
+    with:
+      force_all_checks: true
   cocoapods_trunk_push:
     name: Push to CocoaPods Trunk
     runs-on: macOS-12
