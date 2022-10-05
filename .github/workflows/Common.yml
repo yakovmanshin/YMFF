@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - "main"
+  workflow_call:
+    inputs:
+      force_all_checks:
+        type: boolean
+        required: true
   workflow_dispatch:
 env:
   XCODE_PATH: "/Applications/Xcode_14.0.1.app"
@@ -44,7 +49,7 @@ jobs:
   cocoapods_podspec_lint:
     name: CocoaPods Podspec Linting
     runs-on: macOS-12
-    if: ${{ github.event_name == 'pull_request' }}
+    if: ${{ inputs.force_all_checks || github.event_name == 'pull_request' }}
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
     - uses: actions/checkout@v3
