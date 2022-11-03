@@ -11,7 +11,7 @@ on:
         required: true
   workflow_dispatch:
 env:
-  XCODE_PATH: "/Applications/Xcode_14.0.1.app"
+  XCODE_PATH: "/Applications/Xcode_14.1.app"
 jobs:
   spm_tests_macos:
     name: SPM Tests (Swift ${{ matrix.SWIFT_VERSION }} on macOS)
@@ -22,7 +22,7 @@ jobs:
         include:
           - SWIFT_VERSION: "5.7"
             OS: macOS-12
-            XCODE_APP_NAME: "Xcode_14.0.1"
+            XCODE_APP_NAME: "Xcode_14.1"
           - SWIFT_VERSION: "5.5"
             OS: macOS-12
             XCODE_APP_NAME: "Xcode_13.2.1"
