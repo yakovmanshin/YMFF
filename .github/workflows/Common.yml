@@ -18,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.OS }}
     strategy:
       matrix:
-        SWIFT_VERSION: ["5.7", "5.5", "5.3"]
+        SWIFT_VERSION: ["5.7", "5.5"]
         include:
           - SWIFT_VERSION: "5.7"
             OS: macOS-12
@@ -26,9 +26,6 @@ jobs:
           - SWIFT_VERSION: "5.5"
             OS: macOS-12
             XCODE_APP_NAME: "Xcode_13.2.1"
-          - SWIFT_VERSION: "5.3"
-            OS: macOS-11
-            XCODE_APP_NAME: "Xcode_12.4"
     steps:
     - uses: actions/checkout@v3
     - name: Select Xcode Version
