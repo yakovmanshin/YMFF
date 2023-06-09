@@ -10,6 +10,11 @@ on:
         type: boolean
         required: true
   workflow_dispatch:
+    inputs:
+      force_all_checks:
+        description: "Run all available checks (takes more time)"
+        type: boolean
+        required: true
 env:
   XCODE_PATH: "/Applications/Xcode_14.3.1.app"
 jobs:
