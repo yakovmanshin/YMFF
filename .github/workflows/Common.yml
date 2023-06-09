@@ -10,16 +10,24 @@ on:
         type: boolean
         required: true
   workflow_dispatch:
+    inputs:
+      force_all_checks:
+        description: "Run all available checks (takes more time)"
+        type: boolean
+        required: true
 env:
-  XCODE_PATH: "/Applications/Xcode_14.1.app"
+  XCODE_PATH: "/Applications/Xcode_14.3.1.app"
 jobs:
   spm_tests_macos:
     name: SPM Tests (Swift ${{ matrix.SWIFT_VERSION }} on macOS)
     runs-on: ${{ matrix.OS }}
     strategy:
       matrix:
-        SWIFT_VERSION: ["5.7", "5.5"]
+        SWIFT_VERSION: ["5.8", "5.7", "5.5"]
         include:
+          - SWIFT_VERSION: "5.8"
+            OS: macos-13
+            XCODE_APP_NAME: "Xcode_14.3.1"
           - SWIFT_VERSION: "5.7"
             OS: macOS-12
             XCODE_APP_NAME: "Xcode_14.1"
@@ -36,7 +44,7 @@ jobs:
         swift test -v
   spm_tests_linux:
     name: SPM Tests (Linux)
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
     - name: Run Tests
@@ -45,7 +53,7 @@ jobs:
         swift test -v
   cocoapods_podspec_lint:
     name: CocoaPods Podspec Linting
-    runs-on: macOS-12
+    runs-on: macos-13
     if: ${{ inputs.force_all_checks || github.event_name == 'pull_request' }}
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
