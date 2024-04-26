@@ -15,6 +15,11 @@ YMFF ships completely ready-to-use, right out of the box: you get everything you
 
 ## Installation
 
+I’m sure you know how to install dependencies. YMFF supports both SPM and CocoaPods.
+
+<details>
+<summary>Need Help?</summary>
+
 ### Swift Package Manager (SPM)
 To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Swift Packages → Add Package Dependency, and paste the following URL into the search field:
 
@@ -38,6 +43,8 @@ Add the following to your Podfile:
 ```ruby
 pod 'YMFF', '~> 3.1'
 ```
+
+</details>
 
 ## Setup
 All you need to start managing features with YMFF is at least one *feature flag store*—an object which conforms to `FeatureFlagStoreProtocol` and provides values that correspond to feature flag keys.
