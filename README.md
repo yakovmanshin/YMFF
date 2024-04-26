@@ -203,10 +203,12 @@ You can browse the source files to learn more about the options available to you
 
 ## v4 Roadmap
 * [[#96](https://github.com/yakovmanshin/YMFF/issues/96)] Support for asynchronous feature-flag stores
-* [[#104](https://github.com/yakovmanshin/YMFF/issues/104)] Minimum compiler version: Swift 5.5 (Xcode 13)
-* [[#106](https://github.com/yakovmanshin/YMFF/issues/106)] Minimum deployment target: iOS 13, macOS 10.15
+* [[#124](https://github.com/yakovmanshin/YMFF/issues/124)] Swift macros for easier setup
+* [[#113](https://github.com/yakovmanshin/YMFF/issues/113)] Thread-safety improvements
+* ✅ ~~[[#104](https://github.com/yakovmanshin/YMFF/issues/104)] Minimum compiler version: Swift 5.5 (Xcode 13)~~
+* ✅ ~~[[#106](https://github.com/yakovmanshin/YMFF/issues/106)] Minimum deployment target: iOS 13, macOS 10.15~~
 
-YMFF v4 is expected to be released in late 2022.
+YMFF v4 is expected to be released in 2024.
 
 ## License and Copyright
 YMFF is licensed under the Apache License. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
