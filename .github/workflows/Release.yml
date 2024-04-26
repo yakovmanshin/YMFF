@@ -11,7 +11,7 @@ jobs:
       force_all_checks: true
   cocoapods_trunk_push:
     name: Push to CocoaPods Trunk
-    runs-on: macos-13
+    runs-on: macos-14
     needs: run_common_checks
     env:
       COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TOKEN }}

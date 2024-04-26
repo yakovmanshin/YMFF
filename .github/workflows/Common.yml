@@ -53,7 +53,7 @@ jobs:
         swift test -v
   cocoapods_podspec_lint:
     name: CocoaPods Podspec Linting
-    runs-on: macos-13
+    runs-on: macos-14
     if: ${{ inputs.force_all_checks || github.event_name == 'pull_request' }}
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
