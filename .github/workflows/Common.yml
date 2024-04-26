@@ -23,8 +23,14 @@ jobs:
     runs-on: ${{ matrix.OS }}
     strategy:
       matrix:
-        SWIFT_VERSION: ["5.8", "5.7", "5.5"]
+        SWIFT_VERSION: ["5.10", "5.9", "5.8", "5.7", "5.5"]
         include:
+          - SWIFT_VERSION: "5.10"
+            OS: macos-14
+            XCODE_APP_NAME: "Xcode_15.3"
+          - SWIFT_VERSION: "5.9"
+            OS: macos-13
+            XCODE_APP_NAME: "Xcode_15.2"
           - SWIFT_VERSION: "5.8"
             OS: macos-13
             XCODE_APP_NAME: "Xcode_14.3.1"
