@@ -23,8 +23,8 @@ extension TransparentFeatureFlagStore: FeatureFlagStoreProtocol {
         self[key] != nil
     }
     
-    public func value<Value>(forKey key: String) -> Value? {
-        self[key] as? Value
+    public func value<V>(forKey key: String) -> V? {
+        self[key] as? V
     }
     
 }
