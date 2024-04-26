@@ -213,4 +213,4 @@ YMFF v4 is expected to be released in 2024.
 ## License and Copyright
 YMFF is licensed under the Apache License. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
 
-© 2020–2022 Yakov Manshin
+© 2020–2024 Yakov Manshin
