@@ -208,13 +208,6 @@ You can browse the source files to learn more about the options available to you
 
 YMFF v4 is expected to be released in late 2022.
 
-## Contributing
-Contributions are welcome!
-
-Have a look at [issues](https://github.com/yakovmanshin/YMFF/issues) to see the project’s current needs. Don’t hesitate to create new issues, especially if you intend to work on them yourself.
-
-If you’d like to discuss something else, contact [me](https://github.com/yakovmanshin) via email (the address is in the profile).
-
 ## License and Copyright
 YMFF is licensed under the Apache License. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
 
