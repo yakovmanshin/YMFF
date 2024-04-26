@@ -16,7 +16,6 @@ Pod::Spec.new do |s|
   YMFF is a nice little library that makes management of features
   with feature flags—and management of the feature flags themselves—a bliss.
                         DESC
-  s.documentation_url = "https://opensource.ym.dev/YMFF/"
   
   # Platform
   
