@@ -47,10 +47,10 @@ pod 'YMFF', '~> 3.1'
 </details>
 
 ## Setup
-All you need to start managing features with YMFF is at least one *feature flag store*—an object which conforms to `FeatureFlagStoreProtocol` and provides values that correspond to feature flag keys.
+YMFF relies on the concept of *feature-flag stores*—“sources of truth” for feature-flag values.
 
 ### Firebase Remote Config
-Firebase’s Remote Config is one of the most popular tools to manage feature flags on the server side. Remote Config’s `RemoteConfigValue` requires the use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite straightforward.
+Firebase Remote Config is one of the most popular tools to control feature flags remotely. YMFF integrates with Remote Config seamlessly, although with some manual action.
 
 <details>
 <summary>Typical Setup</summary>
@@ -93,7 +93,7 @@ extension RemoteConfig: FeatureFlagStoreProtocol {
 }
 ```
 
-Now, `RemoteConfig` is a valid *feature flag store*.
+Now, `RemoteConfig` is a valid *feature-flag store*.
 
 Alternatively, you can create a custom wrapper object. That’s what I tend to do in my projects to achieve greater flexibility and avoid tight coupling.
 
