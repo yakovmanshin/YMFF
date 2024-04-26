@@ -35,7 +35,7 @@ jobs:
             OS: macOS-12
             XCODE_APP_NAME: "Xcode_13.2.1"
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Select Xcode Version
       run: sudo xcode-select -switch "/Applications/${{ matrix.XCODE_APP_NAME }}.app"
     - name: Run Tests
@@ -46,7 +46,7 @@ jobs:
     name: SPM Tests (Linux)
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run Tests
       run: |
         swift --version
@@ -57,7 +57,7 @@ jobs:
     if: ${{ inputs.force_all_checks || github.event_name == 'pull_request' }}
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Select Xcode Version
       run: sudo xcode-select -switch ${{ env.XCODE_PATH }}
     - name: Lint Podspec
