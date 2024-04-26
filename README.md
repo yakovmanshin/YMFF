@@ -1,6 +1,6 @@
 # YMFF: Feature management made easy
 
-YMFF is a nice little library that makes managing features with feature flags—and managing feature flags themselves—a bliss, thanks mainly to the power of Swift’s [property wrappers](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617).
+YMFF is a nice little library that makes managing features with feature flags—and managing feature flags themselves—a bliss, thanks to Swift’s [macros](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros) and [property wrappers](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/#Property-Wrappers).
 
 <details>
 <summary>Why & How</summary>
