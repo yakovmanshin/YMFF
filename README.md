@@ -100,7 +100,7 @@ Alternatively, you can create a custom wrapper object. That’s what I tend to d
 </details>
 
 ## Usage
-Here’s the most basic way to use YMFF:
+Here’s how you declare feature flags with YMFF:
 
 ```swift
 import YMFF
@@ -111,25 +111,25 @@ enum FeatureFlags {
     // `resolver` references one or more feature flag stores.
     private static var resolver = FeatureFlagResolver(configuration: .init(stores: [
         // If you want to change feature flag values from within your app, you’ll need at least one mutable store.
+        // `RuntimeOverridesStore` is a YMFF-supplied object. It stores modified values until the app restarts.
         .mutable(RuntimeOverridesStore()),
-        // `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.
+        // `MyFeatureFlagStore.shared` is your object, conforming to `FeatureFlagStoreProtocol`.
         .immutable(MyFeatureFlagStore.shared),
     ]))
     
     // Feature flags are initialized with three pieces of data:
-    // a key string, the default value (used as fallback
-    // when all feature flag stores fail to provide one), and the resolver.
+    // a key string, the default (fallback) value, and the resolver.
     @FeatureFlag("promo_enabled", default: false, resolver: resolver)
     static var promoEnabled
     
-    // Feature flags aren't limited to booleans. You can use any type of value.
+    // Feature flags aren’t limited to booleans. You can use any type of value!
     @FeatureFlag("number_of_banners", default: 3, resolver: resolver)
     static var numberOfBanners
     
-    // Sometimes it may be convenient to transform the raw value—the one you receive from the store—
-    // to the native value—the one used in your app.
-    // In the following example, `MyFeatureFlagStore` stores values as strings, but the app uses an enum.
-    // To switch between the types, you use a `FeatureFlagValueTransformer`.
+    // Advanced: Sometimes you want to map raw values from the store
+    // to native values used in your app. `MyFeatureFlagStore` below
+    // stores values as strings, while the app uses an enum.
+    // To switch between them, you use a `FeatureFlagValueTransformer`.
     @FeatureFlag(
         "promo_unit_kind",
         FeatureFlagValueTransformer { string in
@@ -144,7 +144,7 @@ enum FeatureFlags {
     
 }
 
-// You can create feature flags of any type.
+// You can use custom types for feature-flag values.
 enum PromoUnitKind: String {
     case text
     case image
