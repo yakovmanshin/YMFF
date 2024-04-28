@@ -15,7 +15,7 @@ import YMFFProtocols
 /// A YMFF-supplied implementation of the object that stores feature flag values used in runtime.
 final public class RuntimeOverridesStore {
     
-    private var store: TransparentFeatureFlagStore
+    var store: TransparentFeatureFlagStore
     
     public init() {
         store = .init()
@@ -23,23 +23,23 @@ final public class RuntimeOverridesStore {
     
 }
 
-// MARK: - MutableFeatureFlagStoreProtocol
+// MARK: - SynchronousMutableFeatureFlagStoreProtocol
 
-extension RuntimeOverridesStore: MutableFeatureFlagStoreProtocol {
+extension RuntimeOverridesStore: SynchronousMutableFeatureFlagStoreProtocol {
     
-    public func containsValue(forKey key: String) -> Bool {
+    public func containsValueSync(forKey key: String) -> Bool {
         store[key] != nil
     }
     
-    public func value<Value>(forKey key: String) -> Value? {
+    public func valueSync<Value>(forKey key: String) -> Value? {
         store[key] as? Value
     }
     
-    public func setValue<Value>(_ value: Value, forKey key: String) {
+    public func setValueSync<Value>(_ value: Value, forKey key: String) {
         store[key] = value
     }
     
-    public func removeValue(forKey key: String) {
+    public func removeValueSync(forKey key: String) {
         store.removeValue(forKey: key)
     }
     
