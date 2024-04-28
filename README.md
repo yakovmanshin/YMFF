@@ -1,6 +1,6 @@
 # YMFF: Feature management made easy
 
-YMFF is a nice little library that makes managing features with feature flags—and managing feature flags themselves—a bliss, thanks mainly to the power of Swift’s [property wrappers](https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617).
+YMFF is a nice little library that makes managing features with feature flags—and managing feature flags themselves—a bliss, thanks to Swift’s [macros](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros) and [property wrappers](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/#Property-Wrappers).
 
 <details>
 <summary>Why & How</summary>
@@ -14,6 +14,11 @@ YMFF ships completely ready-to-use, right out of the box: you get everything you
 </details>
 
 ## Installation
+
+I’m sure you know how to install dependencies. YMFF supports both SPM and CocoaPods.
+
+<details>
+<summary>Need Help?</summary>
 
 ### Swift Package Manager (SPM)
 To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Swift Packages → Add Package Dependency, and paste the following URL into the search field:
@@ -39,11 +44,13 @@ Add the following to your Podfile:
 pod 'YMFF', '~> 3.1'
 ```
 
+</details>
+
 ## Setup
-All you need to start managing features with YMFF is at least one *feature flag store*—an object which conforms to `FeatureFlagStoreProtocol` and provides values that correspond to feature flag keys.
+YMFF relies on the concept of *feature-flag stores*—“sources of truth” for feature-flag values.
 
 ### Firebase Remote Config
-Firebase’s Remote Config is one of the most popular tools to manage feature flags on the server side. Remote Config’s `RemoteConfigValue` requires the use of different methods to retrieve values of different types. Integration of YMFF with Remote Config, although doesn’t look very pretty, is quite straightforward.
+Firebase Remote Config is one of the most popular tools to control feature flags remotely. YMFF integrates with Remote Config seamlessly, although with some manual action.
 
 <details>
 <summary>Typical Setup</summary>
@@ -86,14 +93,14 @@ extension RemoteConfig: FeatureFlagStoreProtocol {
 }
 ```
 
-Now, `RemoteConfig` is a valid *feature flag store*.
+Now, `RemoteConfig` is a valid *feature-flag store*.
 
 Alternatively, you can create a custom wrapper object. That’s what I tend to do in my projects to achieve greater flexibility and avoid tight coupling.
 
 </details>
 
 ## Usage
-Here’s the most basic way to use YMFF:
+Here’s how you declare feature flags with YMFF:
 
 ```swift
 import YMFF
@@ -104,25 +111,25 @@ enum FeatureFlags {
     // `resolver` references one or more feature flag stores.
     private static var resolver = FeatureFlagResolver(configuration: .init(stores: [
         // If you want to change feature flag values from within your app, you’ll need at least one mutable store.
+        // `RuntimeOverridesStore` is a YMFF-supplied object. It stores modified values until the app restarts.
         .mutable(RuntimeOverridesStore()),
-        // `MyFeatureFlagStore.shared` conforms to `FeatureFlagStoreProtocol`.
+        // `MyFeatureFlagStore.shared` is your object, conforming to `FeatureFlagStoreProtocol`.
         .immutable(MyFeatureFlagStore.shared),
     ]))
     
     // Feature flags are initialized with three pieces of data:
-    // a key string, the default value (used as fallback
-    // when all feature flag stores fail to provide one), and the resolver.
+    // a key string, the default (fallback) value, and the resolver.
     @FeatureFlag("promo_enabled", default: false, resolver: resolver)
     static var promoEnabled
     
-    // Feature flags aren't limited to booleans. You can use any type of value.
+    // Feature flags aren’t limited to booleans. You can use any type of value!
     @FeatureFlag("number_of_banners", default: 3, resolver: resolver)
     static var numberOfBanners
     
-    // Sometimes it may be convenient to transform the raw value—the one you receive from the store—
-    // to the native value—the one used in your app.
-    // In the following example, `MyFeatureFlagStore` stores values as strings, but the app uses an enum.
-    // To switch between the types, you use a `FeatureFlagValueTransformer`.
+    // Advanced: Sometimes you want to map raw values from the store
+    // to native values used in your app. `MyFeatureFlagStore` below
+    // stores values as strings, while the app uses an enum.
+    // To switch between them, you use a `FeatureFlagValueTransformer`.
     @FeatureFlag(
         "promo_unit_kind",
         FeatureFlagValueTransformer { string in
@@ -137,7 +144,7 @@ enum FeatureFlags {
     
 }
 
-// You can create feature flags of any type.
+// You can use custom types for feature-flag values.
 enum PromoUnitKind: String {
     case text
     case image
@@ -192,23 +199,18 @@ That’s it!
 
 ### More
 
-You can browse the source files to learn more about the options available to you. An autogenerated documentation is available at [opensource.ym.dev](https://opensource.ym.dev/YMFF/).
+Feel free to browse the source files to learn more about the available options!
 
 ## v4 Roadmap
 * [[#96](https://github.com/yakovmanshin/YMFF/issues/96)] Support for asynchronous feature-flag stores
-* [[#104](https://github.com/yakovmanshin/YMFF/issues/104)] Minimum compiler version: Swift 5.5 (Xcode 13)
-* [[#106](https://github.com/yakovmanshin/YMFF/issues/106)] Minimum deployment target: iOS 13, macOS 10.15
+* [[#124](https://github.com/yakovmanshin/YMFF/issues/124)] Swift macros for easier setup
+* [[#113](https://github.com/yakovmanshin/YMFF/issues/113)] Thread-safety improvements
+* ✅ ~~[[#104](https://github.com/yakovmanshin/YMFF/issues/104)] Minimum compiler version: Swift 5.5 (Xcode 13)~~
+* ✅ ~~[[#106](https://github.com/yakovmanshin/YMFF/issues/106)] Minimum deployment target: iOS 13, macOS 10.15~~
 
-YMFF v4 is expected to be released in late 2022.
-
-## Contributing
-Contributions are welcome!
-
-Have a look at [issues](https://github.com/yakovmanshin/YMFF/issues) to see the project’s current needs. Don’t hesitate to create new issues, especially if you intend to work on them yourself.
-
-If you’d like to discuss something else, contact [me](https://github.com/yakovmanshin) via email (the address is in the profile).
+YMFF v4 is expected to be released in 2024.
 
 ## License and Copyright
 YMFF is licensed under the Apache License. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
 
-© 2020–2022 Yakov Manshin
+© 2020–2024 Yakov Manshin
