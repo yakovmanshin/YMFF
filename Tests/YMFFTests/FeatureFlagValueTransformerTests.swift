@@ -14,71 +14,71 @@ import XCTest
 
 final class FeatureFlagValueTransformerTests: XCTestCase {
     
-    func testIdentityTransformer() {
-        let transformer: FeatureFlagValueTransformer<Int, Int> = .identity
+    func test_valueFromRawValue_identityTransformer() {
+        let transformer = FeatureFlagValueTransformer<Int, Int>.identity
         
-        let intValue = 123
+        let value = transformer.valueFromRawValue(123)
         
-        XCTAssertEqual(transformer.valueFromRawValue(intValue), intValue)
-        XCTAssertEqual(transformer.rawValueFromValue(intValue), intValue)
+        XCTAssertEqual(value, 123)
     }
     
-    func testSameTypeTransformation() {
-        let transformer = FeatureFlagValueTransformer { string in
-            String(string.dropFirst(4))
-        } rawValueFromValue: { string in
-            "RAW_\(string)"
+    func test_rawValueFromValue_identityTransformer() {
+        let transformer = FeatureFlagValueTransformer<String, String>.identity
+        
+        let rawValue = transformer.rawValueFromValue("TEST_value")
+        
+        XCTAssertEqual(rawValue, "TEST_value")
+    }
+    
+    func test_valueFromRawValue_sameType() {
+        let transformer = FeatureFlagValueTransformer { rawValue in
+            String(rawValue.dropFirst(4))
+        } rawValueFromValue: { value in
+            "RAW_\(value)"
         }
         
-        let stringValue = "some_value"
-        let stringRawValue = "RAW_some_value"
+        let value = transformer.valueFromRawValue("RAW_some_value")
         
-        XCTAssertEqual(transformer.valueFromRawValue(stringRawValue), stringValue)
-        XCTAssertEqual(transformer.rawValueFromValue(stringValue), stringRawValue)
+        XCTAssertEqual(value, "some_value")
     }
     
-    func testStringToBoolTransformation() {
+    func test_rawValueFromValue_sameType() {
+        let transformer = FeatureFlagValueTransformer { rawValue in
+            rawValue / 2
+        } rawValueFromValue: { value in
+            value * 2
+        }
+        
+        let rawValue = transformer.rawValueFromValue(123)
+        
+        XCTAssertEqual(rawValue, 246)
+    }
+    
+    func test_valueFromRawValue_intFromString() {
         let transformer = FeatureFlagValueTransformer { string in
-            string == "true"
+            Int(string)
+        } rawValueFromValue: { int in
+            "\(int)"
+        }
+        
+        let value = transformer.valueFromRawValue("12345")
+        
+        XCTAssertEqual(value, 12345)
+    }
+    
+    func test_rawValueFromValue_stringFromBool() {
+        let transformer = FeatureFlagValueTransformer { string in
+            string == "YES"
         } rawValueFromValue: { bool in
-            bool ? "true" : "false"
+            bool ? "YES" : "NO"
         }
         
-        let stringRawValueTrue = "true"
-        let stringRawValueFalse = "false"
-        let stringRawValueOther = "OTHER"
+        let rawValue = transformer.rawValueFromValue(true)
         
-        XCTAssertTrue(transformer.valueFromRawValue(stringRawValueTrue) == true)
-        XCTAssertTrue(transformer.valueFromRawValue(stringRawValueFalse) == false)
-        XCTAssertTrue(transformer.valueFromRawValue(stringRawValueOther) == false)
-        
-        XCTAssertEqual(transformer.rawValueFromValue(true), stringRawValueTrue)
-        XCTAssertEqual(transformer.rawValueFromValue(false), stringRawValueFalse)
+        XCTAssertEqual(rawValue, "YES")
     }
     
-    func testStringToEnumWithRawValueTransformation() {
-        let transformer = FeatureFlagValueTransformer { string in
-            AdType(rawValue: string)
-        } rawValueFromValue: { type in
-            type.rawValue
-        }
-        
-        let stringRawValueNone = "none"
-        let stringRawValueBanner = "banner"
-        let stringRawValueVideo = "video"
-        let stringRawValueOther = "image"
-        
-        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueNone), AdType.none)
-        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueBanner), .banner)
-        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueVideo), .video)
-        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueOther), nil)
-        
-        XCTAssertEqual(transformer.rawValueFromValue(.none), stringRawValueNone)
-        XCTAssertEqual(transformer.rawValueFromValue(.banner), stringRawValueBanner)
-        XCTAssertEqual(transformer.rawValueFromValue(.video), stringRawValueVideo)
-    }
-    
-    func testIntToEnumWithCustomInitializationTransformation() {
+    func test_valueFromRawValue_enumFromInt() {
         let transformer = FeatureFlagValueTransformer { (age: Int) -> AgeGroup in
             switch age {
             case ..<13:
@@ -112,6 +112,28 @@ final class FeatureFlagValueTransformerTests: XCTestCase {
         XCTAssertEqual(transformer.rawValueFromValue(.under13), 13)
         XCTAssertEqual(transformer.rawValueFromValue(.between13And17), 17)
         XCTAssertEqual(transformer.rawValueFromValue(.over17), 18)
+    }
+    
+    func test_rawValueFromValue_stringFromEnum() {
+        let transformer = FeatureFlagValueTransformer { string in
+            AdType(rawValue: string)
+        } rawValueFromValue: { type in
+            type.rawValue
+        }
+        
+        let stringRawValueNone = "none"
+        let stringRawValueBanner = "banner"
+        let stringRawValueVideo = "video"
+        let stringRawValueOther = "image"
+        
+        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueNone), AdType.none)
+        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueBanner), .banner)
+        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueVideo), .video)
+        XCTAssertEqual(transformer.valueFromRawValue(stringRawValueOther), nil)
+        
+        XCTAssertEqual(transformer.rawValueFromValue(.none), stringRawValueNone)
+        XCTAssertEqual(transformer.rawValueFromValue(.banner), stringRawValueBanner)
+        XCTAssertEqual(transformer.rawValueFromValue(.video), stringRawValueVideo)
     }
     
 }
