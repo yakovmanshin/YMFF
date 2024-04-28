@@ -13,173 +13,182 @@ import XCTest
 import YMFFProtocols
 #endif
 
-// MARK: - Configuration
-
 final class FeatureFlagTests: XCTestCase {
     
-    private static let resolver: FeatureFlagResolverProtocol = FeatureFlagResolver(configuration: SharedAssets.configuration)
+    private var resolver: SynchronousFeatureFlagResolverMock!
     
-    @FeatureFlag(SharedAssets.boolKey, default: false, resolver: resolver)
-    private var boolFeatureFlag
+    override func setUp() {
+        super.setUp()
+        
+        resolver = SynchronousFeatureFlagResolverMock()
+    }
     
-    @FeatureFlag(SharedAssets.intKey, default: 999, resolver: resolver)
-    private var intFeatureFlag
+    override func tearDown() {
+        resolver = nil
+        
+        super.tearDown()
+    }
     
-    @FeatureFlag(SharedAssets.stringKey, default: "FALLBACK_STRING", resolver: resolver)
-    private var stringFeatureFlag
+    func test_wrappedValue_fromResolver() {
+        @FeatureFlag("TEST_bool_key", default: false, resolver: resolver)
+        var boolFeatureFlag
+        
+        resolver.valueSync_result = .success(true)
+        
+        let wrappedValue = boolFeatureFlag
+        
+        XCTAssertEqual(resolver.valueSync_invocationCount, 1)
+        XCTAssertEqual(resolver.valueSync_keys, ["TEST_bool_key"])
+        XCTAssertTrue(wrappedValue)
+    }
     
-    @FeatureFlag(SharedAssets.optionalIntKey, default: 999 as Int?, resolver: resolver)
-    private var optionalIntFeatureFlag
+    func test_wrappedValue_fallback() {
+        @FeatureFlag("TEST_int_key", default: 123, resolver: resolver)
+        var intFeatureFlag
+        
+        resolver.valueSync_result = .failure(NSError())
+        
+        let wrappedValue = intFeatureFlag
+        
+        XCTAssertEqual(resolver.valueSync_invocationCount, 1)
+        XCTAssertEqual(resolver.valueSync_keys, ["TEST_int_key"])
+        XCTAssertEqual(wrappedValue, 123)
+    }
     
-    @FeatureFlag(SharedAssets.nonexistentKey, default: 999, resolver: resolver)
-    private var nonexistentIntFeatureFlag
+    func test_wrappedValue_valueTransformation_success() {
+        @FeatureFlag(
+            "TEST_enum_key",
+            transformer: FeatureFlagValueTransformer { rawValue in
+                AdType(rawValue: rawValue)
+            } rawValueFromValue: { value in
+                value.rawValue
+            },
+            default: .none,
+            resolver: resolver
+        )
+        var enumFeatureFlag
+        
+        resolver.valueSync_result = .success("video")
+        
+        let wrappedValue = enumFeatureFlag
+        
+        XCTAssertEqual(resolver.valueSync_invocationCount, 1)
+        XCTAssertEqual(resolver.valueSync_keys, ["TEST_enum_key"])
+        XCTAssertEqual(wrappedValue, .video)
+    }
     
-    @FeatureFlag(SharedAssets.intToOverrideKey, default: 999, resolver: resolver)
-    private var overrideFlag
+    func test_wrappedValue_valueTransformation_failure() {
+        @FeatureFlag(
+            "TEST_enum_key",
+            transformer: FeatureFlagValueTransformer { rawValue in
+                AdType(rawValue: rawValue)
+            } rawValueFromValue: { value in
+                value.rawValue
+            },
+            default: .none,
+            resolver: resolver
+        )
+        var enumFeatureFlag
+        
+        resolver.valueSync_result = .success("unknown_value")
+        
+        let wrappedValue = enumFeatureFlag
+        
+        XCTAssertEqual(resolver.valueSync_invocationCount, 1)
+        XCTAssertEqual(resolver.valueSync_keys, ["TEST_enum_key"])
+        XCTAssertEqual(wrappedValue, .none)
+    }
     
-    @FeatureFlag("NONEXISTENT_OVERRIDE_KEY", default: 999, resolver: resolver)
-    private var nonexistentOverrideFlag
+    func test_wrappedValueOverride_success() {
+        @FeatureFlag("TEST_int_key", default: 123, resolver: resolver)
+        var intFeatureFlag
+        
+        resolver.setValueSync_result = .success(())
+        
+        intFeatureFlag = 456
+        
+        XCTAssertEqual(resolver.setValueSync_invocationCount, 1)
+        XCTAssertEqual(resolver.setValueSync_keyValuePairs.count, 1)
+        XCTAssertEqual(resolver.setValueSync_keyValuePairs[0].0, "TEST_int_key")
+        XCTAssertEqual(resolver.setValueSync_keyValuePairs[0].1 as? Int, 456)
+    }
     
-    @FeatureFlag(
-        SharedAssets.stringToBoolKey,
-        transformer: .init(valueFromRawValue: { $0 == "true" }, rawValueFromValue: { $0 ? "true" : "false" }),
-        default: false,
-        resolver: resolver
-    )
-    private var stringToBoolFeatureFlag
+    func test_wrappedValueOverride_failure() {
+        @FeatureFlag("TEST_int_key", default: 123, resolver: resolver)
+        var intFeatureFlag
+        
+        resolver.setValueSync_result = .failure(NSError())
+        
+        intFeatureFlag = 456
+        
+        XCTAssertEqual(resolver.setValueSync_invocationCount, 1)
+        XCTAssertEqual(resolver.setValueSync_keyValuePairs.count, 1)
+        XCTAssertEqual(resolver.setValueSync_keyValuePairs[0].0, "TEST_int_key")
+        XCTAssertEqual(resolver.setValueSync_keyValuePairs[0].1 as? Int, 456)
+    }
     
-    @FeatureFlag(
-        SharedAssets.stringToAdTypeKey,
-        transformer: .init(valueFromRawValue: { AdType(rawValue: $0) }, rawValueFromValue: { $0.rawValue }),
-        default: .none,
-        resolver: resolver
-    )
-    private var stringToAdTypeFeatureFlag
+    func test_wrappedValueOverrideRemoval_success() {
+        @FeatureFlag("TEST_string_key", default: "TEST_value1", resolver: resolver)
+        var stringFeatureFlag
+        
+        resolver.removeValueFromMutableStoreSync_result = .success(())
+        
+        $stringFeatureFlag.removeValueFromMutableStore()
+        
+        XCTAssertEqual(resolver.removeValueFromMutableStoreSync_invocationCount, 1)
+        XCTAssertEqual(resolver.removeValueFromMutableStoreSync_keys, ["TEST_string_key"])
+    }
+    
+    func test_wrappedValueOverrideRemoval_failure() {
+        @FeatureFlag("TEST_string_key", default: "TEST_value1", resolver: resolver)
+        var stringFeatureFlag
+        
+        resolver.removeValueFromMutableStoreSync_result = .failure(NSError())
+        
+        $stringFeatureFlag.removeValueFromMutableStore()
+        
+        XCTAssertEqual(resolver.removeValueFromMutableStoreSync_invocationCount, 1)
+        XCTAssertEqual(resolver.removeValueFromMutableStoreSync_keys, ["TEST_string_key"])
+    }
+    
+    func test_projectedValue_typeCheck_noTransformation() {
+        @FeatureFlag("TEST_string_key", default: "TEST_string", resolver: resolver)
+        var stringFeatureFlag
+        
+        let projectedValue: Any = $stringFeatureFlag
+        
+        XCTAssertEqual(resolver.valueSync_invocationCount, 0)
+        XCTAssertTrue(resolver.valueSync_keys.isEmpty)
+        XCTAssertTrue(projectedValue is FeatureFlag<String, String>)
+        XCTAssertFalse(projectedValue is FeatureFlag<String, Int>)
+        XCTAssertFalse(projectedValue is FeatureFlag<Int, Double>)
+    }
+    
+    func test_projectedValue_typeCheck_customTransformation() {
+        @FeatureFlag(
+            "TEST_bool_key",
+            transformer: FeatureFlagValueTransformer { boolString in
+                boolString == "YES"
+            } rawValueFromValue: { bool in
+                bool ? "YES" : "NO"
+            },
+            default: false,
+            resolver: resolver
+        )
+        var boolFeatureFlag
+        
+        let projectedValue: Any = $boolFeatureFlag
+        
+        XCTAssertEqual(resolver.valueSync_invocationCount, 0)
+        XCTAssertTrue(resolver.valueSync_keys.isEmpty)
+        XCTAssertTrue(projectedValue is FeatureFlag<String, Bool>)
+        XCTAssertFalse(projectedValue is FeatureFlag<String, Int>)
+        XCTAssertFalse(projectedValue is FeatureFlag<Int, Double>)
+    }
     
 }
 
-// MARK: - Wrapped Value Tests
-
-extension FeatureFlagTests {
-    
-    func testBoolWrappedValue() {
-        XCTAssertTrue(boolFeatureFlag)
-    }
-    
-    func testIntWrappedValue() {
-        XCTAssertEqual(intFeatureFlag, 123)
-    }
-    
-    func testStringWrappedValue() {
-        XCTAssertEqual(stringFeatureFlag, "STRING_VALUE_REMOTE")
-    }
-    
-    func testOptionalIntValue() {
-        XCTAssertEqual(optionalIntFeatureFlag, 999)
-    }
-    
-    func testNonexistentIntWrappedValue() {
-        XCTAssertEqual(nonexistentIntFeatureFlag, 999)
-    }
-    
-    func testWrappedValueOverride() {
-        XCTAssertEqual(overrideFlag, 456)
-        
-        overrideFlag = 789
-        
-        XCTAssertEqual(overrideFlag, 789)
-        
-        $overrideFlag.removeValueFromMutableStore()
-        
-        XCTAssertEqual(overrideFlag, 456)
-    }
-    
-    func testNonexistentWrappedValueOverride() {
-        XCTAssertEqual(nonexistentOverrideFlag, 999)
-        
-        nonexistentOverrideFlag = 789
-        
-        XCTAssertEqual(nonexistentOverrideFlag, 789)
-        
-        $nonexistentOverrideFlag.removeValueFromMutableStore()
-        
-        XCTAssertEqual(nonexistentOverrideFlag, 999)
-    }
-    
-    func testStringToBoolWrappedValue() {
-        XCTAssertTrue(stringToBoolFeatureFlag)
-    }
-    
-    func testStringToBoolWrappedValueOverride() {
-        XCTAssertTrue(stringToBoolFeatureFlag)
-        
-        stringToBoolFeatureFlag = false
-        XCTAssertFalse(stringToBoolFeatureFlag)
-        
-        $stringToBoolFeatureFlag.removeValueFromMutableStore()
-        XCTAssertTrue(stringToBoolFeatureFlag)
-    }
-    
-    func testStringToAdTypeWrappedValue() {
-        XCTAssertEqual(stringToAdTypeFeatureFlag, .video)
-    }
-    
-    func testStringToAdTypeWrappedValueOverride() {
-        XCTAssertEqual(stringToAdTypeFeatureFlag, .video)
-        
-        stringToAdTypeFeatureFlag = .banner
-        XCTAssertEqual(stringToAdTypeFeatureFlag, .banner)
-        
-        XCTAssertNoThrow(try Self.resolver.setValue("image", toMutableStoreUsing: SharedAssets.stringToAdTypeKey))
-        XCTAssertEqual(stringToAdTypeFeatureFlag, .none)
-        
-        $stringToAdTypeFeatureFlag.removeValueFromMutableStore()
-        XCTAssertEqual(stringToAdTypeFeatureFlag, .video)
-    }
-    
-}
-
-// MARK: - Projected Value Tests
-
-extension FeatureFlagTests {
-    
-    func testBoolProjectedValue() {
-        XCTAssertTrue(value($boolFeatureFlag, isOfType: IdentityFeatureFlag<Bool>.self))
-    }
-    
-    func testIntProjectedValue() {
-        XCTAssertTrue(value($intFeatureFlag, isOfType: IdentityFeatureFlag<Int>.self))
-    }
-    
-    func testStringProjectedValue() {
-        XCTAssertTrue(value($stringFeatureFlag, isOfType: IdentityFeatureFlag<String>.self))
-    }
-    
-    func testOptionalIntProjectedValue() {
-        XCTAssertTrue(value($optionalIntFeatureFlag, isOfType: IdentityFeatureFlag<Int?>.self))
-    }
-    
-    func testNonexistentIntProjectedValue() {
-        XCTAssertTrue(value($nonexistentIntFeatureFlag, isOfType: IdentityFeatureFlag<Int>.self))
-    }
-    
-    func testStringToBoolProjectedValue() {
-        XCTAssertTrue(value($stringToBoolFeatureFlag, isOfType: FeatureFlag<String, Bool>.self))
-    }
-    
-    func testStringToAdTypeProjectedValue() {
-        XCTAssertTrue(value($stringToAdTypeFeatureFlag, isOfType: FeatureFlag<String, AdType>.self))
-    }
-    
-    private func value<T>(_ value: Any, isOfType type: T.Type) -> Bool {
-        value is T
-    }
-    
-}
-
-// MARK: - Support Types
-
-fileprivate typealias IdentityFeatureFlag<Value> = FeatureFlag<Value, Value>
+// MARK: - Utilities
 
 fileprivate enum AdType: String {
     case none
