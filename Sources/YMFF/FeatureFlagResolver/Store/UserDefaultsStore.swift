@@ -30,27 +30,27 @@ final public class UserDefaultsStore {
     
 }
 
-// MARK: - MutableFeatureFlagStoreProtocol
+// MARK: - SynchronousMutableFeatureFlagStoreProtocol
 
-extension UserDefaultsStore: MutableFeatureFlagStoreProtocol {
+extension UserDefaultsStore: SynchronousMutableFeatureFlagStoreProtocol {
     
-    public func containsValue(forKey key: String) -> Bool {
+    public func containsValueSync(forKey key: String) -> Bool {
         userDefaults.object(forKey: key) != nil
     }
     
-    public func value<Value>(forKey key: String) -> Value? {
+    public func valueSync<Value>(forKey key: String) -> Value? {
         userDefaults.object(forKey: key) as? Value
     }
     
-    public func setValue<Value>(_ value: Value, forKey key: String) {
+    public func setValueSync<Value>(_ value: Value, forKey key: String) {
         userDefaults.set(value, forKey: key)
     }
     
-    public func removeValue(forKey key: String) {
+    public func removeValueSync(forKey key: String) {
         userDefaults.removeObject(forKey: key)
     }
     
-    public func saveChanges() {
+    public func saveChangesSync() {
         userDefaults.synchronize()
     }
     

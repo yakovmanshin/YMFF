@@ -14,79 +14,114 @@ import XCTest
 
 final class UserDefaultsStoreTests: XCTestCase {
     
-    private var resolver: FeatureFlagResolver!
+    private var store: UserDefaultsStore!
     
-    private lazy var userDefaults = UserDefaults()
+    private var userDefaults: UserDefaults!
     
     override func setUp() {
         super.setUp()
         
-        resolver = FeatureFlagResolver(stores: [
-            .mutable(UserDefaultsStore(userDefaults: userDefaults))
-        ])
+        userDefaults = UserDefaults()
+        store = UserDefaultsStore(userDefaults: userDefaults)
     }
     
-}
-
-extension UserDefaultsStoreTests {
-    
-    func testReadValueWithResolver() {
-        let key = "TEST_UserDefaults_key_123"
-        let value = 123
+    override func tearDown() {
+        userDefaults
+            .dictionaryRepresentation()
+            .keys
+            .forEach(userDefaults.removeObject(forKey:))
         
-        userDefaults.set(value, forKey: key)
-        
-        // FIXME: [#40] Can't use `retrievedValue: Int?` here
-        let retrievedValue = try? resolver.value(for: key) as Int
-        
-        XCTAssertEqual(retrievedValue, value)
+        super.tearDown()
     }
     
-    func testWriteValueWithResolver() {
-        let key = "TEST_UserDefaults_key_456"
-        let value = 456
+    func test_containsValue() async {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
         
-        try? resolver.setValue(value, toMutableStoreUsing: key)
+        let containsValue1 = await store.containsValue(forKey: "TEST_key1")
+        let containsValue2 = await store.containsValue(forKey: "TEST_key2")
         
-        let retrievedValue = userDefaults.object(forKey: key) as? Int
-        
-        XCTAssertEqual(retrievedValue, value)
+        XCTAssertTrue(containsValue1)
+        XCTAssertFalse(containsValue2)
     }
     
-    func testWriteAndReadValueWithResolver() {
-        let key = "TEST_UserDefaults_key_789"
-        let value = 789
+    func test_containsValueSync() {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
         
-        try? resolver.setValue(value, toMutableStoreUsing: key)
+        let containsValue1 = store.containsValueSync(forKey: "TEST_key1")
+        let containsValue2 = store.containsValueSync(forKey: "TEST_key2")
         
-        // FIXME: [#40] Can't use `retrievedValue: Int?` here
-        let retrievedValue = try? resolver.value(for: key) as Int
-        
-        XCTAssertEqual(retrievedValue, value)
+        XCTAssertTrue(containsValue1)
+        XCTAssertFalse(containsValue2)
     }
     
-    func testRemoveValueWithResolver() {
-        let key = "TEST_UserDefaults_key_012"
-        let value = 012
+    func test_value() async {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
+        userDefaults.set("TEST_value2", forKey: "TEST_key2")
         
-        userDefaults.set(value, forKey: key)
+        let value1: String? = await store.value(forKey: "TEST_key1")
+        let value2: Int? = await store.value(forKey: "TEST_key2")
+        let value3: Bool? = await store.value(forKey: "TEST_key3")
         
-        XCTAssertEqual(userDefaults.object(forKey: key) as? Int, value)
-        
-        XCTAssertNoThrow(try resolver.removeValueFromMutableStore(using: key))
-        
-        XCTAssertNil(userDefaults.object(forKey: key))
+        XCTAssertEqual(value1, "TEST_value1")
+        XCTAssertNil(value2)
+        XCTAssertNil(value3)
     }
     
-    func testChangeSaving() {
-        let key = "TEST_UserDefaults_key_345"
-        let value = 345
+    func test_valueSync() {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
+        userDefaults.set("TEST_value2", forKey: "TEST_key2")
         
-        try? resolver.setValue(value, toMutableStoreUsing: key)
+        let value1: String? = store.valueSync(forKey: "TEST_key1")
+        let value2: Int? = store.valueSync(forKey: "TEST_key2")
+        let value3: Bool? = store.valueSync(forKey: "TEST_key3")
         
-        resolver = nil
+        XCTAssertEqual(value1, "TEST_value1")
+        XCTAssertNil(value2)
+        XCTAssertNil(value3)
+    }
+    
+    func test_setValue() async {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
         
-        XCTAssertEqual(userDefaults.object(forKey: key) as? Int, value)
+        await store.setValue("TEST_newValue1", forKey: "TEST_key1")
+        await store.setValue("TEST_newValue2", forKey: "TEST_key2")
+        
+        XCTAssertEqual(userDefaults.string(forKey: "TEST_key1"), "TEST_newValue1")
+        XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_newValue2")
+    }
+    
+    func test_setValueSync() {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
+        
+        store.setValueSync("TEST_newValue1", forKey: "TEST_key1")
+        store.setValueSync("TEST_newValue2", forKey: "TEST_key2")
+        
+        XCTAssertEqual(userDefaults.string(forKey: "TEST_key1"), "TEST_newValue1")
+        XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_newValue2")
+    }
+    
+    func test_removeValue() async {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
+        userDefaults.set("TEST_value2", forKey: "TEST_key2")
+        
+        await store.removeValue(forKey: "TEST_key1")
+        await store.removeValue(forKey: "TEST_key999")
+        
+        XCTAssertNil(userDefaults.string(forKey: "TEST_key1"))
+        XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_value2")
+        XCTAssertNil(userDefaults.string(forKey: "TEST_key999"))
+    }
+    
+    func test_removeValueSync() {
+        userDefaults.set("TEST_value1", forKey: "TEST_key1")
+        userDefaults.set("TEST_value2", forKey: "TEST_key2")
+        
+        store.removeValueSync(forKey: "TEST_key1")
+        store.removeValueSync(forKey: "TEST_key999")
+        
+        XCTAssertNil(userDefaults.string(forKey: "TEST_key1"))
+        XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_value2")
+        XCTAssertNil(userDefaults.string(forKey: "TEST_key999"))
     }
     
 }
