@@ -28,6 +28,10 @@ final class FeatureFlagResolverTests: XCTestCase {
         resolver = FeatureFlagResolver(configuration: configuration)
     }
     
+    func test_configuration() {
+        XCTAssertIdentical(resolver.configuration, configuration)
+    }
+    
     func test_deinit() async throws {
         let store1 = MutableFeatureFlagStoreMock()
         let store2 = SynchronousMutableFeatureFlagStoreMock()
