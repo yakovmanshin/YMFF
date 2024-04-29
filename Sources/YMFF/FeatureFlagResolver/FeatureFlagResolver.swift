@@ -39,9 +39,12 @@ final public class FeatureFlagResolver {
     }
     
     deinit {
-        configuration.stores
-            .compactMap({ $0.asMutable })
-            .forEach({ $0.saveChanges() })
+        let mutableStores = getMutableStores()
+        Task { [mutableStores] in
+            for store in mutableStores {
+                await store.saveChanges()
+            }
+        }
     }
     
 }
@@ -67,6 +70,28 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     public func removeValueFromMutableStore(using key: FeatureFlagKey) throws {
         let mutableStore = try firstMutableStore(withValueForKey: key)
         mutableStore.removeValue(forKey: key)
+    }
+    
+}
+
+// MARK: - Stores
+
+extension FeatureFlagResolver {
+    
+    private func getStores() -> [any FeatureFlagStoreProtocol] {
+        configuration.stores.map { $0.asImmutable }
+    }
+    
+    private func getSyncStores() -> [any SynchronousFeatureFlagStoreProtocol] {
+        getStores().compactMap { $0 as? SynchronousFeatureFlagStoreProtocol }
+    }
+    
+    private func getMutableStores() -> [any MutableFeatureFlagStoreProtocol] {
+        getStores().compactMap { $0 as? MutableFeatureFlagStoreProtocol }
+    }
+    
+    private func getSyncMutableStores() -> [any SynchronousMutableFeatureFlagStoreProtocol] {
+        getStores().compactMap { $0 as? SynchronousMutableFeatureFlagStoreProtocol }
     }
     
 }
