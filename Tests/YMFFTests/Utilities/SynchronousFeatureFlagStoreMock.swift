@@ -6,7 +6,11 @@
 //  Copyright © 2024 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if COCOAPODS
+import YMFF
+#else
 import YMFFProtocols
+#endif
 
 // MARK: - Mock
 
