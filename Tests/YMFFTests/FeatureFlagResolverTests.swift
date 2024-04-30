@@ -32,6 +32,28 @@ final class FeatureFlagResolverTests: XCTestCase {
         XCTAssertIdentical(resolver.configuration, configuration)
     }
     
+    func test_init_withConfiguration() {
+        let store1 = FeatureFlagStoreMock()
+        let store2 = SynchronousMutableFeatureFlagStoreMock()
+        let configuration = FeatureFlagResolverConfiguration(stores: [.immutable(store1), .mutable(store2)])
+        
+        let resolver = FeatureFlagResolver(configuration: configuration)
+        
+        XCTAssertIdentical(resolver.configuration, configuration)
+        XCTAssertIdentical(resolver.configuration.stores[0].asImmutable as AnyObject, store1)
+        XCTAssertIdentical(resolver.configuration.stores[1].asImmutable as AnyObject, store2)
+    }
+    
+    func test_init_withStores() {
+        let store1 = FeatureFlagStoreMock()
+        let store2 = SynchronousMutableFeatureFlagStoreMock()
+        
+        let resolver = FeatureFlagResolver(stores: [.immutable(store1), .mutable(store2)])
+        
+        XCTAssertIdentical(resolver.configuration.stores[0].asImmutable as AnyObject, store1)
+        XCTAssertIdentical(resolver.configuration.stores[1].asImmutable as AnyObject, store2)
+    }
+    
     func test_value_noStores() async {
         do {
             let _: String = try await resolver.value(for: "TEST_key1")
