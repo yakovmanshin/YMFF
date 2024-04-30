@@ -46,7 +46,7 @@ final class FeatureFlagTests: XCTestCase {
         @FeatureFlag("TEST_int_key", default: 123, resolver: resolver)
         var intFeatureFlag
         
-        resolver.valueSync_result = .failure(NSError())
+        resolver.valueSync_result = .failure(SomeError())
         
         let wrappedValue = intFeatureFlag
         
@@ -117,7 +117,7 @@ final class FeatureFlagTests: XCTestCase {
         @FeatureFlag("TEST_int_key", default: 123, resolver: resolver)
         var intFeatureFlag
         
-        resolver.setValueSync_result = .failure(NSError())
+        resolver.setValueSync_result = .failure(SomeError())
         
         intFeatureFlag = 456
         
@@ -143,7 +143,7 @@ final class FeatureFlagTests: XCTestCase {
         @FeatureFlag("TEST_string_key", default: "TEST_value1", resolver: resolver)
         var stringFeatureFlag
         
-        resolver.removeValueFromMutableStoreSync_result = .failure(NSError())
+        resolver.removeValueFromMutableStoreSync_result = .failure(SomeError())
         
         $stringFeatureFlag.removeValueFromMutableStore()
         
@@ -195,3 +195,5 @@ fileprivate enum AdType: String {
     case banner
     case video
 }
+
+fileprivate struct SomeError: Error { }
