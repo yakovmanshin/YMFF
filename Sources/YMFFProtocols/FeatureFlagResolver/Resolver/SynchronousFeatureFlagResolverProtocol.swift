@@ -8,13 +8,26 @@
 
 public protocol SynchronousFeatureFlagResolverProtocol: FeatureFlagResolverProtocol {
     
+    /// Returns a value for the specified key.
+    ///
+    /// - Parameter key: *Required.* The feature flag key.
     func valueSync<Value>(for key: FeatureFlagKey) throws -> Value
     
+    /// Sets a new feature flag value to the first mutable store found in `configuration.stores`.
+    ///
+    /// - Parameters:
+    ///   - newValue: *Required.* The override value.
+    ///   - key: *Required.* The feature flag key.
     func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws
     
+    /// Removes the value from the first mutable feature flag store which has one for the specified key.
+    ///
+    /// - Parameter key: *Required.* The feature flag key.
     func removeValueFromMutableStoreSync(using key: FeatureFlagKey) throws
     
 }
+
+// MARK: - Async Requirements
 
 extension SynchronousFeatureFlagResolverProtocol {
     

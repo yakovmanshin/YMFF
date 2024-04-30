@@ -8,13 +8,26 @@
 
 public protocol SynchronousMutableFeatureFlagStoreProtocol: SynchronousFeatureFlagStoreProtocol, MutableFeatureFlagStoreProtocol {
     
+    /// Adds the value to the store so it can be retrieved with the key later.
+    ///
+    /// - Parameters:
+    ///   - value: *Required.* The value to record.
+    ///   - key: *Required.* The key used to address the value.
     func setValueSync<Value>(_ value: Value, forKey key: String)
     
+    /// Removes the value from the store.
+    ///
+    /// - Parameter key: *Required.* The key used to address the value.
     func removeValueSync(forKey key: String)
     
+    /// Immediately saves changed values so they’re not lost.
+    ///
+    /// + This method can be called when work with the feature flag store is finished.
     func saveChangesSync()
     
 }
+
+// MARK: - Async Requirements
 
 extension SynchronousMutableFeatureFlagStoreProtocol {
     
@@ -31,6 +44,8 @@ extension SynchronousMutableFeatureFlagStoreProtocol {
     }
     
 }
+
+// MARK: - Default Implementation
 
 extension SynchronousMutableFeatureFlagStoreProtocol {
     
