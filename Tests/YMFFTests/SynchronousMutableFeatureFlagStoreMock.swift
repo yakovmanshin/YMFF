@@ -44,7 +44,7 @@ extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagS
         valueSync_invocationCount += 1
         valueSync_keys.append(key)
         if let valueSync_returnValue {
-            return valueSync_returnValue as! Value?
+            return valueSync_returnValue as? Value? ?? nil
         } else {
             return nil
         }

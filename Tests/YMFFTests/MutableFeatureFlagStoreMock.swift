@@ -44,7 +44,7 @@ extension MutableFeatureFlagStoreMock: MutableFeatureFlagStoreProtocol {
         value_invocationCount += 1
         value_keys.append(key)
         if let value_returnValue {
-            return value_returnValue as! Value?
+            return value_returnValue as? Value? ?? nil
         } else {
             return nil
         }
