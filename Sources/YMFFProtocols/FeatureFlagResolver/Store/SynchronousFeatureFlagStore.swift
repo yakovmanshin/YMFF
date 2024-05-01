@@ -1,12 +1,12 @@
 //
-//  SynchronousFeatureFlagStoreProtocol.swift
+//  SynchronousFeatureFlagStore.swift
 //  YMFFProtocols
 //
 //  Created by Yakov Manshin on 9/29/22.
 //  Copyright © 2022 Yakov Manshin. See the LICENSE file for license info.
 //
 
-public protocol SynchronousFeatureFlagStoreProtocol: FeatureFlagStoreProtocol {
+public protocol SynchronousFeatureFlagStore: FeatureFlagStore {
     
     /// Indicates whether the store contains a value that corresponds to the key.
     ///
@@ -22,7 +22,7 @@ public protocol SynchronousFeatureFlagStoreProtocol: FeatureFlagStoreProtocol {
 
 // MARK: - Async Requirements
 
-extension SynchronousFeatureFlagStoreProtocol {
+extension SynchronousFeatureFlagStore {
     
     public func containsValue(forKey key: String) async -> Bool {
         containsValueSync(forKey: key)

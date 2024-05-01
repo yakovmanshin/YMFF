@@ -1,5 +1,5 @@
 //
-//  FeatureFlagStoreProtocol.swift
+//  FeatureFlagStore.swift
 //  YMFFProtocols
 //
 //  Created by Yakov Manshin on 9/20/20.
@@ -7,7 +7,7 @@
 //
 
 /// An object that stores feature flag values, and provides them at the resolver's request.
-public protocol FeatureFlagStoreProtocol {
+public protocol FeatureFlagStore {
     
     /// Indicates whether the store contains a value that corresponds to the key.
     ///

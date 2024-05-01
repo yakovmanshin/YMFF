@@ -30,9 +30,9 @@ final public class UserDefaultsStore {
     
 }
 
-// MARK: - SynchronousMutableFeatureFlagStoreProtocol
+// MARK: - SynchronousMutableFeatureFlagStore
 
-extension UserDefaultsStore: SynchronousMutableFeatureFlagStoreProtocol {
+extension UserDefaultsStore: SynchronousMutableFeatureFlagStore {
     
     public func containsValueSync(forKey key: String) -> Bool {
         userDefaults.object(forKey: key) != nil

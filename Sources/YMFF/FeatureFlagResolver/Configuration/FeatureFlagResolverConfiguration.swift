@@ -15,10 +15,10 @@ import YMFFProtocols
 /// The object used to configure the resolver.
 final public class FeatureFlagResolverConfiguration {
     
-    public var stores: [any FeatureFlagStoreProtocol]
+    public var stores: [any FeatureFlagStore]
     
     /// Initializes a new configuration with the given array of feature flag stores.
-    public init(stores: [any FeatureFlagStoreProtocol]) {
+    public init(stores: [any FeatureFlagStore]) {
         self.stores = stores
     }
     

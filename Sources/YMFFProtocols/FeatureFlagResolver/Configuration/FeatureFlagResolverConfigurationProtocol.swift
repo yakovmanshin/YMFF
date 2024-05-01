@@ -10,6 +10,6 @@
 public protocol FeatureFlagResolverConfigurationProtocol: AnyObject {
     
     /// An array of stores which contain feature-flag values.
-    var stores: [any FeatureFlagStoreProtocol] { get set }
+    var stores: [any FeatureFlagStore] { get set }
     
 }
