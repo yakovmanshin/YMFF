@@ -39,9 +39,12 @@ final public class FeatureFlagResolver {
     }
     
     deinit {
-        configuration.stores
-            .compactMap({ $0.asMutable })
-            .forEach({ $0.saveChanges() })
+        let mutableStores = getMutableStores()
+        Task { [mutableStores] in
+            for store in mutableStores {
+                await store.saveChanges()
+            }
+        }
     }
     
 }
@@ -50,23 +53,110 @@ final public class FeatureFlagResolver {
 
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
-    public func value<Value>(for key: FeatureFlagKey) throws -> Value {
-        let retrievedValue: Value = try retrieveFirstValueFoundInStores(byKey: key)
+    public func value<Value>(for key: FeatureFlagKey) async throws -> Value {
+        let retrievedValue: Value = try await retrieveFirstValue(forKey: key)
         try validateValue(retrievedValue)
         
         return retrievedValue
     }
     
-    public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
-        try validateOverrideValue(newValue, forKey: key)
+    public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) async throws {
+        guard !configuration.stores.isEmpty else {
+            throw FeatureFlagResolverError.noStoreAvailable
+        }
         
-        let mutableStore = try findMutableStores()[0]
-        mutableStore.setValue(newValue, forKey: key)
+        let mutableStores = getMutableStores()
+        guard !mutableStores.isEmpty else {
+            throw FeatureFlagResolverError.noMutableStoreAvailable
+        }
+        
+        try await validateOverrideValue(newValue, forKey: key)
+        
+        await mutableStores[0].setValue(newValue, forKey: key)
     }
     
-    public func removeValueFromMutableStore(using key: FeatureFlagKey) throws {
-        let mutableStore = try firstMutableStore(withValueForKey: key)
-        mutableStore.removeValue(forKey: key)
+    public func removeValueFromMutableStore(using key: FeatureFlagKey) async throws {
+        guard !configuration.stores.isEmpty else {
+            throw FeatureFlagResolverError.noStoreAvailable
+        }
+        
+        let mutableStores = getMutableStores()
+        guard !mutableStores.isEmpty else {
+            throw FeatureFlagResolverError.noMutableStoreAvailable
+        }
+        
+        await mutableStores[0].removeValue(forKey: key)
+    }
+    
+}
+
+// MARK: - SynchronousFeatureFlagResolverProtocol
+
+extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
+    
+    public func valueSync<Value>(for key: FeatureFlagKey) throws -> Value {
+        let retrievedValue: Value = try retrieveFirstValueSync(forKey: key)
+        try validateValue(retrievedValue)
+        
+        return retrievedValue
+    }
+    
+    public func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
+        guard !configuration.stores.isEmpty else {
+            throw FeatureFlagResolverError.noStoreAvailable
+        }
+        
+        guard !getSyncStores().isEmpty else {
+            throw FeatureFlagResolverError.noSyncStoreAvailable
+        }
+        
+        let mutableStores = getSyncMutableStores()
+        guard !mutableStores.isEmpty else {
+            throw FeatureFlagResolverError.noSyncMutableStoreAvailable
+        }
+        
+        try validateOverrideValueSync(newValue, forKey: key)
+        
+        mutableStores[0].setValueSync(newValue, forKey: key)
+    }
+    
+    public func removeValueFromMutableStoreSync(using key: FeatureFlagKey) throws {
+        guard !configuration.stores.isEmpty else {
+            throw FeatureFlagResolverError.noStoreAvailable
+        }
+        
+        guard !getSyncStores().isEmpty else {
+            throw FeatureFlagResolverError.noSyncStoreAvailable
+        }
+        
+        let mutableStores = getSyncMutableStores()
+        guard !mutableStores.isEmpty else {
+            throw FeatureFlagResolverError.noSyncMutableStoreAvailable
+        }
+        
+        mutableStores[0].removeValueSync(forKey: key)
+    }
+    
+}
+
+// MARK: - Stores
+
+extension FeatureFlagResolver {
+    
+    private func getStores() -> [any FeatureFlagStoreProtocol] {
+        configuration.stores.map { $0.asImmutable }
+    }
+    
+    private func getSyncStores() -> [any SynchronousFeatureFlagStoreProtocol] {
+        getStores().compactMap { $0 as? SynchronousFeatureFlagStoreProtocol }
+    }
+    
+    private func getMutableStores() -> [any MutableFeatureFlagStoreProtocol] {
+        getStores().compactMap { $0 as? MutableFeatureFlagStoreProtocol }
+    }
+    
+    private func getSyncMutableStores() -> [any SynchronousMutableFeatureFlagStoreProtocol] {
+        getStores().compactMap { $0 as? SynchronousMutableFeatureFlagStoreProtocol }
     }
     
 }
@@ -75,14 +165,38 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 
 extension FeatureFlagResolver {
     
-    func retrieveFirstValueFoundInStores<Value>(byKey key: String) throws -> Value {
+    private func retrieveFirstValue<Value>(forKey key: String) async throws -> Value {
         guard !configuration.stores.isEmpty else {
             throw FeatureFlagResolverError.noStoreAvailable
         }
         
-        for store in configuration.stores {
-            if store.asImmutable.containsValue(forKey: key) {
-                guard let value: Value = store.asImmutable.value(forKey: key)
+        let matchingStores = getStores()
+        
+        for store in matchingStores {
+            if await store.containsValue(forKey: key) {
+                guard let value: Value = await store.value(forKey: key)
+                else { throw FeatureFlagResolverError.typeMismatch }
+                
+                return value
+            }
+        }
+        
+        throw FeatureFlagResolverError.valueNotFoundInPersistentStores(key: key)
+    }
+    
+    private func retrieveFirstValueSync<Value>(forKey key: String) throws -> Value {
+        guard !configuration.stores.isEmpty else {
+            throw FeatureFlagResolverError.noStoreAvailable
+        }
+        
+        let matchingStores = getSyncStores()
+        guard !matchingStores.isEmpty else {
+            throw FeatureFlagResolverError.noSyncStoreAvailable
+        }
+        
+        for store in matchingStores {
+            if store.containsValueSync(forKey: key) {
+                guard let value: Value = store.valueSync(forKey: key)
                 else { throw FeatureFlagResolverError.typeMismatch }
                 
                 return value
@@ -108,11 +222,11 @@ extension FeatureFlagResolver {
 
 extension FeatureFlagResolver {
     
-    func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
+    private func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) async throws {
         try validateValue(value)
         
         do {
-            let _: Value = try retrieveFirstValueFoundInStores(byKey: key)
+            let _: Value = try await retrieveFirstValue(forKey: key)
         } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
             // If none of the persistent stores contains a value for the key, then the client is attempting
             // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
@@ -121,23 +235,17 @@ extension FeatureFlagResolver {
         }
     }
     
-    private func firstMutableStore(withValueForKey key: String) throws -> MutableFeatureFlagStoreProtocol {
-        let mutableStores = try findMutableStores()
+    func validateOverrideValueSync<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
+        try validateValue(value)
         
-        guard let firstStoreWithValueForKey = mutableStores.first(where: { $0.containsValue(forKey: key) }) else {
-            throw FeatureFlagResolverError.noMutableStoreContainsValueForKey(key: key)
+        do {
+            let _: Value = try retrieveFirstValueSync(forKey: key)
+        } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
+            // If none of the persistent stores contains a value for the key, then the client is attempting
+            // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
+        } catch {
+            throw error
         }
-        return firstStoreWithValueForKey
-    }
-    
-    private func findMutableStores() throws -> [MutableFeatureFlagStoreProtocol] {
-        let stores = configuration.stores.compactMap({ $0.asMutable })
-        
-        if stores.isEmpty {
-            throw FeatureFlagResolverError.noMutableStoreAvailable
-        }
-        
-        return stores
     }
     
 }

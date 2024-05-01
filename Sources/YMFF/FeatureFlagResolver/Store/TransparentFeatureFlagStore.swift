@@ -13,17 +13,17 @@ import YMFFProtocols
 // MARK: - TransparentFeatureFlagStore
 
 /// A simple dictionary used to store and retrieve feature flag values.
-public typealias TransparentFeatureFlagStore = [String : Any]
+public typealias TransparentFeatureFlagStore = [String: Any]
 
-// MARK: - FeatureFlagStoreProtocol
+// MARK: - SynchronousFeatureFlagStoreProtocol
 
-extension TransparentFeatureFlagStore: FeatureFlagStoreProtocol {
+extension TransparentFeatureFlagStore: SynchronousFeatureFlagStoreProtocol, FeatureFlagStoreProtocol {
     
-    public func containsValue(forKey key: String) -> Bool {
+    public func containsValueSync(forKey key: String) -> Bool {
         self[key] != nil
     }
     
-    public func value<V>(forKey key: String) -> V? {
+    public func valueSync<V>(forKey key: String) -> V? {
         self[key] as? V
     }
     

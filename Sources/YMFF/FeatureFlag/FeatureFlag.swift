@@ -24,7 +24,7 @@ final public class FeatureFlag<RawValue, Value> {
     /// The fallback value returned when no store is able to provide the real one.
     public let defaultValue: Value
     
-    private let resolver: FeatureFlagResolverProtocol
+    private let resolver: any SynchronousFeatureFlagResolverProtocol
     
     // MARK: Initializers
     
@@ -39,7 +39,7 @@ final public class FeatureFlag<RawValue, Value> {
         _ key: FeatureFlagKey,
         transformer: FeatureFlagValueTransformer<RawValue, Value>,
         default defaultValue: Value,
-        resolver: FeatureFlagResolverProtocol
+        resolver: any SynchronousFeatureFlagResolverProtocol
     ) {
         self.key = key
         self.transformer = transformer
@@ -56,7 +56,7 @@ final public class FeatureFlag<RawValue, Value> {
     public convenience init(
         _ key: FeatureFlagKey,
         default defaultValue: Value,
-        resolver: FeatureFlagResolverProtocol
+        resolver: any SynchronousFeatureFlagResolverProtocol
     ) where RawValue == Value {
         self.init(key, transformer: .identity, default: defaultValue, resolver: resolver)
     }
@@ -67,13 +67,13 @@ final public class FeatureFlag<RawValue, Value> {
     public var wrappedValue: Value {
         get {
             guard
-                let rawValue = try? (resolver.value(for: key) as RawValue),
+                let rawValue = try? (resolver.valueSync(for: key) as RawValue),
                 let value = transformer.valueFromRawValue(rawValue)
             else { return defaultValue }
             
             return value
         } set {
-            try? resolver.setValue(transformer.rawValueFromValue(newValue), toMutableStoreUsing: key)
+            try? resolver.setValueSync(transformer.rawValueFromValue(newValue), toMutableStoreUsing: key)
         }
     }
     
@@ -88,7 +88,7 @@ final public class FeatureFlag<RawValue, Value> {
     ///
     /// + Errors thrown by `resolver` are ignored.
     public func removeValueFromMutableStore() {
-        try? resolver.removeValueFromMutableStore(using: key)
+        try? resolver.removeValueFromMutableStoreSync(using: key)
     }
     
 }

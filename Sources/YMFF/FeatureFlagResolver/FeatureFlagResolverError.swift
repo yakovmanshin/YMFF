@@ -8,10 +8,12 @@
 
 /// Errors returned by `FeatureFlagResolver`.
 public enum FeatureFlagResolverError: Error {
-    case noMutableStoreAvailable
-    case noMutableStoreContainsValueForKey(key: String)
     case noStoreAvailable
+    case noSyncStoreAvailable
+    case noMutableStoreAvailable
+    case noSyncMutableStoreAvailable
     case optionalValuesNotAllowed
     case typeMismatch
     case valueNotFoundInPersistentStores(key: String)
+    case noMutableStoreContainsValueForKey(key: String)
 }
