@@ -33,7 +33,7 @@ final public class FeatureFlagResolver {
     /// + Passing in an empty array will produce the `noStoreAvailable` error on next read attempt.
     ///
     /// - Parameter stores: *Required.* The array of feature flag stores.
-    public convenience init(stores: [FeatureFlagStore]) {
+    public convenience init(stores: [any FeatureFlagStoreProtocol]) {
         let configuration: FeatureFlagResolverConfigurationProtocol = FeatureFlagResolverConfiguration(stores: stores)
         self.init(configuration: configuration)
     }
@@ -144,7 +144,7 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
 extension FeatureFlagResolver {
     
     private func getStores() -> [any FeatureFlagStoreProtocol] {
-        configuration.stores.map { $0.asImmutable }
+        configuration.stores
     }
     
     private func getSyncStores() -> [any SynchronousFeatureFlagStoreProtocol] {

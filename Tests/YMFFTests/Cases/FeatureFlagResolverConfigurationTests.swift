@@ -17,13 +17,13 @@ final class FeatureFlagResolverConfigurationTests: XCTestCase {
         
         XCTAssertEqual(configuration.stores.count, 0)
         
-        configuration.stores.append(.immutable(TransparentFeatureFlagStore()))
+        configuration.stores.append(TransparentFeatureFlagStore())
         
         XCTAssertEqual(configuration.stores.count, 1)
     }
     
     func testStoreRemovalFromConfiguration() {
-        let configuration = FeatureFlagResolverConfiguration(stores: [.immutable(TransparentFeatureFlagStore())])
+        let configuration = FeatureFlagResolverConfiguration(stores: [TransparentFeatureFlagStore()])
         
         XCTAssertEqual(configuration.stores.count, 1)
         
