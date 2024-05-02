@@ -61,13 +61,9 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     }
     
     public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) async throws {
-        guard !configuration.stores.isEmpty else {
-            throw Error.noStoreAvailable
-        }
-        
         let mutableStores = getMutableStores()
         guard !mutableStores.isEmpty else {
-            throw Error.noMutableStoreAvailable
+            throw Error.noStoreAvailable
         }
         
         try await validateOverrideValue(newValue, forKey: key)
@@ -76,13 +72,9 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     }
     
     public func removeValueFromMutableStore(using key: FeatureFlagKey) async throws {
-        guard !configuration.stores.isEmpty else {
-            throw Error.noStoreAvailable
-        }
-        
         let mutableStores = getMutableStores()
         guard !mutableStores.isEmpty else {
-            throw Error.noMutableStoreAvailable
+            throw Error.noStoreAvailable
         }
         
         await mutableStores[0].removeValue(forKey: key)
@@ -102,39 +94,23 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
     }
     
     public func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
-        guard !configuration.stores.isEmpty else {
+        let syncMutableStores = getSyncMutableStores()
+        guard !syncMutableStores.isEmpty else {
             throw Error.noStoreAvailable
-        }
-        
-        guard !getSyncStores().isEmpty else {
-            throw Error.noSyncStoreAvailable
-        }
-        
-        let mutableStores = getSyncMutableStores()
-        guard !mutableStores.isEmpty else {
-            throw Error.noSyncMutableStoreAvailable
         }
         
         try validateOverrideValueSync(newValue, forKey: key)
         
-        mutableStores[0].setValueSync(newValue, forKey: key)
+        syncMutableStores[0].setValueSync(newValue, forKey: key)
     }
     
     public func removeValueFromMutableStoreSync(using key: FeatureFlagKey) throws {
-        guard !configuration.stores.isEmpty else {
+        let syncMutableStores = getSyncMutableStores()
+        guard !syncMutableStores.isEmpty else {
             throw Error.noStoreAvailable
         }
         
-        guard !getSyncStores().isEmpty else {
-            throw Error.noSyncStoreAvailable
-        }
-        
-        let mutableStores = getSyncMutableStores()
-        guard !mutableStores.isEmpty else {
-            throw Error.noSyncMutableStoreAvailable
-        }
-        
-        mutableStores[0].removeValueSync(forKey: key)
+        syncMutableStores[0].removeValueSync(forKey: key)
     }
     
 }
@@ -166,11 +142,10 @@ extension FeatureFlagResolver {
 extension FeatureFlagResolver {
     
     private func retrieveFirstValue<Value>(forKey key: String) async throws -> Value {
-        guard !configuration.stores.isEmpty else {
+        let matchingStores = getStores()
+        guard !matchingStores.isEmpty else {
             throw Error.noStoreAvailable
         }
-        
-        let matchingStores = getStores()
         
         for store in matchingStores {
             if await store.containsValue(forKey: key) {
@@ -185,13 +160,9 @@ extension FeatureFlagResolver {
     }
     
     private func retrieveFirstValueSync<Value>(forKey key: String) throws -> Value {
-        guard !configuration.stores.isEmpty else {
-            throw Error.noStoreAvailable
-        }
-        
         let matchingStores = getSyncStores()
         guard !matchingStores.isEmpty else {
-            throw Error.noSyncStoreAvailable
+            throw Error.noStoreAvailable
         }
         
         for store in matchingStores {

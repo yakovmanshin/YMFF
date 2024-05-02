@@ -79,7 +79,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.noSyncStoreAvailable {
+        } catch FeatureFlagResolver.Error.noStoreAvailable {
             XCTAssertEqual(store.containsValue_invocationCount, 0)
             XCTAssertEqual(store.value_invocationCount, 0)
         } catch {
@@ -334,7 +334,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.noSyncStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -346,7 +346,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.setValue(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.noMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -358,7 +358,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.noSyncMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -606,7 +606,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.noSyncStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -618,7 +618,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.removeValueFromMutableStore(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.noMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -630,7 +630,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.noSyncMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }

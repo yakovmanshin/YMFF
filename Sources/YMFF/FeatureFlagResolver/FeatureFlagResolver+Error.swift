@@ -11,9 +11,6 @@ extension FeatureFlagResolver {
     /// Errors returned by `FeatureFlagResolver`.
     public enum Error: Swift.Error {
         case noStoreAvailable
-        case noSyncStoreAvailable
-        case noMutableStoreAvailable
-        case noSyncMutableStoreAvailable
         case valueNotFoundInStores(key: String)
         case optionalValuesNotAllowed
         case typeMismatch
