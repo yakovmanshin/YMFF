@@ -17,7 +17,6 @@ extension FeatureFlagResolver {
         case valueNotFoundInStores(key: String)
         case optionalValuesNotAllowed
         case typeMismatch
-        case noMutableStoreContainsValueForKey(key: String)
     }
     
 }
