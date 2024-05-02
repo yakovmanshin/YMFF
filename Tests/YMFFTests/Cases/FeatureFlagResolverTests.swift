@@ -97,7 +97,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try await resolver.value(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.valueNotFoundInPersistentStores {
+        } catch FeatureFlagResolver.Error.valueNotFoundInStores {
             XCTAssertEqual(store1.containsValue_invocationCount, 1)
             XCTAssertEqual(store1.containsValue_keys, ["TEST_key1"])
             XCTAssertEqual(store1.value_invocationCount, 0)
@@ -119,7 +119,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.valueNotFoundInPersistentStores {
+        } catch FeatureFlagResolver.Error.valueNotFoundInStores {
             XCTAssertEqual(store1.containsValueSync_invocationCount, 1)
             XCTAssertEqual(store1.containsValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store2.containsValueSync_invocationCount, 1)
