@@ -17,7 +17,7 @@ import YMFFProtocols
 final class SynchronousFeatureFlagResolverMock {
     
     var configuration_invocationCount = 0
-    var configuration_returnValue: (any FeatureFlagResolverConfigurationProtocol)!
+    var configuration_returnValue: (any FeatureFlagResolverConfiguration)!
     
     var valueSync_invocationCount = 0
     var valueSync_keys = [FeatureFlagKey]()
@@ -37,7 +37,7 @@ final class SynchronousFeatureFlagResolverMock {
 
 extension SynchronousFeatureFlagResolverMock: SynchronousFeatureFlagResolverProtocol {
     
-    var configuration: any FeatureFlagResolverConfigurationProtocol {
+    var configuration: any FeatureFlagResolverConfiguration {
         configuration_invocationCount += 1
         return configuration_returnValue
     }

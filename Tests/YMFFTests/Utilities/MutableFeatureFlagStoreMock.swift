@@ -34,9 +34,9 @@ final class MutableFeatureFlagStoreMock {
     
 }
 
-// MARK: - MutableFeatureFlagStoreProtocol
+// MARK: - MutableFeatureFlagStore
 
-extension MutableFeatureFlagStoreMock: MutableFeatureFlagStoreProtocol {
+extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
     
     func containsValue(forKey key: String) async -> Bool {
         containsValue_invocationCount += 1

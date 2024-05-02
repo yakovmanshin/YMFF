@@ -1,5 +1,5 @@
 //
-//  MutableFeatureFlagStoreProtocol.swift
+//  MutableFeatureFlagStore.swift
 //  YMFFProtocols
 //
 //  Created by Yakov Manshin on 9/26/20.
@@ -7,7 +7,7 @@
 //
 
 /// An object that stores feature flag values that can be added and removed in runtime.
-public protocol MutableFeatureFlagStoreProtocol: AnyObject, FeatureFlagStoreProtocol {
+public protocol MutableFeatureFlagStore: AnyObject, FeatureFlagStore {
     
     /// Adds the value to the store so it can be retrieved with the key later.
     ///
@@ -30,7 +30,7 @@ public protocol MutableFeatureFlagStoreProtocol: AnyObject, FeatureFlagStoreProt
 
 // MARK: - Default Implementation
 
-extension MutableFeatureFlagStoreProtocol {
+extension MutableFeatureFlagStore {
     
     // Not all kinds of feature flag stores need this method, so it’s optional to implement.
     public func saveChanges() async { }

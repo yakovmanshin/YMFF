@@ -13,17 +13,17 @@ import XCTest
 final class FeatureFlagResolverConfigurationTests: XCTestCase {
     
     func testStoreAdditionToConfiguration() {
-        let configuration = FeatureFlagResolverConfiguration(stores: [])
+        let configuration = FeatureFlagResolver.Configuration(stores: [])
         
         XCTAssertEqual(configuration.stores.count, 0)
         
-        configuration.stores.append(.immutable(TransparentFeatureFlagStore()))
+        configuration.stores.append(TransparentFeatureFlagStore())
         
         XCTAssertEqual(configuration.stores.count, 1)
     }
     
     func testStoreRemovalFromConfiguration() {
-        let configuration = FeatureFlagResolverConfiguration(stores: [.immutable(TransparentFeatureFlagStore())])
+        let configuration = FeatureFlagResolver.Configuration(stores: [TransparentFeatureFlagStore()])
         
         XCTAssertEqual(configuration.stores.count, 1)
         

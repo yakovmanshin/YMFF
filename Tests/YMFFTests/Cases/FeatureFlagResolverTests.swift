@@ -19,12 +19,12 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     private var resolver: FeatureFlagResolver!
     
-    private var configuration: FeatureFlagResolverConfigurationProtocol!
+    private var configuration: FeatureFlagResolverConfiguration!
     
     override func setUp() {
         super.setUp()
         
-        configuration = FeatureFlagResolverConfiguration(stores: [])
+        configuration = FeatureFlagResolver.Configuration(stores: [])
         resolver = FeatureFlagResolver(configuration: configuration)
     }
     
@@ -35,23 +35,23 @@ final class FeatureFlagResolverTests: XCTestCase {
     func test_init_withConfiguration() {
         let store1 = FeatureFlagStoreMock()
         let store2 = SynchronousMutableFeatureFlagStoreMock()
-        let configuration = FeatureFlagResolverConfiguration(stores: [.immutable(store1), .mutable(store2)])
+        let configuration = FeatureFlagResolver.Configuration(stores: [store1, store2])
         
         let resolver = FeatureFlagResolver(configuration: configuration)
         
         XCTAssertIdentical(resolver.configuration, configuration)
-        XCTAssertIdentical(resolver.configuration.stores[0].asImmutable as AnyObject, store1)
-        XCTAssertIdentical(resolver.configuration.stores[1].asImmutable as AnyObject, store2)
+        XCTAssertIdentical(resolver.configuration.stores[0] as AnyObject, store1)
+        XCTAssertIdentical(resolver.configuration.stores[1] as AnyObject, store2)
     }
     
     func test_init_withStores() {
         let store1 = FeatureFlagStoreMock()
         let store2 = SynchronousMutableFeatureFlagStoreMock()
         
-        let resolver = FeatureFlagResolver(stores: [.immutable(store1), .mutable(store2)])
+        let resolver = FeatureFlagResolver(stores: [store1, store2])
         
-        XCTAssertIdentical(resolver.configuration.stores[0].asImmutable as AnyObject, store1)
-        XCTAssertIdentical(resolver.configuration.stores[1].asImmutable as AnyObject, store2)
+        XCTAssertIdentical(resolver.configuration.stores[0] as AnyObject, store1)
+        XCTAssertIdentical(resolver.configuration.stores[1] as AnyObject, store2)
     }
     
     func test_value_noStores() async {
@@ -74,7 +74,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_valueSync_noSyncStores() {
         let store = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
@@ -90,7 +90,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     func test_value_notFoundInStores() async {
         let store1 = FeatureFlagStoreMock()
         let store2 = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store1), .immutable(store2)]
+        configuration.stores = [store1, store2]
         store1.containsValue_returnValue = false
         store2.containsValue_returnValue = false
         
@@ -112,7 +112,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     func test_valueSync_notFoundInSyncStores() {
         let store1 = SynchronousFeatureFlagStoreMock()
         let store2 = SynchronousFeatureFlagStoreMock()
-        configuration.stores = [.immutable(store1), .immutable(store2)]
+        configuration.stores = [store1, store2]
         store1.containsValueSync_returnValue = false
         store2.containsValueSync_returnValue = false
         
@@ -134,7 +134,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     func test_value_foundInSingleStore() async {
         let store1 = FeatureFlagStoreMock()
         let store2 = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store1), .immutable(store2)]
+        configuration.stores = [store1, store2]
         store1.containsValue_returnValue = false
         store2.containsValue_returnValue = true
         store2.value_returnValue = "TEST_value2"
@@ -158,7 +158,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     func test_valueSync_foundInSingleSyncStore() {
         let store1 = SynchronousFeatureFlagStoreMock()
         let store2 = SynchronousFeatureFlagStoreMock()
-        configuration.stores = [.immutable(store1), .immutable(store2)]
+        configuration.stores = [store1, store2]
         store1.containsValueSync_returnValue = false
         store2.containsValueSync_returnValue = true
         store2.valueSync_returnValue = "TEST_value2"
@@ -183,7 +183,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store1 = FeatureFlagStoreMock()
         let store2 = FeatureFlagStoreMock()
         let store3 = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store1), .immutable(store2), .immutable(store3)]
+        configuration.stores = [store1, store2, store3]
         store1.containsValue_returnValue = false
         store2.containsValue_returnValue = true
         store2.value_returnValue = "TEST_value2"
@@ -210,7 +210,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store1 = SynchronousFeatureFlagStoreMock()
         let store2 = SynchronousFeatureFlagStoreMock()
         let store3 = SynchronousFeatureFlagStoreMock()
-        configuration.stores = [.immutable(store1), .immutable(store2), .immutable(store3)]
+        configuration.stores = [store1, store2, store3]
         store1.containsValueSync_returnValue = false
         store2.containsValueSync_returnValue = true
         store2.valueSync_returnValue = "TEST_value2"
@@ -235,7 +235,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_value_typeMismatch() async {
         let store = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         store.containsValue_returnValue = true
         store.value_returnValue = 123
         
@@ -254,7 +254,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_valueSync_typeMismatch() {
         let store = SynchronousFeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         store.containsValueSync_returnValue = true
         store.valueSync_returnValue = 123
         
@@ -273,7 +273,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_value_optionalValue() async {
         let store = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         store.containsValue_returnValue = true
         store.value_returnValue = 123 as Int?
         
@@ -292,7 +292,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_valueSync_optionalValue() {
         let store = SynchronousFeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         store.containsValueSync_returnValue = true
         store.valueSync_returnValue = 123 as Int?
         
@@ -329,7 +329,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValueSync_noSyncStores() {
         let store = MutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         
         do {
             try resolver.setValueSync(123, toMutableStoreUsing: "TEST_key1")
@@ -341,7 +341,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValue_noMutableStores() async {
         let store = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         
         do {
             try await resolver.setValue(123, toMutableStoreUsing: "TEST_key1")
@@ -353,7 +353,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValueSync_noSyncMutableStores() {
         let store = SynchronousFeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         
         do {
             try resolver.setValueSync(123, toMutableStoreUsing: "TEST_key1")
@@ -365,7 +365,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValue_singleMutableStore_noValue() async {
         let store = MutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValue_returnValue = false
         
         do {
@@ -384,7 +384,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValueSync_singleSyncMutableStore_noValue() {
         let store = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValueSync_returnValue = false
         
         do {
@@ -403,7 +403,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValue_singleMutableStore_existingValue() async {
         let store = MutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValue_returnValue = true
         store.value_returnValue = "TEST_value1"
         
@@ -423,7 +423,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValueSync_singleSyncMutableStore_existingValue() {
         let store = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValueSync_returnValue = true
         store.valueSync_returnValue = "TEST_value1"
         
@@ -443,7 +443,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValue_singleMutableStore_existingValue_optionalValue() async {
         let store = MutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValue_returnValue = true
         store.value_returnValue = "TEST_value1"
         
@@ -462,7 +462,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValueSync_singleSyncMutableStore_existingValue_optionalValue() {
         let store = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValueSync_returnValue = true
         store.valueSync_returnValue = "TEST_value1"
         
@@ -481,7 +481,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValue_singleMutableStore_existingValue_typeMismatch() async {
         let store = MutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValue_returnValue = true
         store.value_returnValue = "TEST_value1"
         
@@ -500,7 +500,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_setValueSync_singleSyncMutableStore_existingValue_typeMismatch() {
         let store = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         store.containsValueSync_returnValue = true
         store.valueSync_returnValue = "TEST_value1"
         
@@ -521,7 +521,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store1 = MutableFeatureFlagStoreMock()
         let store2 = FeatureFlagStoreMock()
         let store3 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store1), .immutable(store2), .mutable(store3)]
+        configuration.stores = [store1, store2, store3]
         store1.containsValue_returnValue = true
         store2.containsValue_returnValue = true
         store3.containsValueSync_returnValue = true
@@ -553,7 +553,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store1 = SynchronousMutableFeatureFlagStoreMock()
         let store2 = SynchronousFeatureFlagStoreMock()
         let store3 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store1), .immutable(store2), .mutable(store3)]
+        configuration.stores = [store1, store2, store3]
         store1.containsValueSync_returnValue = true
         store2.containsValueSync_returnValue = true
         store3.containsValueSync_returnValue = true
@@ -601,7 +601,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_removeValueFromMutableStoreSync_noSyncStores() {
         let store = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
@@ -613,7 +613,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_removeValueFromMutableStore_noMutableStores() async {
         let store = FeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         
         do {
             try await resolver.removeValueFromMutableStore(using: "TEST_key1")
@@ -625,7 +625,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_removeValueFromMutableStoreSync_noSyncMutableStores() {
         let store = SynchronousFeatureFlagStoreMock()
-        configuration.stores = [.immutable(store)]
+        configuration.stores = [store]
         
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
@@ -637,7 +637,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_removeValueFromMutableStore_singleMutableStore() async {
         let store = MutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         
         do {
             try await resolver.removeValueFromMutableStore(using: "TEST_key1")
@@ -651,7 +651,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     func test_removeValueFromMutableStoreSync_singleSyncMutableStore() {
         let store = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store)]
+        configuration.stores = [store]
         
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
@@ -667,7 +667,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store1 = MutableFeatureFlagStoreMock()
         let store2 = SynchronousFeatureFlagStoreMock()
         let store3 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store1), .immutable(store2), .mutable(store3)]
+        configuration.stores = [store1, store2, store3]
         
         do {
             try await resolver.removeValueFromMutableStore(using: "TEST_key1")
@@ -685,7 +685,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store1 = SynchronousMutableFeatureFlagStoreMock()
         let store2 = MutableFeatureFlagStoreMock()
         let store3 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store1), .mutable(store2), .mutable(store3)]
+        configuration.stores = [store1, store2, store3]
         
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
@@ -704,7 +704,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     func test_deinit() async throws {
         let store1 = MutableFeatureFlagStoreMock()
         let store2 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [.mutable(store1), .mutable(store2)]
+        configuration.stores = [store1, store2]
         
         configuration = nil
         resolver = nil

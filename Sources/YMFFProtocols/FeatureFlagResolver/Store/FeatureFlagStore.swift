@@ -2,38 +2,21 @@
 //  FeatureFlagStore.swift
 //  YMFFProtocols
 //
-//  Created by Yakov Manshin on 4/10/21.
-//  Copyright © 2021 Yakov Manshin. See the LICENSE file for license info.
+//  Created by Yakov Manshin on 9/20/20.
+//  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
-// MARK: - FeatureFlagStore
-
-/// The enum used to configure the feature flag resolver.
-public enum FeatureFlagStore {
-    case immutable(FeatureFlagStoreProtocol)
-    case mutable(MutableFeatureFlagStoreProtocol)
-}
-
-public extension FeatureFlagStore {
+/// An object that stores feature flag values, and provides them at the resolver's request.
+public protocol FeatureFlagStore {
     
-    /// Returns the underlying feature flag store as an immutable, regardless of its actual type.
-    var asImmutable: FeatureFlagStoreProtocol {
-        switch self {
-        case .immutable(let store):
-            return store
-        case .mutable(let store):
-            return store
-        }
-    }
+    /// Indicates whether the store contains a value that corresponds to the key.
+    ///
+    /// - Parameter key: *Required.* The key.
+    func containsValue(forKey key: String) async -> Bool
     
-    /// Returns the underlying feature flag store if it’s mutable; otherwise, `nil`.
-    var asMutable: MutableFeatureFlagStoreProtocol? {
-        switch self {
-        case .immutable:
-            return nil
-        case .mutable(let store):
-            return store
-        }
-    }
+    /// Retrieves a feature flag value by its key.
+    ///
+    /// - Parameter key: *Required.* The key that points to a feature flag value in the store.
+    func value<Value>(forKey key: String) async -> Value?
     
 }

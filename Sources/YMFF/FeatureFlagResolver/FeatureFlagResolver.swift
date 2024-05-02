@@ -17,14 +17,14 @@ final public class FeatureFlagResolver {
     
     // MARK: Properties
     
-    public let configuration: FeatureFlagResolverConfigurationProtocol
+    public let configuration: any FeatureFlagResolverConfiguration
     
     // MARK: Initializers
     
-    /// Initializes the resolver with an object that conforms to `FeatureFlagResolverConfigurationProtocol`.
+    /// Initializes the resolver with an object that conforms to `FeatureFlagResolverConfiguration`.
     ///
     /// - Parameter configuration: *Required.* The configuration used to read and write feature flag values.
-    public init(configuration: FeatureFlagResolverConfigurationProtocol) {
+    public init(configuration: any FeatureFlagResolverConfiguration) {
         self.configuration = configuration
     }
     
@@ -33,8 +33,8 @@ final public class FeatureFlagResolver {
     /// + Passing in an empty array will produce the `noStoreAvailable` error on next read attempt.
     ///
     /// - Parameter stores: *Required.* The array of feature flag stores.
-    public convenience init(stores: [FeatureFlagStore]) {
-        let configuration: FeatureFlagResolverConfigurationProtocol = FeatureFlagResolverConfiguration(stores: stores)
+    public convenience init(stores: [any FeatureFlagStore]) {
+        let configuration: any FeatureFlagResolverConfiguration = Configuration(stores: stores)
         self.init(configuration: configuration)
     }
     
@@ -143,20 +143,20 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
 
 extension FeatureFlagResolver {
     
-    private func getStores() -> [any FeatureFlagStoreProtocol] {
-        configuration.stores.map { $0.asImmutable }
+    private func getStores() -> [any FeatureFlagStore] {
+        configuration.stores
     }
     
-    private func getSyncStores() -> [any SynchronousFeatureFlagStoreProtocol] {
-        getStores().compactMap { $0 as? SynchronousFeatureFlagStoreProtocol }
+    private func getSyncStores() -> [any SynchronousFeatureFlagStore] {
+        getStores().compactMap { $0 as? SynchronousFeatureFlagStore }
     }
     
-    private func getMutableStores() -> [any MutableFeatureFlagStoreProtocol] {
-        getStores().compactMap { $0 as? MutableFeatureFlagStoreProtocol }
+    private func getMutableStores() -> [any MutableFeatureFlagStore] {
+        getStores().compactMap { $0 as? MutableFeatureFlagStore }
     }
     
-    private func getSyncMutableStores() -> [any SynchronousMutableFeatureFlagStoreProtocol] {
-        getStores().compactMap { $0 as? SynchronousMutableFeatureFlagStoreProtocol }
+    private func getSyncMutableStores() -> [any SynchronousMutableFeatureFlagStore] {
+        getStores().compactMap { $0 as? SynchronousMutableFeatureFlagStore }
     }
     
 }

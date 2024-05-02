@@ -34,9 +34,9 @@ final class SynchronousMutableFeatureFlagStoreMock {
     
 }
 
-// MARK: - SynchronousMutableFeatureFlagStoreProtocol
+// MARK: - SynchronousMutableFeatureFlagStore
 
-extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagStoreProtocol {
+extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagStore {
     
     func containsValueSync(forKey key: String) -> Bool {
         containsValueSync_invocationCount += 1

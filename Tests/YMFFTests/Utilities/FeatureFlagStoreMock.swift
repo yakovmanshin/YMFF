@@ -26,9 +26,9 @@ final class FeatureFlagStoreMock {
     
 }
 
-// MARK: - FeatureFlagStoreProtocol
+// MARK: - FeatureFlagStore
 
-extension FeatureFlagStoreMock: FeatureFlagStoreProtocol {
+extension FeatureFlagStoreMock: FeatureFlagStore {
     
     func containsValue(forKey key: String) async -> Bool {
         containsValue_invocationCount += 1

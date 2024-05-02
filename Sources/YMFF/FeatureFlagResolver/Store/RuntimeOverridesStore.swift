@@ -23,9 +23,9 @@ final public class RuntimeOverridesStore {
     
 }
 
-// MARK: - SynchronousMutableFeatureFlagStoreProtocol
+// MARK: - SynchronousMutableFeatureFlagStore
 
-extension RuntimeOverridesStore: SynchronousMutableFeatureFlagStoreProtocol {
+extension RuntimeOverridesStore: SynchronousMutableFeatureFlagStore {
     
     public func containsValueSync(forKey key: String) -> Bool {
         store[key] != nil

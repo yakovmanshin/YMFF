@@ -1,12 +1,12 @@
 //
-//  SynchronousMutableFeatureFlagStoreProtocol.swift
+//  SynchronousMutableFeatureFlagStore.swift
 //  YMFFProtocols
 //
 //  Created by Yakov Manshin on 9/29/22.
 //  Copyright © 2022 Yakov Manshin. See the LICENSE file for license info.
 //
 
-public protocol SynchronousMutableFeatureFlagStoreProtocol: SynchronousFeatureFlagStoreProtocol, MutableFeatureFlagStoreProtocol {
+public protocol SynchronousMutableFeatureFlagStore: SynchronousFeatureFlagStore, MutableFeatureFlagStore {
     
     /// Adds the value to the store so it can be retrieved with the key later.
     ///
@@ -29,7 +29,7 @@ public protocol SynchronousMutableFeatureFlagStoreProtocol: SynchronousFeatureFl
 
 // MARK: - Async Requirements
 
-extension SynchronousMutableFeatureFlagStoreProtocol {
+extension SynchronousMutableFeatureFlagStore {
     
     public func setValue<Value>(_ value: Value, forKey key: String) async {
         setValueSync(value, forKey: key)
@@ -47,7 +47,7 @@ extension SynchronousMutableFeatureFlagStoreProtocol {
 
 // MARK: - Default Implementation
 
-extension SynchronousMutableFeatureFlagStoreProtocol {
+extension SynchronousMutableFeatureFlagStore {
     
     public func saveChangesSync() { }
     
