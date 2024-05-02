@@ -58,7 +58,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try await resolver.value(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -67,7 +67,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -79,7 +79,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noSyncStoreAvailable {
+        } catch FeatureFlagResolver.Error.noSyncStoreAvailable {
             XCTAssertEqual(store.containsValue_invocationCount, 0)
             XCTAssertEqual(store.value_invocationCount, 0)
         } catch {
@@ -97,7 +97,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try await resolver.value(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
+        } catch FeatureFlagResolver.Error.valueNotFoundInPersistentStores {
             XCTAssertEqual(store1.containsValue_invocationCount, 1)
             XCTAssertEqual(store1.containsValue_keys, ["TEST_key1"])
             XCTAssertEqual(store1.value_invocationCount, 0)
@@ -119,7 +119,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
+        } catch FeatureFlagResolver.Error.valueNotFoundInPersistentStores {
             XCTAssertEqual(store1.containsValueSync_invocationCount, 1)
             XCTAssertEqual(store1.containsValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store2.containsValueSync_invocationCount, 1)
@@ -242,7 +242,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try await resolver.value(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.typeMismatch {
+        } catch FeatureFlagResolver.Error.typeMismatch {
             XCTAssertEqual(store.containsValue_invocationCount, 1)
             XCTAssertEqual(store.containsValue_keys, ["TEST_key1"])
             XCTAssertEqual(store.value_invocationCount, 1)
@@ -261,7 +261,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.typeMismatch {
+        } catch FeatureFlagResolver.Error.typeMismatch {
             XCTAssertEqual(store.containsValueSync_invocationCount, 1)
             XCTAssertEqual(store.containsValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store.valueSync_invocationCount, 1)
@@ -280,7 +280,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: Int? = try await resolver.value(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.optionalValuesNotAllowed {
+        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
             XCTAssertEqual(store.containsValue_invocationCount, 1)
             XCTAssertEqual(store.containsValue_keys, ["TEST_key1"])
             XCTAssertEqual(store.value_invocationCount, 1)
@@ -299,7 +299,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: Int? = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.optionalValuesNotAllowed {
+        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
             XCTAssertEqual(store.containsValueSync_invocationCount, 1)
             XCTAssertEqual(store.containsValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store.valueSync_invocationCount, 1)
@@ -313,7 +313,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.setValue(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -322,7 +322,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -334,7 +334,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noSyncStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noSyncStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -346,7 +346,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.setValue(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noMutableStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -358,7 +358,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(123, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noSyncMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noSyncMutableStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -450,7 +450,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.setValue(456 as Int?, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.optionalValuesNotAllowed {
+        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
             XCTAssertEqual(store.containsValue_invocationCount, 0)
             XCTAssertTrue(store.containsValue_keys.isEmpty)
             XCTAssertEqual(store.setValue_invocationCount, 0)
@@ -469,7 +469,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(456 as Int?, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.optionalValuesNotAllowed {
+        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
             XCTAssertEqual(store.containsValueSync_invocationCount, 0)
             XCTAssertTrue(store.containsValueSync_keys.isEmpty)
             XCTAssertEqual(store.setValueSync_invocationCount, 0)
@@ -488,7 +488,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.setValue(456, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.typeMismatch {
+        } catch FeatureFlagResolver.Error.typeMismatch {
             XCTAssertEqual(store.containsValue_invocationCount, 1)
             XCTAssertEqual(store.containsValue_keys, ["TEST_key1"])
             XCTAssertEqual(store.setValue_invocationCount, 0)
@@ -507,7 +507,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(456, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.typeMismatch {
+        } catch FeatureFlagResolver.Error.typeMismatch {
             XCTAssertEqual(store.containsValueSync_invocationCount, 1)
             XCTAssertEqual(store.containsValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store.setValueSync_invocationCount, 0)
@@ -585,7 +585,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.removeValueFromMutableStore(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -594,7 +594,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -606,7 +606,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noSyncStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noSyncStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -618,7 +618,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.removeValueFromMutableStore(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noMutableStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -630,7 +630,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.removeValueFromMutableStoreSync(using: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolverError.noSyncMutableStoreAvailable { } catch {
+        } catch FeatureFlagResolver.Error.noSyncMutableStoreAvailable { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
