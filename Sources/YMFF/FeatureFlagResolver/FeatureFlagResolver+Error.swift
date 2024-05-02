@@ -10,10 +10,24 @@ extension FeatureFlagResolver {
     
     /// Errors returned by `FeatureFlagResolver`.
     public enum Error: Swift.Error {
+        
+        /// The resolver doesn’t have any feature-flag stores suitable for the operation you’re trying to perform.
+        ///
+        /// + This error may occur if you’re trying to write a value while not having any mutable stores,
+        /// or if you’re trying to synchronously read a value while having only asynchronous stores.
         case noStoreAvailable
+        
+        /// No feature-flag store contains a value for the given key.
         case valueNotFoundInStores(key: String)
+        
+        /// Currently, optional values are not supported by the `FeatureFlagResolver`.
+        ///
+        /// - Note: Support for optional values will be added in [#130](https://github.com/yakovmanshin/YMFF/issues/130).
         case optionalValuesNotAllowed
+        
+        /// The types of the old and new values don’t match.
         case typeMismatch
+        
     }
     
 }
