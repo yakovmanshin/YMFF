@@ -19,12 +19,12 @@ final class FeatureFlagResolverTests: XCTestCase {
     
     private var resolver: FeatureFlagResolver!
     
-    private var configuration: FeatureFlagResolverConfigurationProtocol!
+    private var configuration: FeatureFlagResolverConfiguration!
     
     override func setUp() {
         super.setUp()
         
-        configuration = FeatureFlagResolverConfiguration(stores: [])
+        configuration = FeatureFlagResolver.Configuration(stores: [])
         resolver = FeatureFlagResolver(configuration: configuration)
     }
     
@@ -35,7 +35,7 @@ final class FeatureFlagResolverTests: XCTestCase {
     func test_init_withConfiguration() {
         let store1 = FeatureFlagStoreMock()
         let store2 = SynchronousMutableFeatureFlagStoreMock()
-        let configuration = FeatureFlagResolverConfiguration(stores: [store1, store2])
+        let configuration = FeatureFlagResolver.Configuration(stores: [store1, store2])
         
         let resolver = FeatureFlagResolver(configuration: configuration)
         

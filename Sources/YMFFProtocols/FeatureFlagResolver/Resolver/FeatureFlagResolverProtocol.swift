@@ -10,7 +10,7 @@
 public protocol FeatureFlagResolverProtocol {
     
     /// The object used to configure the resolver.
-    var configuration: FeatureFlagResolverConfigurationProtocol { get }
+    var configuration: FeatureFlagResolverConfiguration { get }
     
     /// Returns a value for the specified key.
     ///

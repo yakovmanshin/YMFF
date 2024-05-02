@@ -17,14 +17,14 @@ final public class FeatureFlagResolver {
     
     // MARK: Properties
     
-    public let configuration: FeatureFlagResolverConfigurationProtocol
+    public let configuration: any FeatureFlagResolverConfiguration
     
     // MARK: Initializers
     
-    /// Initializes the resolver with an object that conforms to `FeatureFlagResolverConfigurationProtocol`.
+    /// Initializes the resolver with an object that conforms to `FeatureFlagResolverConfiguration`.
     ///
     /// - Parameter configuration: *Required.* The configuration used to read and write feature flag values.
-    public init(configuration: FeatureFlagResolverConfigurationProtocol) {
+    public init(configuration: any FeatureFlagResolverConfiguration) {
         self.configuration = configuration
     }
     
@@ -34,7 +34,7 @@ final public class FeatureFlagResolver {
     ///
     /// - Parameter stores: *Required.* The array of feature flag stores.
     public convenience init(stores: [any FeatureFlagStore]) {
-        let configuration: FeatureFlagResolverConfigurationProtocol = FeatureFlagResolverConfiguration(stores: stores)
+        let configuration: any FeatureFlagResolverConfiguration = Configuration(stores: stores)
         self.init(configuration: configuration)
     }
     
