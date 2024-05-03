@@ -61,13 +61,9 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     }
     
     public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) async throws {
-        guard !configuration.stores.isEmpty else {
-            throw FeatureFlagResolverError.noStoreAvailable
-        }
-        
         let mutableStores = getMutableStores()
         guard !mutableStores.isEmpty else {
-            throw FeatureFlagResolverError.noMutableStoreAvailable
+            throw Error.noStoreAvailable
         }
         
         try await validateOverrideValue(newValue, forKey: key)
@@ -76,13 +72,9 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     }
     
     public func removeValueFromMutableStore(using key: FeatureFlagKey) async throws {
-        guard !configuration.stores.isEmpty else {
-            throw FeatureFlagResolverError.noStoreAvailable
-        }
-        
         let mutableStores = getMutableStores()
         guard !mutableStores.isEmpty else {
-            throw FeatureFlagResolverError.noMutableStoreAvailable
+            throw Error.noStoreAvailable
         }
         
         await mutableStores[0].removeValue(forKey: key)
@@ -102,39 +94,23 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
     }
     
     public func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
-        guard !configuration.stores.isEmpty else {
-            throw FeatureFlagResolverError.noStoreAvailable
-        }
-        
-        guard !getSyncStores().isEmpty else {
-            throw FeatureFlagResolverError.noSyncStoreAvailable
-        }
-        
-        let mutableStores = getSyncMutableStores()
-        guard !mutableStores.isEmpty else {
-            throw FeatureFlagResolverError.noSyncMutableStoreAvailable
+        let syncMutableStores = getSyncMutableStores()
+        guard !syncMutableStores.isEmpty else {
+            throw Error.noStoreAvailable
         }
         
         try validateOverrideValueSync(newValue, forKey: key)
         
-        mutableStores[0].setValueSync(newValue, forKey: key)
+        syncMutableStores[0].setValueSync(newValue, forKey: key)
     }
     
     public func removeValueFromMutableStoreSync(using key: FeatureFlagKey) throws {
-        guard !configuration.stores.isEmpty else {
-            throw FeatureFlagResolverError.noStoreAvailable
+        let syncMutableStores = getSyncMutableStores()
+        guard !syncMutableStores.isEmpty else {
+            throw Error.noStoreAvailable
         }
         
-        guard !getSyncStores().isEmpty else {
-            throw FeatureFlagResolverError.noSyncStoreAvailable
-        }
-        
-        let mutableStores = getSyncMutableStores()
-        guard !mutableStores.isEmpty else {
-            throw FeatureFlagResolverError.noSyncMutableStoreAvailable
-        }
-        
-        mutableStores[0].removeValueSync(forKey: key)
+        syncMutableStores[0].removeValueSync(forKey: key)
     }
     
 }
@@ -166,49 +142,44 @@ extension FeatureFlagResolver {
 extension FeatureFlagResolver {
     
     private func retrieveFirstValue<Value>(forKey key: String) async throws -> Value {
-        guard !configuration.stores.isEmpty else {
-            throw FeatureFlagResolverError.noStoreAvailable
-        }
-        
         let matchingStores = getStores()
+        guard !matchingStores.isEmpty else {
+            throw Error.noStoreAvailable
+        }
         
         for store in matchingStores {
             if await store.containsValue(forKey: key) {
                 guard let value: Value = await store.value(forKey: key)
-                else { throw FeatureFlagResolverError.typeMismatch }
+                else { throw Error.typeMismatch }
                 
                 return value
             }
         }
         
-        throw FeatureFlagResolverError.valueNotFoundInPersistentStores(key: key)
+        throw Error.valueNotFoundInStores(key: key)
     }
     
     private func retrieveFirstValueSync<Value>(forKey key: String) throws -> Value {
-        guard !configuration.stores.isEmpty else {
-            throw FeatureFlagResolverError.noStoreAvailable
-        }
-        
         let matchingStores = getSyncStores()
         guard !matchingStores.isEmpty else {
-            throw FeatureFlagResolverError.noSyncStoreAvailable
+            throw Error.noStoreAvailable
         }
         
         for store in matchingStores {
             if store.containsValueSync(forKey: key) {
                 guard let value: Value = store.valueSync(forKey: key)
-                else { throw FeatureFlagResolverError.typeMismatch }
+                else { throw Error.typeMismatch }
                 
                 return value
             }
         }
         
-        throw FeatureFlagResolverError.valueNotFoundInPersistentStores(key: key)
+        throw Error.valueNotFoundInStores(key: key)
     }
     
     func validateValue<Value>(_ value: Value) throws {
         if valueIsOptional(value) {
-            throw FeatureFlagResolverError.optionalValuesNotAllowed
+            throw Error.optionalValuesNotAllowed
         }
     }
     
@@ -227,7 +198,7 @@ extension FeatureFlagResolver {
         
         do {
             let _: Value = try await retrieveFirstValue(forKey: key)
-        } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
+        } catch Error.valueNotFoundInStores {
             // If none of the persistent stores contains a value for the key, then the client is attempting
             // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
         } catch {
@@ -240,7 +211,7 @@ extension FeatureFlagResolver {
         
         do {
             let _: Value = try retrieveFirstValueSync(forKey: key)
-        } catch FeatureFlagResolverError.valueNotFoundInPersistentStores {
+        } catch Error.valueNotFoundInStores {
             // If none of the persistent stores contains a value for the key, then the client is attempting
             // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
         } catch {
