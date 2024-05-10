@@ -23,48 +23,26 @@ final class RuntimeOverridesStoreTests: XCTestCase {
         store = RuntimeOverridesStore()
     }
     
-    func test_containsValue() async {
-        store.store = ["TEST_key1": "TEST_value1"]
-        
-        let containsValue1 = await store.containsValue(forKey: "TEST_key1")
-        let containsValue2 = await store.containsValue(forKey: "TEST_key2")
-        
-        XCTAssertTrue(containsValue1)
-        XCTAssertFalse(containsValue2)
-    }
-    
-    func test_containsValueSync() {
-        store.store = ["TEST_key1": "TEST_value1"]
-        
-        let containsValue1 = store.containsValueSync(forKey: "TEST_key1")
-        let containsValue2 = store.containsValueSync(forKey: "TEST_key2")
-        
-        XCTAssertTrue(containsValue1)
-        XCTAssertFalse(containsValue2)
-    }
-    
     func test_value() async throws {
         store.store = [
             "TEST_key1": "TEST_value1",
             "TEST_key2": "TEST_value2",
         ]
         
-        let value1: String = try await store.value(forKey: "TEST_key1")
+        let value1: String = try await store.value(forKey: "TEST_key1").get()
         XCTAssertEqual(value1, "TEST_value1")
         
         do {
-            let _: Int = try await store.value(forKey: "TEST_key2")
+            let _: Int = try await store.value(forKey: "TEST_key2").get()
             XCTFail("Expected an error")
-        } catch CommonFeatureFlagStoreError.typeMismatch { } catch {
+        } catch FeatureFlagStoreError.typeMismatch { } catch {
             XCTFail("Unexpected error: \(error)")
         }
         
         do {
-            let _: Bool = try await store.value(forKey: "TEST_key3")
+            let _: Bool = try await store.value(forKey: "TEST_key3").get()
             XCTFail("Expected an error")
-        } catch CommonFeatureFlagStoreError.valueNotFound(key: let key) {
-            XCTAssertEqual(key, "TEST_key3")
-        } catch {
+        } catch FeatureFlagStoreError.valueNotFound { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
@@ -75,22 +53,20 @@ final class RuntimeOverridesStoreTests: XCTestCase {
             "TEST_key2": "TEST_value2",
         ]
         
-        let value1: String = try store.valueSync(forKey: "TEST_key1")
+        let value1: String = try store.valueSync(forKey: "TEST_key1").get()
         XCTAssertEqual(value1, "TEST_value1")
         
         do {
-            let _: Int = try store.valueSync(forKey: "TEST_key2")
+            let _: Int = try store.valueSync(forKey: "TEST_key2").get()
             XCTFail("Expected an error")
-        } catch CommonFeatureFlagStoreError.typeMismatch { } catch {
+        } catch FeatureFlagStoreError.typeMismatch { } catch {
             XCTFail("Unexpected error: \(error)")
         }
         
         do {
-            let _: Bool = try store.valueSync(forKey: "TEST_key3")
+            let _: Bool = try store.valueSync(forKey: "TEST_key3").get()
             XCTFail("Expected an error")
-        } catch CommonFeatureFlagStoreError.valueNotFound(key: let key) {
-            XCTAssertEqual(key, "TEST_key3")
-        } catch {
+        } catch FeatureFlagStoreError.valueNotFound { } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
