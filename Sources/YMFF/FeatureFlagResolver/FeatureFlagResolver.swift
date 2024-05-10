@@ -42,7 +42,7 @@ final public class FeatureFlagResolver {
         let mutableStores = getMutableStores()
         Task { [mutableStores] in
             for store in mutableStores {
-                await store.saveChanges()
+                try? await store.saveChanges()
             }
         }
     }
@@ -68,7 +68,11 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         
         try await validateOverrideValue(newValue, forKey: key)
         
-        await mutableStores[0].setValue(newValue, forKey: key)
+        do {
+            try await mutableStores[0].setValue(newValue, forKey: key)
+        } catch {
+            throw Error.storeError(error)
+        }
     }
     
     public func removeValueFromMutableStore(using key: FeatureFlagKey) async throws {
@@ -77,7 +81,11 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        await mutableStores[0].removeValue(forKey: key)
+        do {
+            try await mutableStores[0].removeValue(forKey: key)
+        } catch {
+            throw Error.storeError(error)
+        }
     }
     
 }
@@ -101,7 +109,11 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
         
         try validateOverrideValueSync(newValue, forKey: key)
         
-        syncMutableStores[0].setValueSync(newValue, forKey: key)
+        do {
+            try syncMutableStores[0].setValueSync(newValue, forKey: key)
+        } catch {
+            throw Error.storeError(error)
+        }
     }
     
     public func removeValueFromMutableStoreSync(using key: FeatureFlagKey) throws {
@@ -110,7 +122,11 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        syncMutableStores[0].removeValueSync(forKey: key)
+        do {
+            try syncMutableStores[0].removeValueSync(forKey: key)
+        } catch {
+            throw Error.storeError(error)
+        }
     }
     
 }
@@ -149,10 +165,12 @@ extension FeatureFlagResolver {
         
         for store in matchingStores {
             if await store.containsValue(forKey: key) {
-                guard let value: Value = await store.value(forKey: key)
-                else { throw Error.typeMismatch }
-                
-                return value
+                do {
+                    let value: Value = try await store.value(forKey: key)
+                    return value
+                } catch {
+                    throw Error.storeError(error)
+                }
             }
         }
         
@@ -167,10 +185,12 @@ extension FeatureFlagResolver {
         
         for store in matchingStores {
             if store.containsValueSync(forKey: key) {
-                guard let value: Value = store.valueSync(forKey: key)
-                else { throw Error.typeMismatch }
-                
-                return value
+                do {
+                    let value: Value = try store.valueSync(forKey: key)
+                    return value
+                } catch {
+                    throw Error.storeError(error)
+                }
             }
         }
         
