@@ -22,18 +22,18 @@ final class SynchronousMutableFeatureFlagStoreMock {
     
     var valueSync_invocationCount = 0
     var valueSync_keys = [String]()
-    var valueSync_result: Result<Any, any Error>!
+    var valueSync_result: Result<Any, TestFeatureFlagStoreError>!
     
     var setValueSync_invocationCount = 0
     var setValueSync_keyValuePairs = [(String, Any)]()
-    var setValueSync_result: Result<Void, any Error>!
+    var setValueSync_result: Result<Void, TestFeatureFlagStoreError>!
     
     var removeValueSync_invocationCount = 0
     var removeValueSync_keys = [String]()
-    var removeValueSync_result: Result<Void, any Error>!
+    var removeValueSync_result: Result<Void, TestFeatureFlagStoreError>!
     
     var saveChangesSync_invocationCount = 0
-    var saveChangesSync_result: Result<Void, any Error>!
+    var saveChangesSync_result: Result<Void, TestFeatureFlagStoreError>!
     
 }
 

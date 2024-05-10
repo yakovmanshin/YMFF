@@ -22,7 +22,7 @@ final class FeatureFlagStoreMock {
     
     var value_invocationCount = 0
     var value_keys = [String]()
-    var value_result: Result<Any, any Error>!
+    var value_result: Result<Any, TestFeatureFlagStoreError>!
     
 }
 

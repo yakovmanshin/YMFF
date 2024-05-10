@@ -22,7 +22,7 @@ final class SynchronousFeatureFlagStoreMock {
     
     var valueSync_invocationCount = 0
     var valueSync_keys = [String]()
-    var valueSync_result: Result<Any, any Error>!
+    var valueSync_result: Result<Any, TestFeatureFlagStoreError>!
     
 }
 

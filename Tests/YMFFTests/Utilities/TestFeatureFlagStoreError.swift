@@ -8,4 +8,6 @@
 
 enum TestFeatureFlagStoreError: Error, Equatable {
     case typeMismatch
+    case failedToSetValue
+    case failedToRemoveValue
 }

@@ -22,18 +22,18 @@ final class MutableFeatureFlagStoreMock {
     
     var value_invocationCount = 0
     var value_keys = [String]()
-    var value_result: Result<Any, any Error>!
+    var value_result: Result<Any, TestFeatureFlagStoreError>!
     
     var setValue_invocationCount = 0
     var setValue_keyValuePairs = [(String, Any)]()
-    var setValue_result: Result<Void, any Error>!
+    var setValue_result: Result<Void, TestFeatureFlagStoreError>!
     
     var removeValue_invocationCount = 0
     var removeValue_keys = [String]()
-    var removeValue_result: Result<Void, any Error>!
+    var removeValue_result: Result<Void, TestFeatureFlagStoreError>!
     
     var saveChanges_invocationCount = 0
-    var saveChanges_result: Result<Void, any Error>!
+    var saveChanges_result: Result<Void, TestFeatureFlagStoreError>!
     
 }
 
