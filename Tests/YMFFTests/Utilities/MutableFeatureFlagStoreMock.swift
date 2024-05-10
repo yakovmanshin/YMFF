@@ -16,13 +16,9 @@ import YMFFProtocols
 
 final class MutableFeatureFlagStoreMock {
     
-    var containsValue_invocationCount = 0
-    var containsValue_keys = [String]()
-    var containsValue_returnValue: Bool!
-    
     var value_invocationCount = 0
     var value_keys = [String]()
-    var value_result: Result<Any, TestFeatureFlagStoreError>!
+    var value_result: Result<Any, FeatureFlagStoreError>!
     
     var setValue_invocationCount = 0
     var setValue_keyValuePairs = [(String, Any)]()
@@ -41,23 +37,17 @@ final class MutableFeatureFlagStoreMock {
 
 extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
     
-    func containsValue(forKey key: String) async -> Bool {
-        containsValue_invocationCount += 1
-        containsValue_keys.append(key)
-        return containsValue_returnValue
-    }
-    
-    func value<Value>(forKey key: String) async throws -> Value {
+    func value<Value>(forKey key: String) async -> Result<Value, FeatureFlagStoreError> {
         value_invocationCount += 1
         value_keys.append(key)
-        switch value_result! {
+        return switch value_result! {
         case .success(let anyValue):
             if let value = anyValue as? Value {
-                return value
+                .success(value)
             } else {
-                throw TestFeatureFlagStoreError.typeMismatch
+                .failure(.typeMismatch)
             }
-        case .failure(let error): throw error
+        case .failure(let error): .failure(error)
         }
     }
     
