@@ -137,7 +137,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         configuration.stores = [store1, store2]
         store1.containsValue_returnValue = false
         store2.containsValue_returnValue = true
-        store2.value_returnValue = "TEST_value2"
+        store2.value_result = .success("TEST_value2")
         
         do {
             let value: String = try await resolver.value(for: "TEST_key1")
@@ -161,7 +161,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         configuration.stores = [store1, store2]
         store1.containsValueSync_returnValue = false
         store2.containsValueSync_returnValue = true
-        store2.valueSync_returnValue = "TEST_value2"
+        store2.valueSync_result = .success("TEST_value2")
         
         do {
             let value: String = try resolver.valueSync(for: "TEST_key1")
@@ -186,9 +186,9 @@ final class FeatureFlagResolverTests: XCTestCase {
         configuration.stores = [store1, store2, store3]
         store1.containsValue_returnValue = false
         store2.containsValue_returnValue = true
-        store2.value_returnValue = "TEST_value2"
+        store2.value_result = .success("TEST_value2")
         store3.containsValue_returnValue = true
-        store3.value_returnValue = "TEST_value3"
+        store3.value_result = .success("TEST_value3")
         
         do {
             let value: String = try await resolver.value(for: "TEST_key1")
@@ -213,9 +213,9 @@ final class FeatureFlagResolverTests: XCTestCase {
         configuration.stores = [store1, store2, store3]
         store1.containsValueSync_returnValue = false
         store2.containsValueSync_returnValue = true
-        store2.valueSync_returnValue = "TEST_value2"
+        store2.valueSync_result = .success("TEST_value2")
         store3.containsValueSync_returnValue = true
-        store3.valueSync_returnValue = "TEST_value3"
+        store3.valueSync_result = .success("TEST_value3")
         
         do {
             let value: String = try resolver.valueSync(for: "TEST_key1")
@@ -237,7 +237,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = FeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValue_returnValue = true
-        store.value_returnValue = 123
+        store.value_result = .success(123)
         
         do {
             let _: String = try await resolver.value(for: "TEST_key1")
@@ -256,7 +256,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = SynchronousFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValueSync_returnValue = true
-        store.valueSync_returnValue = 123
+        store.valueSync_result = .success(123)
         
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
@@ -275,7 +275,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = FeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValue_returnValue = true
-        store.value_returnValue = 123 as Int?
+        store.value_result = .success(123 as Int?)
         
         do {
             let _: Int? = try await resolver.value(for: "TEST_key1")
@@ -294,7 +294,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = SynchronousFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValueSync_returnValue = true
-        store.valueSync_returnValue = 123 as Int?
+        store.valueSync_result = .success(123 as Int?)
         
         do {
             let _: Int? = try resolver.valueSync(for: "TEST_key1")
@@ -405,7 +405,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = MutableFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValue_returnValue = true
-        store.value_returnValue = "TEST_value1"
+        store.value_result = .success("TEST_value1")
         
         do {
             try await resolver.setValue("TEST_value2", toMutableStoreUsing: "TEST_key1")
@@ -425,7 +425,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = SynchronousMutableFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValueSync_returnValue = true
-        store.valueSync_returnValue = "TEST_value1"
+        store.valueSync_result = .success("TEST_value1")
         
         do {
             try resolver.setValueSync("TEST_value2", toMutableStoreUsing: "TEST_key1")
@@ -445,7 +445,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = MutableFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValue_returnValue = true
-        store.value_returnValue = "TEST_value1"
+        store.value_result = .success("TEST_value1")
         
         do {
             try await resolver.setValue(456 as Int?, toMutableStoreUsing: "TEST_key1")
@@ -464,7 +464,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = SynchronousMutableFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValueSync_returnValue = true
-        store.valueSync_returnValue = "TEST_value1"
+        store.valueSync_result = .success("TEST_value1")
         
         do {
             try resolver.setValueSync(456 as Int?, toMutableStoreUsing: "TEST_key1")
@@ -483,7 +483,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = MutableFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValue_returnValue = true
-        store.value_returnValue = "TEST_value1"
+        store.value_result = .success("TEST_value1")
         
         do {
             try await resolver.setValue(456, toMutableStoreUsing: "TEST_key1")
@@ -502,7 +502,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = SynchronousMutableFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValueSync_returnValue = true
-        store.valueSync_returnValue = "TEST_value1"
+        store.valueSync_result = .success("TEST_value1")
         
         do {
             try resolver.setValueSync(456, toMutableStoreUsing: "TEST_key1")
@@ -525,9 +525,9 @@ final class FeatureFlagResolverTests: XCTestCase {
         store1.containsValue_returnValue = true
         store2.containsValue_returnValue = true
         store3.containsValueSync_returnValue = true
-        store1.value_returnValue = "TEST_value1"
-        store2.value_returnValue = "TEST_value2"
-        store3.valueSync_returnValue = "TEST_value3"
+        store1.value_result = .success("TEST_value1")
+        store2.value_result = .success("TEST_value2")
+        store3.valueSync_result = .success("TEST_value3")
         
         do {
             try await resolver.setValue("TEST_value4", toMutableStoreUsing: "TEST_key1")
@@ -557,9 +557,9 @@ final class FeatureFlagResolverTests: XCTestCase {
         store1.containsValueSync_returnValue = true
         store2.containsValueSync_returnValue = true
         store3.containsValueSync_returnValue = true
-        store1.valueSync_returnValue = "TEST_value1"
-        store2.valueSync_returnValue = "TEST_value2"
-        store3.valueSync_returnValue = "TEST_value3"
+        store1.valueSync_result = .success("TEST_value1")
+        store2.valueSync_result = .success("TEST_value2")
+        store3.valueSync_result = .success("TEST_value3")
         
         do {
             try resolver.setValueSync("TEST_value4", toMutableStoreUsing: "TEST_key1")
