@@ -22,7 +22,7 @@ final class SynchronousFeatureFlagStoreMock {
     
     var valueSync_invocationCount = 0
     var valueSync_keys = [String]()
-    var valueSync_returnValue: Any?
+    var valueSync_result: Result<Any, TestFeatureFlagStoreError>!
     
 }
 
@@ -36,13 +36,17 @@ extension SynchronousFeatureFlagStoreMock: SynchronousFeatureFlagStore {
         return containsValueSync_returnValue
     }
     
-    func valueSync<Value>(forKey key: String) -> Value? {
+    func valueSync<Value>(forKey key: String) throws -> Value {
         valueSync_invocationCount += 1
         valueSync_keys.append(key)
-        if let valueSync_returnValue {
-            return valueSync_returnValue as? Value? ?? nil
-        } else {
-            return nil
+        switch valueSync_result! {
+        case .success(let anyValue):
+            if let value = anyValue as? Value {
+                return value
+            } else {
+                throw TestFeatureFlagStoreError.typeMismatch
+            }
+        case .failure(let error): throw error
         }
     }
     

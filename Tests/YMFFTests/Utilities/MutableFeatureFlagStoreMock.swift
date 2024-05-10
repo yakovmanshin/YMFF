@@ -22,15 +22,18 @@ final class MutableFeatureFlagStoreMock {
     
     var value_invocationCount = 0
     var value_keys = [String]()
-    var value_returnValue: Any?
+    var value_result: Result<Any, TestFeatureFlagStoreError>!
     
     var setValue_invocationCount = 0
     var setValue_keyValuePairs = [(String, Any)]()
+    var setValue_result: Result<Void, TestFeatureFlagStoreError>!
     
     var removeValue_invocationCount = 0
     var removeValue_keys = [String]()
+    var removeValue_result: Result<Void, TestFeatureFlagStoreError>!
     
     var saveChanges_invocationCount = 0
+    var saveChanges_result: Result<Void, TestFeatureFlagStoreError>!
     
 }
 
@@ -44,28 +47,41 @@ extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
         return containsValue_returnValue
     }
     
-    func value<Value>(forKey key: String) async -> Value? {
+    func value<Value>(forKey key: String) async throws -> Value {
         value_invocationCount += 1
         value_keys.append(key)
-        if let value_returnValue {
-            return value_returnValue as? Value? ?? nil
-        } else {
-            return nil
+        switch value_result! {
+        case .success(let anyValue):
+            if let value = anyValue as? Value {
+                return value
+            } else {
+                throw TestFeatureFlagStoreError.typeMismatch
+            }
+        case .failure(let error): throw error
         }
     }
     
-    func setValue<Value>(_ value: Value, forKey key: String) async {
+    func setValue<Value>(_ value: Value, forKey key: String) async throws {
         setValue_invocationCount += 1
         setValue_keyValuePairs.append((key, value))
+        if case .failure(let error) = setValue_result {
+            throw error
+        }
     }
     
-    func removeValue(forKey key: String) async {
+    func removeValue(forKey key: String) async throws {
         removeValue_invocationCount += 1
         removeValue_keys.append(key)
+        if case .failure(let error) = removeValue_result {
+            throw error
+        }
     }
     
-    func saveChanges() async {
+    func saveChanges() async throws {
         saveChanges_invocationCount += 1
+        if case .failure(let error) = saveChanges_result {
+            throw error
+        }
     }
     
 }

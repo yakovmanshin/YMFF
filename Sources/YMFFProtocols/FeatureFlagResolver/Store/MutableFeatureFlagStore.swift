@@ -14,17 +14,17 @@ public protocol MutableFeatureFlagStore: AnyObject, FeatureFlagStore {
     /// - Parameters:
     ///   - value: *Required.* The value to record.
     ///   - key: *Required.* The key used to address the value.
-    func setValue<Value>(_ value: Value, forKey key: String) async
+    func setValue<Value>(_ value: Value, forKey key: String) async throws
     
     /// Removes the value from the store.
     ///
     /// - Parameter key: *Required.* The key used to address the value.
-    func removeValue(forKey key: String) async
+    func removeValue(forKey key: String) async throws
     
     /// Immediately saves changed values so they’re not lost.
     ///
     /// + This method can be called when work with the feature flag store is finished.
-    func saveChanges() async
+    func saveChanges() async throws
     
 }
 
@@ -33,6 +33,6 @@ public protocol MutableFeatureFlagStore: AnyObject, FeatureFlagStore {
 extension MutableFeatureFlagStore {
     
     // Not all kinds of feature flag stores need this method, so it’s optional to implement.
-    public func saveChanges() async { }
+    public func saveChanges() async throws { }
     
 }

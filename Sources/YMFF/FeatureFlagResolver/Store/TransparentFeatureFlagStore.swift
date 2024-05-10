@@ -23,8 +23,10 @@ extension TransparentFeatureFlagStore: SynchronousFeatureFlagStore, FeatureFlagS
         self[key] != nil
     }
     
-    public func valueSync<V>(forKey key: String) -> V? {
-        self[key] as? V
+    public func valueSync<V>(forKey key: String) throws -> V {
+        guard let anyValue = self[key] else { throw CommonFeatureFlagStoreError.valueNotFound(key: key) }
+        guard let value = anyValue as? V else { throw CommonFeatureFlagStoreError.typeMismatch }
+        return value
     }
     
 }

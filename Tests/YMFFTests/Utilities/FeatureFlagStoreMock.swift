@@ -22,7 +22,7 @@ final class FeatureFlagStoreMock {
     
     var value_invocationCount = 0
     var value_keys = [String]()
-    var value_returnValue: Any?
+    var value_result: Result<Any, TestFeatureFlagStoreError>!
     
 }
 
@@ -36,13 +36,17 @@ extension FeatureFlagStoreMock: FeatureFlagStore {
         return containsValue_returnValue
     }
     
-    func value<Value>(forKey key: String) async -> Value? {
+    func value<Value>(forKey key: String) async throws -> Value {
         value_invocationCount += 1
         value_keys.append(key)
-        if let value_returnValue {
-            return value_returnValue as? Value? ?? nil
-        } else {
-            return nil
+        switch value_result! {
+        case .success(let anyValue):
+            if let value = anyValue as? Value {
+                return value
+            } else {
+                throw TestFeatureFlagStoreError.typeMismatch
+            }
+        case .failure(let error): throw error
         }
     }
     
