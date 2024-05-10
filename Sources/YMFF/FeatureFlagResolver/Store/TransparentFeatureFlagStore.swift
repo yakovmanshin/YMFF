@@ -19,14 +19,10 @@ public typealias TransparentFeatureFlagStore = [String: Any]
 
 extension TransparentFeatureFlagStore: SynchronousFeatureFlagStore, FeatureFlagStore {
     
-    public func containsValueSync(forKey key: String) -> Bool {
-        self[key] != nil
-    }
-    
-    public func valueSync<V>(forKey key: String) throws -> V {
-        guard let anyValue = self[key] else { throw CommonFeatureFlagStoreError.valueNotFound(key: key) }
-        guard let value = anyValue as? V else { throw CommonFeatureFlagStoreError.typeMismatch }
-        return value
+    public func valueSync<V>(forKey key: String) -> Result<V, FeatureFlagStoreError> {
+        guard let anyValue = self[key] else { return .failure(.valueNotFound) }
+        guard let value = anyValue as? V else { return .failure(.typeMismatch) }
+        return .success(value)
     }
     
 }
