@@ -28,9 +28,6 @@ extension FeatureFlagResolver {
         /// - Note: Support for optional values will be added in [#130](https://github.com/yakovmanshin/YMFF/issues/130).
         case optionalValuesNotAllowed
         
-        /// The types of the old and new values don’t match.
-        case typeMismatch
-        
     }
     
 }
