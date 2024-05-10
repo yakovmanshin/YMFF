@@ -39,8 +39,13 @@ extension SynchronousFeatureFlagStoreMock: SynchronousFeatureFlagStore {
     func valueSync<Value>(forKey key: String) throws -> Value {
         valueSync_invocationCount += 1
         valueSync_keys.append(key)
-        return switch valueSync_result! {
-        case .success(let value): value as! Value
+        switch valueSync_result! {
+        case .success(let anyValue):
+            if let value = anyValue as? Value {
+                return value
+            } else {
+                throw TestFeatureFlagStoreError.typeMismatch
+            }
         case .failure(let error): throw error
         }
     }

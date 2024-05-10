@@ -39,8 +39,13 @@ extension FeatureFlagStoreMock: FeatureFlagStore {
     func value<Value>(forKey key: String) async throws -> Value {
         value_invocationCount += 1
         value_keys.append(key)
-        return switch value_result! {
-        case .success(let value): value as! Value
+        switch value_result! {
+        case .success(let anyValue):
+            if let value = anyValue as? Value {
+                return value
+            } else {
+                throw TestFeatureFlagStoreError.typeMismatch
+            }
         case .failure(let error): throw error
         }
     }
