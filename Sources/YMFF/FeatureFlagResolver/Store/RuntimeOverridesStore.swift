@@ -31,8 +31,10 @@ extension RuntimeOverridesStore: SynchronousMutableFeatureFlagStore {
         store[key] != nil
     }
     
-    public func valueSync<Value>(forKey key: String) -> Value? {
-        store[key] as? Value
+    public func valueSync<Value>(forKey key: String) throws -> Value {
+        guard let anyValue = store[key] else { throw CommonFeatureFlagStoreError.valueNotFound(key: key) }
+        guard let value = anyValue as? Value else { throw CommonFeatureFlagStoreError.typeMismatch }
+        return value
     }
     
     public func setValueSync<Value>(_ value: Value, forKey key: String) {
