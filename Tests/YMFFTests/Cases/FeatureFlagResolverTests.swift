@@ -277,7 +277,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = FeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValue_returnValue = true
-        store.value_result = .success(123 as Int?)
+        store.value_result = .success((123 as Int?)!)
         
         do {
             let _: Int? = try await resolver.value(for: "TEST_key1")
@@ -296,7 +296,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store = SynchronousFeatureFlagStoreMock()
         configuration.stores = [store]
         store.containsValueSync_returnValue = true
-        store.valueSync_result = .success(123 as Int?)
+        store.valueSync_result = .success((123 as Int?)!)
         
         do {
             let _: Int? = try resolver.valueSync(for: "TEST_key1")
