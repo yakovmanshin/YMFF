@@ -242,7 +242,8 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try await resolver.value(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.typeMismatch {
+        } catch FeatureFlagResolver.Error.storeError(let error) {
+            XCTAssertEqual(error as? TestFeatureFlagStoreError, .typeMismatch)
             XCTAssertEqual(store.containsValue_invocationCount, 1)
             XCTAssertEqual(store.containsValue_keys, ["TEST_key1"])
             XCTAssertEqual(store.value_invocationCount, 1)
@@ -261,7 +262,8 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             let _: String = try resolver.valueSync(for: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.typeMismatch {
+        } catch FeatureFlagResolver.Error.storeError(let error) {
+            XCTAssertEqual(error as? TestFeatureFlagStoreError, .typeMismatch)
             XCTAssertEqual(store.containsValueSync_invocationCount, 1)
             XCTAssertEqual(store.containsValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store.valueSync_invocationCount, 1)
@@ -488,7 +490,8 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try await resolver.setValue(456, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.typeMismatch {
+        } catch FeatureFlagResolver.Error.storeError(let error) {
+            XCTAssertEqual(error as? TestFeatureFlagStoreError, .typeMismatch)
             XCTAssertEqual(store.containsValue_invocationCount, 1)
             XCTAssertEqual(store.containsValue_keys, ["TEST_key1"])
             XCTAssertEqual(store.setValue_invocationCount, 0)
@@ -507,7 +510,8 @@ final class FeatureFlagResolverTests: XCTestCase {
         do {
             try resolver.setValueSync(456, toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.typeMismatch {
+        } catch FeatureFlagResolver.Error.storeError(let error) {
+            XCTAssertEqual(error as? TestFeatureFlagStoreError, .typeMismatch)
             XCTAssertEqual(store.containsValueSync_invocationCount, 1)
             XCTAssertEqual(store.containsValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store.setValueSync_invocationCount, 0)
