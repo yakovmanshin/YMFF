@@ -54,37 +54,59 @@ final class UserDefaultsStoreTests: XCTestCase {
         XCTAssertFalse(containsValue2)
     }
     
-    func test_value() async {
+    func test_value() async throws {
         userDefaults.set("TEST_value1", forKey: "TEST_key1")
         userDefaults.set("TEST_value2", forKey: "TEST_key2")
         
-        let value1: String? = await store.value(forKey: "TEST_key1")
-        let value2: Int? = await store.value(forKey: "TEST_key2")
-        let value3: Bool? = await store.value(forKey: "TEST_key3")
-        
+        let value1: String = try await store.value(forKey: "TEST_key1")
         XCTAssertEqual(value1, "TEST_value1")
-        XCTAssertNil(value2)
-        XCTAssertNil(value3)
+        
+        do {
+            let _: Int = try await store.value(forKey: "TEST_key2")
+            XCTFail("Expected an error")
+        } catch CommonFeatureFlagStoreError.typeMismatch { } catch {
+            XCTFail("Unexpected error: \(error.localizedDescription)")
+        }
+        
+        do {
+            let _: Bool = try await store.value(forKey: "TEST_key3")
+            XCTFail("Expected an error")
+        } catch CommonFeatureFlagStoreError.valueNotFound(key: let key) {
+            XCTAssertEqual(key, "TEST_key3")
+        } catch {
+            XCTFail("Unexpected error: \(error.localizedDescription)")
+        }
     }
     
-    func test_valueSync() {
+    func test_valueSync() throws {
         userDefaults.set("TEST_value1", forKey: "TEST_key1")
         userDefaults.set("TEST_value2", forKey: "TEST_key2")
         
-        let value1: String? = store.valueSync(forKey: "TEST_key1")
-        let value2: Int? = store.valueSync(forKey: "TEST_key2")
-        let value3: Bool? = store.valueSync(forKey: "TEST_key3")
-        
+        let value1: String = try store.valueSync(forKey: "TEST_key1")
         XCTAssertEqual(value1, "TEST_value1")
-        XCTAssertNil(value2)
-        XCTAssertNil(value3)
+        
+        do {
+            let _: Int = try store.valueSync(forKey: "TEST_key2")
+            XCTFail("Expected an error")
+        } catch CommonFeatureFlagStoreError.typeMismatch { } catch {
+            XCTFail("Unexpected error: \(error.localizedDescription)")
+        }
+        
+        do {
+            let _: Bool = try store.valueSync(forKey: "TEST_key3")
+            XCTFail("Expected an error")
+        } catch CommonFeatureFlagStoreError.valueNotFound(key: let key) {
+            XCTAssertEqual(key, "TEST_key3")
+        } catch {
+            XCTFail("Unexpected error: \(error.localizedDescription)")
+        }
     }
     
-    func test_setValue() async {
+    func test_setValue() async throws {
         userDefaults.set("TEST_value1", forKey: "TEST_key1")
         
-        await store.setValue("TEST_newValue1", forKey: "TEST_key1")
-        await store.setValue("TEST_newValue2", forKey: "TEST_key2")
+        try await store.setValue("TEST_newValue1", forKey: "TEST_key1")
+        try await store.setValue("TEST_newValue2", forKey: "TEST_key2")
         
         XCTAssertEqual(userDefaults.string(forKey: "TEST_key1"), "TEST_newValue1")
         XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_newValue2")
@@ -100,12 +122,12 @@ final class UserDefaultsStoreTests: XCTestCase {
         XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_newValue2")
     }
     
-    func test_removeValue() async {
+    func test_removeValue() async throws {
         userDefaults.set("TEST_value1", forKey: "TEST_key1")
         userDefaults.set("TEST_value2", forKey: "TEST_key2")
         
-        await store.removeValue(forKey: "TEST_key1")
-        await store.removeValue(forKey: "TEST_key999")
+        try await store.removeValue(forKey: "TEST_key1")
+        try await store.removeValue(forKey: "TEST_key999")
         
         XCTAssertNil(userDefaults.string(forKey: "TEST_key1"))
         XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_value2")

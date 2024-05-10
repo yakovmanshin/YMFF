@@ -38,8 +38,12 @@ extension UserDefaultsStore: SynchronousMutableFeatureFlagStore {
         userDefaults.object(forKey: key) != nil
     }
     
-    public func valueSync<Value>(forKey key: String) -> Value? {
-        userDefaults.object(forKey: key) as? Value
+    public func valueSync<Value>(forKey key: String) throws -> Value {
+        guard let anyValue = userDefaults.object(forKey: key) else {
+            throw CommonFeatureFlagStoreError.valueNotFound(key: key)
+        }
+        guard let value = anyValue as? Value else { throw CommonFeatureFlagStoreError.typeMismatch }
+        return value
     }
     
     public func setValueSync<Value>(_ value: Value, forKey key: String) {
