@@ -515,7 +515,7 @@ final class FeatureFlagResolverTests: XCTestCase {
         let store2 = FeatureFlagStoreMock()
         let store3 = SynchronousMutableFeatureFlagStoreMock()
         configuration.stores = [store1, store2, store3]
-        store1.value_result = .success("TEST_value1")
+        store1.value_result = .failure(.valueNotFound)
         store2.value_result = .success("TEST_value2")
         store3.valueSync_result = .success("TEST_value3")
         
@@ -524,43 +524,151 @@ final class FeatureFlagResolverTests: XCTestCase {
             
             XCTAssertEqual(store1.value_invocationCount, 1)
             XCTAssertEqual(store1.value_keys, ["TEST_key1"])
-            XCTAssertEqual(store2.value_invocationCount, 0)
-            XCTAssertTrue(store2.value_keys.isEmpty)
-            XCTAssertEqual(store3.valueSync_invocationCount, 0)
-            XCTAssertTrue(store3.valueSync_keys.isEmpty)
+            XCTAssertEqual(store2.value_invocationCount, 1)
+            XCTAssertEqual(store2.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store3.valueSync_invocationCount, 1)
+            XCTAssertEqual(store3.valueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store1.setValue_invocationCount, 1)
             XCTAssertEqual(store1.setValue_keyValuePairs.count, 1)
             XCTAssertEqual(store1.setValue_keyValuePairs[0].0, "TEST_key1")
             XCTAssertEqual(store1.setValue_keyValuePairs[0].1 as? String, "TEST_value4")
-            XCTAssertEqual(store3.setValueSync_invocationCount, 0)
-            XCTAssertTrue(store3.setValueSync_keyValuePairs.isEmpty)
+            XCTAssertEqual(store3.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store3.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store3.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store3.setValueSync_keyValuePairs[0].1 as? String, "TEST_value4")
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
     
-    func test_setValue_multipleSyncMutableStores() {
-        let store1 = SynchronousMutableFeatureFlagStoreMock()
+    func test_setValueSync_multipleMutableStores() {
+        let store1 = MutableFeatureFlagStoreMock()
         let store2 = SynchronousFeatureFlagStoreMock()
         let store3 = SynchronousMutableFeatureFlagStoreMock()
         configuration.stores = [store1, store2, store3]
-        store1.valueSync_result = .success("TEST_value1")
+        store1.value_result = .failure(.valueNotFound)
         store2.valueSync_result = .success("TEST_value2")
         store3.valueSync_result = .success("TEST_value3")
         
         do {
             try resolver.setValueSync("TEST_value4", toMutableStoreUsing: "TEST_key1")
             
+            XCTAssertEqual(store1.value_invocationCount, 0)
+            XCTAssertTrue(store1.value_keys.isEmpty)
+            XCTAssertEqual(store2.valueSync_invocationCount, 1)
+            XCTAssertEqual(store2.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store3.valueSync_invocationCount, 1)
+            XCTAssertEqual(store3.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store1.setValue_invocationCount, 0)
+            XCTAssertTrue(store1.setValue_keyValuePairs.isEmpty)
+            XCTAssertEqual(store3.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store3.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store3.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store3.setValueSync_keyValuePairs[0].1 as? String, "TEST_value4")
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValue_partialStoreError() async {
+        let store1 = MutableFeatureFlagStoreMock()
+        let store2 = SynchronousMutableFeatureFlagStoreMock()
+        let store3 = MutableFeatureFlagStoreMock()
+        configuration.stores = [store1, store2, store3]
+        store1.value_result = .failure(.valueNotFound)
+        store1.setValue_result = .failure(TestFeatureFlagStoreError.failedToSetValue)
+        store2.valueSync_result = .success("TEST_value2")
+        store2.setValueSync_result = .success(())
+        store3.value_result = .success("TEST_value3")
+        store3.setValue_result = .failure(TestFeatureFlagStoreError.someError1)
+        
+        do {
+            try await resolver.setValue("TEST_value4", toMutableStoreUsing: "TEST_key1")
+            XCTFail("Expected an error")
+        } catch FeatureFlagResolver.Error.storeError(TestFeatureFlagStoreError.someError1) {
+            XCTAssertEqual(store1.value_invocationCount, 1)
+            XCTAssertEqual(store1.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store2.valueSync_invocationCount, 1)
+            XCTAssertEqual(store2.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store3.value_invocationCount, 1)
+            XCTAssertEqual(store3.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store1.setValue_invocationCount, 1)
+            XCTAssertEqual(store1.setValue_keyValuePairs.count, 1)
+            XCTAssertEqual(store1.setValue_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store1.setValue_keyValuePairs[0].1 as? String, "TEST_value4")
+            XCTAssertEqual(store2.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store2.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store2.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store2.setValueSync_keyValuePairs[0].1 as? String, "TEST_value4")
+            XCTAssertEqual(store3.setValue_invocationCount, 1)
+            XCTAssertEqual(store3.setValue_keyValuePairs.count, 1)
+            XCTAssertEqual(store3.setValue_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store3.setValue_keyValuePairs[0].1 as? String, "TEST_value4")
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValueSync_partialStoreError() {
+        let store1 = SynchronousMutableFeatureFlagStoreMock()
+        let store2 = SynchronousMutableFeatureFlagStoreMock()
+        let store3 = SynchronousMutableFeatureFlagStoreMock()
+        configuration.stores = [store1, store2, store3]
+        store1.valueSync_result = .failure(.valueNotFound)
+        store1.setValueSync_result = .failure(TestFeatureFlagStoreError.failedToSetValue)
+        store2.valueSync_result = .success("TEST_value2")
+        store2.setValueSync_result = .success(())
+        store3.valueSync_result = .success("TEST_value3")
+        store3.setValueSync_result = .failure(TestFeatureFlagStoreError.someError1)
+        
+        do {
+            try resolver.setValueSync("TEST_value4", toMutableStoreUsing: "TEST_key1")
+            XCTFail("Expected an error")
+        } catch FeatureFlagResolver.Error.storeError(TestFeatureFlagStoreError.someError1) {
             XCTAssertEqual(store1.valueSync_invocationCount, 1)
             XCTAssertEqual(store1.valueSync_keys, ["TEST_key1"])
-            XCTAssertEqual(store2.valueSync_invocationCount, 0)
-            XCTAssertTrue(store2.valueSync_keys.isEmpty)
-            XCTAssertEqual(store3.valueSync_invocationCount, 0)
-            XCTAssertTrue(store3.valueSync_keys.isEmpty)
+            XCTAssertEqual(store2.valueSync_invocationCount, 1)
+            XCTAssertEqual(store2.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store3.valueSync_invocationCount, 1)
+            XCTAssertEqual(store3.valueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store1.setValueSync_invocationCount, 1)
             XCTAssertEqual(store1.setValueSync_keyValuePairs.count, 1)
             XCTAssertEqual(store1.setValueSync_keyValuePairs[0].0, "TEST_key1")
             XCTAssertEqual(store1.setValueSync_keyValuePairs[0].1 as? String, "TEST_value4")
+            XCTAssertEqual(store2.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store2.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store2.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store2.setValueSync_keyValuePairs[0].1 as? String, "TEST_value4")
+            XCTAssertEqual(store3.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store3.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store3.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store3.setValueSync_keyValuePairs[0].1 as? String, "TEST_value4")
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValue_multipleStores_typeMismatch() async {
+        let store1 = MutableFeatureFlagStoreMock()
+        let store2 = SynchronousFeatureFlagStoreMock()
+        let store3 = SynchronousMutableFeatureFlagStoreMock()
+        configuration.stores = [store1, store2, store3]
+        store1.value_result = .failure(.valueNotFound)
+        store2.valueSync_result = .success(123)
+        store3.valueSync_result = .success("TEST_value3")
+        
+        do {
+            try await resolver.setValue("TEST_value4", toMutableStoreUsing: "TEST_key1")
+            XCTFail("Expected an error")
+        } catch FeatureFlagResolver.Error.storeError(FeatureFlagStoreError.typeMismatch) {
+            XCTAssertEqual(store1.value_invocationCount, 1)
+            XCTAssertEqual(store1.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store2.valueSync_invocationCount, 1)
+            XCTAssertEqual(store2.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store3.valueSync_invocationCount, 0)
+            XCTAssertTrue(store3.valueSync_keys.isEmpty)
+            XCTAssertEqual(store1.setValue_invocationCount, 0)
+            XCTAssertTrue(store1.setValue_keyValuePairs.isEmpty)
             XCTAssertEqual(store3.setValueSync_invocationCount, 0)
             XCTAssertTrue(store3.setValueSync_keyValuePairs.isEmpty)
         } catch {
@@ -568,59 +676,29 @@ final class FeatureFlagResolverTests: XCTestCase {
         }
     }
     
-    func test_setValue_storeError() async {
-        let store1 = MutableFeatureFlagStoreMock()
-        let store2 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [store1, store2]
-        store1.value_result = .failure(.valueNotFound)
-        store1.setValue_result = .failure(TestFeatureFlagStoreError.failedToSetValue)
-        store2.valueSync_result = .success("TEST_value1")
-        store2.setValueSync_result = .success(())
-        
-        do {
-            try await resolver.setValue("TEST_value2", toMutableStoreUsing: "TEST_key1")
-            XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.storeError(let error) {
-            XCTAssertEqual(error as? TestFeatureFlagStoreError, .failedToSetValue)
-            XCTAssertEqual(store1.value_invocationCount, 1)
-            XCTAssertEqual(store1.value_keys, ["TEST_key1"])
-            XCTAssertEqual(store2.valueSync_invocationCount, 1)
-            XCTAssertEqual(store2.valueSync_keys, ["TEST_key1"])
-            XCTAssertEqual(store1.setValue_invocationCount, 1)
-            XCTAssertEqual(store1.setValue_keyValuePairs.count, 1)
-            XCTAssertEqual(store1.setValue_keyValuePairs[0].0, "TEST_key1")
-            XCTAssertEqual(store1.setValue_keyValuePairs[0].1 as? String, "TEST_value2")
-            XCTAssertEqual(store2.setValueSync_invocationCount, 0)
-            XCTAssertTrue(store2.setValueSync_keyValuePairs.isEmpty)
-        } catch {
-            XCTFail("Unexpected error: \(error)")
-        }
-    }
-    
-    func test_setValueSync_storeError() {
+    func test_setValueSync_multipleStores_typeMismatch() {
         let store1 = SynchronousMutableFeatureFlagStoreMock()
-        let store2 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [store1, store2]
+        let store2 = SynchronousFeatureFlagStoreMock()
+        let store3 = SynchronousMutableFeatureFlagStoreMock()
+        configuration.stores = [store1, store2, store3]
         store1.valueSync_result = .failure(.valueNotFound)
-        store1.setValueSync_result = .failure(TestFeatureFlagStoreError.failedToSetValue)
-        store2.valueSync_result = .success("TEST_value1")
-        store2.setValueSync_result = .success(())
+        store2.valueSync_result = .success(123)
+        store3.valueSync_result = .success("TEST_value3")
         
         do {
-            try resolver.setValueSync("TEST_value2", toMutableStoreUsing: "TEST_key1")
+            try resolver.setValueSync("TEST_value4", toMutableStoreUsing: "TEST_key1")
             XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.storeError(let error) {
-            XCTAssertEqual(error as? TestFeatureFlagStoreError, .failedToSetValue)
+        } catch FeatureFlagResolver.Error.storeError(FeatureFlagStoreError.typeMismatch) {
             XCTAssertEqual(store1.valueSync_invocationCount, 1)
             XCTAssertEqual(store1.valueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store2.valueSync_invocationCount, 1)
             XCTAssertEqual(store2.valueSync_keys, ["TEST_key1"])
-            XCTAssertEqual(store1.setValueSync_invocationCount, 1)
-            XCTAssertEqual(store1.setValueSync_keyValuePairs.count, 1)
-            XCTAssertEqual(store1.setValueSync_keyValuePairs[0].0, "TEST_key1")
-            XCTAssertEqual(store1.setValueSync_keyValuePairs[0].1 as? String, "TEST_value2")
-            XCTAssertEqual(store2.setValueSync_invocationCount, 0)
-            XCTAssertTrue(store2.setValueSync_keyValuePairs.isEmpty)
+            XCTAssertEqual(store3.valueSync_invocationCount, 0)
+            XCTAssertTrue(store3.valueSync_keys.isEmpty)
+            XCTAssertEqual(store1.setValueSync_invocationCount, 0)
+            XCTAssertTrue(store1.setValueSync_keyValuePairs.isEmpty)
+            XCTAssertEqual(store3.setValueSync_invocationCount, 0)
+            XCTAssertTrue(store3.setValueSync_keyValuePairs.isEmpty)
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -719,8 +797,8 @@ final class FeatureFlagResolverTests: XCTestCase {
             
             XCTAssertEqual(store1.removeValue_invocationCount, 1)
             XCTAssertEqual(store1.removeValue_keys, ["TEST_key1"])
-            XCTAssertEqual(store3.removeValueSync_invocationCount, 0)
-            XCTAssertTrue(store3.removeValueSync_keys.isEmpty)
+            XCTAssertEqual(store3.removeValueSync_invocationCount, 1)
+            XCTAssertEqual(store3.removeValueSync_keys, ["TEST_key1"])
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -739,8 +817,8 @@ final class FeatureFlagResolverTests: XCTestCase {
             XCTAssertEqual(store1.removeValueSync_keys, ["TEST_key1"])
             XCTAssertEqual(store2.removeValue_invocationCount, 0)
             XCTAssertTrue(store2.removeValue_keys.isEmpty)
-            XCTAssertEqual(store3.removeValueSync_invocationCount, 0)
-            XCTAssertTrue(store3.removeValueSync_keys.isEmpty)
+            XCTAssertEqual(store3.removeValueSync_invocationCount, 1)
+            XCTAssertEqual(store3.removeValueSync_keys, ["TEST_key1"])
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -760,8 +838,8 @@ final class FeatureFlagResolverTests: XCTestCase {
             XCTAssertEqual(error as? TestFeatureFlagStoreError, .failedToRemoveValue)
             XCTAssertEqual(store1.removeValue_invocationCount, 1)
             XCTAssertEqual(store1.removeValue_keys, ["TEST_key1"])
-            XCTAssertEqual(store2.removeValueSync_invocationCount, 0)
-            XCTAssertTrue(store2.removeValueSync_keys.isEmpty)
+            XCTAssertEqual(store2.removeValueSync_invocationCount, 1)
+            XCTAssertEqual(store2.removeValueSync_keys, ["TEST_key1"])
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -781,8 +859,8 @@ final class FeatureFlagResolverTests: XCTestCase {
             XCTAssertEqual(error as? TestFeatureFlagStoreError, .failedToRemoveValue)
             XCTAssertEqual(store1.removeValueSync_invocationCount, 1)
             XCTAssertEqual(store1.removeValueSync_keys, ["TEST_key1"])
-            XCTAssertEqual(store2.removeValueSync_invocationCount, 0)
-            XCTAssertTrue(store2.removeValueSync_keys.isEmpty)
+            XCTAssertEqual(store2.removeValueSync_invocationCount, 1)
+            XCTAssertEqual(store2.removeValueSync_keys, ["TEST_key1"])
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
