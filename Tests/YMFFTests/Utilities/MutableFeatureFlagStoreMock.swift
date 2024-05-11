@@ -40,14 +40,14 @@ extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
     func value<Value>(forKey key: String) async -> Result<Value, FeatureFlagStoreError> {
         value_invocationCount += 1
         value_keys.append(key)
-        return switch value_result! {
+        switch value_result! {
         case .success(let anyValue):
             if let value = anyValue as? Value {
-                .success(value)
+                return .success(value)
             } else {
-                .failure(.typeMismatch)
+                return .failure(.typeMismatch)
             }
-        case .failure(let error): .failure(error)
+        case .failure(let error): return .failure(error)
         }
     }
     

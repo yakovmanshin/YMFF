@@ -40,14 +40,14 @@ extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagS
     func valueSync<Value>(forKey key: String) -> Result<Value, FeatureFlagStoreError> {
         valueSync_invocationCount += 1
         valueSync_keys.append(key)
-        return switch valueSync_result! {
+        switch valueSync_result! {
         case .success(let anyValue):
             if let value = anyValue as? Value {
-                .success(value)
+                return .success(value)
             } else {
-                .failure(.typeMismatch)
+                return .failure(.typeMismatch)
             }
-        case .failure(let error): .failure(error)
+        case .failure(let error): return .failure(error)
         }
     }
     
