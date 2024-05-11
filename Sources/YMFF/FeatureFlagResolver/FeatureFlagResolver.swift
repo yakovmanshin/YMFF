@@ -164,11 +164,16 @@ extension FeatureFlagResolver {
         }
         
         for store in matchingStores {
-            if await store.containsValue(forKey: key) {
-                do {
-                    let value: Value = try await store.value(forKey: key)
-                    return value
-                } catch {
+            switch await store.value(forKey: key) as Result<Value, _> {
+            case .success(let value):
+                return value
+            case .failure(let error):
+                switch error {
+                case .valueNotFound:
+                    continue
+                case .typeMismatch:
+                    throw Error.storeError(error)
+                case .otherError(let error):
                     throw Error.storeError(error)
                 }
             }
@@ -184,11 +189,16 @@ extension FeatureFlagResolver {
         }
         
         for store in matchingStores {
-            if store.containsValueSync(forKey: key) {
-                do {
-                    let value: Value = try store.valueSync(forKey: key)
-                    return value
-                } catch {
+            switch store.valueSync(forKey: key) as Result<Value, _> {
+            case .success(let value):
+                return value
+            case .failure(let error):
+                switch error {
+                case .valueNotFound:
+                    continue
+                case .typeMismatch:
+                    throw Error.storeError(error)
+                case .otherError(let error):
                     throw Error.storeError(error)
                 }
             }
