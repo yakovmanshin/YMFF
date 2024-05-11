@@ -276,6 +276,38 @@ final class FeatureFlagResolverTests: XCTestCase {
         }
     }
     
+    func test_value_otherStoreError() async {
+        let store = FeatureFlagStoreMock()
+        configuration.stores = [store]
+        let storeError = NSError(domain: "TEST_Error_Domain", code: 123)
+        store.value_result = .failure(.otherError(storeError))
+        
+        do {
+            let _: String = try await resolver.value(for: "TEST_key1")
+            XCTFail("Expected an error")
+        } catch FeatureFlagResolver.Error.storeError(let error) {
+            XCTAssertIdentical(error as NSError, storeError)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_valueSync_otherStoreError() {
+        let store = SynchronousFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let storeError = NSError(domain: "TEST_Error_Domain", code: 123)
+        store.valueSync_result = .failure(.otherError(storeError))
+        
+        do {
+            let _: String = try resolver.valueSync(for: "TEST_key1")
+            XCTFail("Expected an error")
+        } catch FeatureFlagResolver.Error.storeError(let error) {
+            XCTAssertIdentical(error as NSError, storeError)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
     func test_setValue_noStores() async {
         do {
             try await resolver.setValue(123, toMutableStoreUsing: "TEST_key1")
