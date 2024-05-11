@@ -27,14 +27,10 @@ final public class RuntimeOverridesStore {
 
 extension RuntimeOverridesStore: SynchronousMutableFeatureFlagStore {
     
-    public func containsValueSync(forKey key: String) -> Bool {
-        store[key] != nil
-    }
-    
-    public func valueSync<Value>(forKey key: String) throws -> Value {
-        guard let anyValue = store[key] else { throw CommonFeatureFlagStoreError.valueNotFound(key: key) }
-        guard let value = anyValue as? Value else { throw CommonFeatureFlagStoreError.typeMismatch }
-        return value
+    public func valueSync<Value>(forKey key: String) -> Result<Value, FeatureFlagStoreError> {
+        guard let anyValue = store[key] else { return .failure(.valueNotFound) }
+        guard let value = anyValue as? Value else { return .failure(.typeMismatch) }
+        return .success(value)
     }
     
     public func setValueSync<Value>(_ value: Value, forKey key: String) {

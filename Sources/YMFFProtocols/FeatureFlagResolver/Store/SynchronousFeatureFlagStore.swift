@@ -8,15 +8,10 @@
 
 public protocol SynchronousFeatureFlagStore: FeatureFlagStore {
     
-    /// Indicates whether the store contains a value that corresponds to the key.
-    ///
-    /// - Parameter key: *Required.* The key.
-    func containsValueSync(forKey key: String) -> Bool
-    
     /// Retrieves a feature flag value by its key.
     ///
     /// - Parameter key: *Required.* The key that points to a feature flag value in the store.
-    func valueSync<Value>(forKey key: String) throws -> Value
+    func valueSync<Value>(forKey key: String) -> Result<Value, FeatureFlagStoreError>
     
 }
 
@@ -24,12 +19,8 @@ public protocol SynchronousFeatureFlagStore: FeatureFlagStore {
 
 extension SynchronousFeatureFlagStore {
     
-    public func containsValue(forKey key: String) async -> Bool {
-        containsValueSync(forKey: key)
-    }
-    
-    public func value<Value>(forKey key: String) async throws -> Value {
-        try valueSync(forKey: key)
+    public func value<Value>(forKey key: String) async -> Result<Value, FeatureFlagStoreError> {
+        valueSync(forKey: key)
     }
     
 }
