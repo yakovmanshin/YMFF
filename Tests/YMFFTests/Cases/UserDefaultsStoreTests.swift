@@ -11,7 +11,9 @@
 @testable import YMFF
 
 import XCTest
+#if !COCOAPODS
 import YMFFProtocols
+#endif
 
 final class UserDefaultsStoreTests: XCTestCase {
     
