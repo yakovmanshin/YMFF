@@ -9,9 +9,6 @@
 /// A service that resolves feature flag values with their keys.
 public protocol FeatureFlagResolverProtocol {
     
-    /// The object used to configure the resolver.
-    var configuration: FeatureFlagResolverConfiguration { get }
-    
     /// Returns a value for the specified key.
     ///
     /// - Parameter key: *Required.* The feature flag key.
