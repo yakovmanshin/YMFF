@@ -264,35 +264,3 @@ extension FeatureFlagResolver {
     }
     
 }
-
-// MARK: - Overriding
-
-extension FeatureFlagResolver {
-    
-    private func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) async throws {
-        try validateValue(value)
-        
-        do {
-            let _: Value = try await retrieveFirstValue(forKey: key)
-        } catch Error.valueNotFoundInStores {
-            // If none of the persistent stores contains a value for the key, then the client is attempting
-            // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
-        } catch {
-            throw error
-        }
-    }
-    
-    func validateOverrideValueSync<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
-        try validateValue(value)
-        
-        do {
-            let _: Value = try retrieveFirstValueSync(forKey: key)
-        } catch Error.valueNotFoundInStores {
-            // If none of the persistent stores contains a value for the key, then the client is attempting
-            // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
-        } catch {
-            throw error
-        }
-    }
-    
-}
