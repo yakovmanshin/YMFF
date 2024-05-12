@@ -21,18 +21,4 @@ public protocol MutableFeatureFlagStore: AnyObject, FeatureFlagStore {
     /// - Parameter key: *Required.* The key used to address the value.
     func removeValue(for key: FeatureFlagKey) async throws
     
-    /// Immediately saves changed values so they’re not lost.
-    ///
-    /// + This method can be called when work with the feature flag store is finished.
-    func saveChanges() async throws
-    
-}
-
-// MARK: - Default Implementation
-
-extension MutableFeatureFlagStore {
-    
-    // Not all kinds of feature flag stores need this method, so it’s optional to implement.
-    public func saveChanges() async throws { }
-    
 }
