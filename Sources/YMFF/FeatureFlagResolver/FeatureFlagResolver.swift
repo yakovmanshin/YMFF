@@ -66,12 +66,28 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        try await validateOverrideValue(newValue, forKey: key)
+        try validateValue(newValue)
         
-        do {
-            try await mutableStores[0].setValue(newValue, forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        for store in getStores() {
+            if
+                case .failure(let error) = await store.value(forKey: key) as Result<Value, _>,
+                case .typeMismatch = error
+            {
+                throw Error.storeError(error)
+            }
+        }
+        
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in mutableStores {
+            do {
+                try await store.setValue(newValue, forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
@@ -107,12 +123,28 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        try validateOverrideValueSync(newValue, forKey: key)
+        try validateValue(newValue)
         
-        do {
-            try syncMutableStores[0].setValueSync(newValue, forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        for store in getSyncStores() {
+            if
+                case .failure(let error) = store.valueSync(forKey: key) as Result<Value, _>,
+                case .typeMismatch = error
+            {
+                throw Error.storeError(error)
+            }
+        }
+        
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in syncMutableStores {
+            do {
+                try store.setValueSync(newValue, forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
