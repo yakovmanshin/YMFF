@@ -54,10 +54,7 @@ final public class FeatureFlagResolver {
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func value<Value>(for key: FeatureFlagKey) async throws -> Value {
-        let retrievedValue: Value = try await retrieveFirstValue(forKey: key)
-        try validateValue(retrievedValue)
-        
-        return retrievedValue
+        try await retrieveFirstValue(forKey: key)
     }
     
     public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) async throws {
@@ -65,8 +62,6 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         guard !mutableStores.isEmpty else {
             throw Error.noStoreAvailable
         }
-        
-        try validateValue(newValue)
         
         for store in getStores() {
             if
@@ -118,10 +113,7 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
     
     public func valueSync<Value>(for key: FeatureFlagKey) throws -> Value {
-        let retrievedValue: Value = try retrieveFirstValueSync(forKey: key)
-        try validateValue(retrievedValue)
-        
-        return retrievedValue
+        try retrieveFirstValueSync(forKey: key)
     }
     
     public func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
@@ -129,8 +121,6 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
         guard !syncMutableStores.isEmpty else {
             throw Error.noStoreAvailable
         }
-        
-        try validateValue(newValue)
         
         for store in getSyncStores() {
             if
@@ -251,16 +241,6 @@ extension FeatureFlagResolver {
         }
         
         throw Error.valueNotFoundInStores(key: key)
-    }
-    
-    func validateValue<Value>(_ value: Value) throws {
-        if valueIsOptional(value) {
-            throw Error.optionalValuesNotAllowed
-        }
-    }
-    
-    func valueIsOptional<Value>(_ value: Value) -> Bool {
-        value is ExpressibleByNilLiteral
     }
     
 }
