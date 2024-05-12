@@ -23,11 +23,6 @@ extension FeatureFlagResolver {
         /// The feature-flag store has thrown an error.
         case storeError(any Swift.Error)
         
-        /// Currently, optional values are not supported by the `FeatureFlagResolver`.
-        ///
-        /// - Note: Support for optional values will be added in [#130](https://github.com/yakovmanshin/YMFF/issues/130).
-        case optionalValuesNotAllowed
-        
     }
     
 }
