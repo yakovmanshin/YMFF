@@ -244,33 +244,73 @@ final class FeatureFlagResolverTests: XCTestCase {
         }
     }
     
-    func test_value_optionalValue() async {
+    func test_value_optionalValue_nonNil() async {
         let store = FeatureFlagStoreMock()
         configuration.stores = [store]
-        store.value_result = .success((123 as Int?)!)
+        let optionalInt: Int? = 123
+        store.value_result = .success(optionalInt as Any)
         
         do {
-            let _: Int? = try await resolver.value(for: "TEST_key1")
-            XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
+            let value: Int? = try await resolver.value(for: "TEST_key1")
+            
             XCTAssertEqual(store.value_invocationCount, 1)
             XCTAssertEqual(store.value_keys, ["TEST_key1"])
+            XCTAssert(type(of: value) == Optional<Int>.self)
+            XCTAssertEqual(value, 123)
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
     
-    func test_valueSync_optionalValue() {
+    func test_valueSync_optionalValue_nonNil() {
         let store = SynchronousFeatureFlagStoreMock()
         configuration.stores = [store]
-        store.valueSync_result = .success((123 as Int?)!)
+        let optionalInt: Int? = 123
+        store.valueSync_result = .success(optionalInt as Any)
         
         do {
-            let _: Int? = try resolver.valueSync(for: "TEST_key1")
-            XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
+            let value: Int? = try resolver.valueSync(for: "TEST_key1")
+            
             XCTAssertEqual(store.valueSync_invocationCount, 1)
             XCTAssertEqual(store.valueSync_keys, ["TEST_key1"])
+            XCTAssert(type(of: value) == Optional<Int>.self)
+            XCTAssertEqual(value, 123)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_value_optionalValue_nil() async {
+        let store = FeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalString: String? = nil
+        store.value_result = .success(optionalString as Any)
+        
+        do {
+            let value: String? = try await resolver.value(for: "TEST_key1")
+            
+            XCTAssertEqual(store.value_invocationCount, 1)
+            XCTAssertEqual(store.value_keys, ["TEST_key1"])
+            XCTAssert(type(of: value) == Optional<String>.self)
+            XCTAssertNil(value)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_valueSync_optionalValue_nil() {
+        let store = SynchronousFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalString: String? = nil
+        store.valueSync_result = .success(optionalString as Any)
+        
+        do {
+            let value: String? = try resolver.valueSync(for: "TEST_key1")
+            
+            XCTAssertEqual(store.valueSync_invocationCount, 1)
+            XCTAssertEqual(store.valueSync_keys, ["TEST_key1"])
+            XCTAssert(type(of: value) == Optional<String>.self)
+            XCTAssertNil(value)
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -438,37 +478,169 @@ final class FeatureFlagResolverTests: XCTestCase {
         }
     }
     
-    func test_setValue_singleMutableStore_existingValue_optionalValue() async {
+    func test_setValue_singleMutableStore_existingValue_nonNilToNonNil() async {
         let store = MutableFeatureFlagStoreMock()
         configuration.stores = [store]
-        store.value_result = .success("TEST_value1")
+        let optionalInt: Int? = 123
+        store.value_result = .success(optionalInt as Any)
         
         do {
-            try await resolver.setValue(456 as Int?, toMutableStoreUsing: "TEST_key1")
-            XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
-            XCTAssertEqual(store.value_invocationCount, 0)
-            XCTAssertTrue(store.value_keys.isEmpty)
-            XCTAssertEqual(store.setValue_invocationCount, 0)
-            XCTAssertTrue(store.setValue_keyValuePairs.isEmpty)
+            let newValue: Int? = 456
+            try await resolver.setValue(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.value_invocationCount, 1)
+            XCTAssertEqual(store.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValue_invocationCount, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValue_keyValuePairs[0].1 as! Int?, 456)
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
     
-    func test_setValueSync_singleSyncMutableStore_existingValue_optionalValue() {
+    func test_setValueSync_singleSyncMutableStore_existingValue_nonNilToNonNil() {
         let store = SynchronousMutableFeatureFlagStoreMock()
         configuration.stores = [store]
-        store.valueSync_result = .success("TEST_value1")
+        let optionalInt: Int? = 123
+        store.valueSync_result = .success(optionalInt as Any)
         
         do {
-            try resolver.setValueSync(456 as Int?, toMutableStoreUsing: "TEST_key1")
-            XCTFail("Expected an error")
-        } catch FeatureFlagResolver.Error.optionalValuesNotAllowed {
-            XCTAssertEqual(store.valueSync_invocationCount, 0)
-            XCTAssertTrue(store.valueSync_keys.isEmpty)
-            XCTAssertEqual(store.setValueSync_invocationCount, 0)
-            XCTAssertTrue(store.setValueSync_keyValuePairs.isEmpty)
+            let newValue: Int? = 456
+            try resolver.setValueSync(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.valueSync_invocationCount, 1)
+            XCTAssertEqual(store.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].1 as! Int?, 456)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValue_singleMutableStore_existingValue_nilToNonNil() async {
+        let store = MutableFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalInt: Int? = 123
+        store.value_result = .success(optionalInt as Any)
+        
+        do {
+            let newValue: Int? = nil
+            try await resolver.setValue(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.value_invocationCount, 1)
+            XCTAssertEqual(store.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValue_invocationCount, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValue_keyValuePairs[0].1 as! Int?, nil)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValueSync_singleSyncMutableStore_existingValue_nilToNonNil() {
+        let store = SynchronousMutableFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalInt: Int? = 123
+        store.valueSync_result = .success(optionalInt as Any)
+        
+        do {
+            let newValue: Int? = nil
+            try resolver.setValueSync(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.valueSync_invocationCount, 1)
+            XCTAssertEqual(store.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].1 as! Int?, nil)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValue_singleMutableStore_existingValue_nonNilToNil() async {
+        let store = MutableFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalInt: Int? = nil
+        store.value_result = .success(optionalInt as Any)
+        
+        do {
+            let newValue: Int? = 456
+            try await resolver.setValue(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.value_invocationCount, 1)
+            XCTAssertEqual(store.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValue_invocationCount, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValue_keyValuePairs[0].1 as! Int?, 456)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValueSync_singleSyncMutableStore_existingValue_nonNilToNil() {
+        let store = SynchronousMutableFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalInt: Int? = nil
+        store.valueSync_result = .success(optionalInt as Any)
+        
+        do {
+            let newValue: Int? = 456
+            try resolver.setValueSync(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.valueSync_invocationCount, 1)
+            XCTAssertEqual(store.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].1 as! Int?, 456)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValue_singleMutableStore_existingValue_nilToNil() async {
+        let store = MutableFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalInt: Int? = nil
+        store.value_result = .success(optionalInt as Any)
+        
+        do {
+            let newValue: Int? = nil
+            try await resolver.setValue(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.value_invocationCount, 1)
+            XCTAssertEqual(store.value_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValue_invocationCount, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValue_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValue_keyValuePairs[0].1 as! Int?, nil)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+    
+    func test_setValueSync_singleSyncMutableStore_existingValue_nilToNil() {
+        let store = SynchronousMutableFeatureFlagStoreMock()
+        configuration.stores = [store]
+        let optionalInt: Int? = nil
+        store.valueSync_result = .success(optionalInt as Any)
+        
+        do {
+            let newValue: Int? = nil
+            try resolver.setValueSync(newValue, toMutableStoreUsing: "TEST_key1")
+            
+            XCTAssertEqual(store.valueSync_invocationCount, 1)
+            XCTAssertEqual(store.valueSync_keys, ["TEST_key1"])
+            XCTAssertEqual(store.setValueSync_invocationCount, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs.count, 1)
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].0, "TEST_key1")
+            XCTAssertEqual(store.setValueSync_keyValuePairs[0].1 as! Int?, nil)
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
