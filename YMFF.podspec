@@ -5,8 +5,7 @@ Pod::Spec.new do |s|
   s.name              = "YMFF"
   s.version           = "3.1.0"
   s.swift_version     = "5.8"
-  s.authors            = { "Yakov Manshin" => "git@yakovmanshin.com" }
-  s.social_media_url  = "https://twitter.com/yakovmanshin"
+  s.authors           = { "Yakov Manshin" => "git@yakovmanshin.com" }
   s.license           = { :type => "Apache License, version 2.0", :file => "LICENSE" }
   s.homepage          = "https://github.com/yakovmanshin/YMFF"
   s.readme            = "https://github.com/yakovmanshin/YMFF/blob/main/README.md"
