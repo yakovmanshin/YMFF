@@ -28,9 +28,6 @@ final class SynchronousMutableFeatureFlagStoreMock {
     var removeValueSync_keys = [String]()
     var removeValueSync_result: Result<Void, TestFeatureFlagStoreError>!
     
-    var saveChangesSync_invocationCount = 0
-    var saveChangesSync_result: Result<Void, TestFeatureFlagStoreError>!
-    
 }
 
 // MARK: - SynchronousMutableFeatureFlagStore
@@ -63,13 +60,6 @@ extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagS
         removeValueSync_invocationCount += 1
         removeValueSync_keys.append(key)
         if case .failure(let error) = removeValueSync_result {
-            throw error
-        }
-    }
-    
-    func saveChangesSync() throws {
-        saveChangesSync_invocationCount += 1
-        if case .failure(let error) = saveChangesSync_result {
             throw error
         }
     }

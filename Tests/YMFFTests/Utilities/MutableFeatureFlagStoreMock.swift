@@ -28,9 +28,6 @@ final class MutableFeatureFlagStoreMock {
     var removeValue_keys = [String]()
     var removeValue_result: Result<Void, TestFeatureFlagStoreError>!
     
-    var saveChanges_invocationCount = 0
-    var saveChanges_result: Result<Void, TestFeatureFlagStoreError>!
-    
 }
 
 // MARK: - MutableFeatureFlagStore
@@ -63,13 +60,6 @@ extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
         removeValue_invocationCount += 1
         removeValue_keys.append(key)
         if case .failure(let error) = removeValue_result {
-            throw error
-        }
-    }
-    
-    func saveChanges() async throws {
-        saveChanges_invocationCount += 1
-        if case .failure(let error) = saveChanges_result {
             throw error
         }
     }
