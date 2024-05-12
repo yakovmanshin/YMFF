@@ -97,10 +97,17 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        do {
-            try await mutableStores[0].removeValue(forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in mutableStores {
+            do {
+                try await store.removeValue(forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
@@ -154,10 +161,17 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        do {
-            try syncMutableStores[0].removeValueSync(forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in syncMutableStores {
+            do {
+                try store.removeValueSync(forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
