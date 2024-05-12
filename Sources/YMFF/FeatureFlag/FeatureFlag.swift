@@ -73,7 +73,7 @@ final public class FeatureFlag<RawValue, Value> {
             
             return value
         } set {
-            try? resolver.setValueSync(transformer.rawValueFromValue(newValue), toMutableStoreUsing: key)
+            try? resolver.setValueSync(transformer.rawValueFromValue(newValue), for: key)
         }
     }
     
@@ -87,8 +87,8 @@ final public class FeatureFlag<RawValue, Value> {
     /// Removes the value from the first mutable feature flag store which contains one for `key`.
     ///
     /// + Errors thrown by `resolver` are ignored.
-    public func removeValueFromMutableStore() {
-        try? resolver.removeValueFromMutableStoreSync(using: key)
+    public func removeValueFromMutableStores() {
+        try? resolver.removeValueSync(for: key)
     }
     
 }

@@ -1,6 +1,6 @@
 //
 //  FeatureFlagTests.swift
-//  YMFF
+//  YMFFTests
 //
 //  Created by Yakov Manshin on 9/26/20.
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
@@ -133,7 +133,7 @@ final class FeatureFlagTests: XCTestCase {
         
         resolver.removeValueFromMutableStoreSync_result = .success(())
         
-        $stringFeatureFlag.removeValueFromMutableStore()
+        $stringFeatureFlag.removeValueFromMutableStores()
         
         XCTAssertEqual(resolver.removeValueFromMutableStoreSync_invocationCount, 1)
         XCTAssertEqual(resolver.removeValueFromMutableStoreSync_keys, ["TEST_string_key"])
@@ -145,7 +145,7 @@ final class FeatureFlagTests: XCTestCase {
         
         resolver.removeValueFromMutableStoreSync_result = .failure(SomeError())
         
-        $stringFeatureFlag.removeValueFromMutableStore()
+        $stringFeatureFlag.removeValueFromMutableStores()
         
         XCTAssertEqual(resolver.removeValueFromMutableStoreSync_invocationCount, 1)
         XCTAssertEqual(resolver.removeValueFromMutableStoreSync_keys, ["TEST_string_key"])

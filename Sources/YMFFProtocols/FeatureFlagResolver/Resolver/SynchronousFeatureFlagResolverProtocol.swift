@@ -18,12 +18,12 @@ public protocol SynchronousFeatureFlagResolverProtocol: FeatureFlagResolverProto
     /// - Parameters:
     ///   - newValue: *Required.* The override value.
     ///   - key: *Required.* The feature flag key.
-    func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws
+    func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) throws
     
     /// Removes the value from the first mutable feature flag store which has one for the specified key.
     ///
     /// - Parameter key: *Required.* The feature flag key.
-    func removeValueFromMutableStoreSync(using key: FeatureFlagKey) throws
+    func removeValueSync(for key: FeatureFlagKey) throws
     
 }
 
@@ -35,12 +35,12 @@ extension SynchronousFeatureFlagResolverProtocol {
         try valueSync(for: key)
     }
     
-    public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) async throws {
-        try setValueSync(newValue, toMutableStoreUsing: key)
+    public func setValue<Value>(_ newValue: Value, for key: FeatureFlagKey) async throws {
+        try setValueSync(newValue, for: key)
     }
     
-    public func removeValueFromMutableStore(using key: FeatureFlagKey) async throws {
-        try removeValueFromMutableStoreSync(using: key)
+    public func removeValue(for key: FeatureFlagKey) async throws {
+        try removeValueSync(for: key)
     }
     
 }

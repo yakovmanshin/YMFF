@@ -13,12 +13,12 @@ public protocol SynchronousMutableFeatureFlagStore: SynchronousFeatureFlagStore,
     /// - Parameters:
     ///   - value: *Required.* The value to record.
     ///   - key: *Required.* The key used to address the value.
-    func setValueSync<Value>(_ value: Value, forKey key: String) throws
+    func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) throws
     
     /// Removes the value from the store.
     ///
     /// - Parameter key: *Required.* The key used to address the value.
-    func removeValueSync(forKey key: String) throws
+    func removeValueSync(for key: FeatureFlagKey) throws
     
     /// Immediately saves changed values so they’re not lost.
     ///
@@ -31,12 +31,12 @@ public protocol SynchronousMutableFeatureFlagStore: SynchronousFeatureFlagStore,
 
 extension SynchronousMutableFeatureFlagStore {
     
-    public func setValue<Value>(_ value: Value, forKey key: String) async throws {
-        try setValueSync(value, forKey: key)
+    public func setValue<Value>(_ value: Value, for key: FeatureFlagKey) async throws {
+        try setValueSync(value, for: key)
     }
     
-    public func removeValue(forKey key: String) async throws {
-        try removeValueSync(forKey: key)
+    public func removeValue(for key: FeatureFlagKey) async throws {
+        try removeValueSync(for: key)
     }
     
     public func saveChanges() async throws {

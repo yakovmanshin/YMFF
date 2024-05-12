@@ -26,7 +26,7 @@ final class FeatureFlagStoreMock {
 
 extension FeatureFlagStoreMock: FeatureFlagStore {
     
-    func value<Value>(forKey key: String) async -> Result<Value, FeatureFlagStoreError> {
+    func value<Value>(for key: FeatureFlagKey) async -> Result<Value, FeatureFlagStoreError> {
         value_invocationCount += 1
         value_keys.append(key)
         switch value_result! {
