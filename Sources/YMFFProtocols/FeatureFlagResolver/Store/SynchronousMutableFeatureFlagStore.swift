@@ -20,11 +20,6 @@ public protocol SynchronousMutableFeatureFlagStore: SynchronousFeatureFlagStore,
     /// - Parameter key: *Required.* The key used to address the value.
     func removeValueSync(for key: FeatureFlagKey) throws
     
-    /// Immediately saves changed values so they’re not lost.
-    ///
-    /// + This method can be called when work with the feature flag store is finished.
-    func saveChangesSync() throws
-    
 }
 
 // MARK: - Async Requirements
@@ -38,17 +33,5 @@ extension SynchronousMutableFeatureFlagStore {
     public func removeValue(for key: FeatureFlagKey) async throws {
         try removeValueSync(for: key)
     }
-    
-    public func saveChanges() async throws {
-        try saveChangesSync()
-    }
-    
-}
-
-// MARK: - Default Implementation
-
-extension SynchronousMutableFeatureFlagStore {
-    
-    public func saveChangesSync() throws { }
     
 }

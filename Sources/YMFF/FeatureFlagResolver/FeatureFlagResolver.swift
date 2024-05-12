@@ -38,15 +38,6 @@ final public class FeatureFlagResolver {
         self.init(configuration: configuration)
     }
     
-    deinit {
-        let mutableStores = getMutableStores()
-        Task { [mutableStores] in
-            for store in mutableStores {
-                try? await store.saveChanges()
-            }
-        }
-    }
-    
 }
 
 // MARK: - FeatureFlagResolverProtocol

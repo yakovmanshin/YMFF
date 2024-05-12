@@ -1038,18 +1038,4 @@ final class FeatureFlagResolverTests: XCTestCase {
         }
     }
     
-    func test_deinit() async throws {
-        let store1 = MutableFeatureFlagStoreMock()
-        let store2 = SynchronousMutableFeatureFlagStoreMock()
-        configuration.stores = [store1, store2]
-        
-        configuration = nil
-        resolver = nil
-        
-        try await Task.sleep(nanoseconds: 1_000_000)
-        
-        XCTAssertEqual(store1.saveChanges_invocationCount, 1)
-        XCTAssertEqual(store2.saveChangesSync_invocationCount, 1)
-    }
-    
 }

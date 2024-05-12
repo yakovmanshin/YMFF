@@ -28,6 +28,10 @@ final public class UserDefaultsStore {
         self.userDefaults = userDefaults
     }
     
+    deinit {
+        userDefaults.synchronize()
+    }
+    
 }
 
 // MARK: - SynchronousMutableFeatureFlagStore
@@ -46,10 +50,6 @@ extension UserDefaultsStore: SynchronousMutableFeatureFlagStore {
     
     public func removeValueSync(for key: FeatureFlagKey) {
         userDefaults.removeObject(forKey: key)
-    }
-    
-    public func saveChangesSync() {
-        userDefaults.synchronize()
     }
     
 }
