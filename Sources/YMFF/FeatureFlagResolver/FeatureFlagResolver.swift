@@ -54,9 +54,7 @@ final public class FeatureFlagResolver {
 extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func value<Value>(for key: FeatureFlagKey) async throws -> Value {
-        let retrievedValue: Value = try await retrieveFirstValue(forKey: key)
-        
-        return retrievedValue
+        try await retrieveFirstValue(forKey: key)
     }
     
     public func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) async throws {
@@ -115,9 +113,7 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
 extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
     
     public func valueSync<Value>(for key: FeatureFlagKey) throws -> Value {
-        let retrievedValue: Value = try retrieveFirstValueSync(forKey: key)
-        
-        return retrievedValue
+        try retrieveFirstValueSync(forKey: key)
     }
     
     public func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
