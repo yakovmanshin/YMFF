@@ -6,6 +6,10 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
+#if !COCOAPODS
+import YMFFProtocols
+#endif
+
 extension FeatureFlagResolver {
     
     /// Errors returned by `FeatureFlagResolver`.
@@ -18,7 +22,7 @@ extension FeatureFlagResolver {
         case noStoreAvailable
         
         /// No feature-flag store contains a value for the given key.
-        case valueNotFoundInStores(key: String)
+        case valueNotFoundInStores(key: FeatureFlagKey)
         
         /// The feature-flag store has thrown an error.
         case storeError(any Swift.Error)
