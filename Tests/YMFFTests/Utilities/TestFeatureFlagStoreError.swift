@@ -7,6 +7,6 @@
 //
 
 enum TestFeatureFlagStoreError: Error, Equatable {
-    case failedToSetValue
-    case failedToRemoveValue
+    case someError1
+    case someError2
 }

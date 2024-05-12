@@ -66,12 +66,28 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        try await validateOverrideValue(newValue, forKey: key)
+        try validateValue(newValue)
         
-        do {
-            try await mutableStores[0].setValue(newValue, forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        for store in getStores() {
+            if
+                case .failure(let error) = await store.value(forKey: key) as Result<Value, _>,
+                case .typeMismatch = error
+            {
+                throw Error.storeError(error)
+            }
+        }
+        
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in mutableStores {
+            do {
+                try await store.setValue(newValue, forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
@@ -81,10 +97,17 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        do {
-            try await mutableStores[0].removeValue(forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in mutableStores {
+            do {
+                try await store.removeValue(forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
@@ -107,12 +130,28 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        try validateOverrideValueSync(newValue, forKey: key)
+        try validateValue(newValue)
         
-        do {
-            try syncMutableStores[0].setValueSync(newValue, forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        for store in getSyncStores() {
+            if
+                case .failure(let error) = store.valueSync(forKey: key) as Result<Value, _>,
+                case .typeMismatch = error
+            {
+                throw Error.storeError(error)
+            }
+        }
+        
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in syncMutableStores {
+            do {
+                try store.setValueSync(newValue, forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
@@ -122,10 +161,17 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
             throw Error.noStoreAvailable
         }
         
-        do {
-            try syncMutableStores[0].removeValueSync(forKey: key)
-        } catch {
-            throw Error.storeError(error)
+        var lastErrorFromStore: (any Swift.Error)?
+        for store in syncMutableStores {
+            do {
+                try store.removeValueSync(forKey: key)
+            } catch {
+                lastErrorFromStore = error
+            }
+        }
+        
+        if let lastErrorFromStore {
+            throw Error.storeError(lastErrorFromStore)
         }
     }
     
@@ -215,38 +261,6 @@ extension FeatureFlagResolver {
     
     func valueIsOptional<Value>(_ value: Value) -> Bool {
         value is ExpressibleByNilLiteral
-    }
-    
-}
-
-// MARK: - Overriding
-
-extension FeatureFlagResolver {
-    
-    private func validateOverrideValue<Value>(_ value: Value, forKey key: FeatureFlagKey) async throws {
-        try validateValue(value)
-        
-        do {
-            let _: Value = try await retrieveFirstValue(forKey: key)
-        } catch Error.valueNotFoundInStores {
-            // If none of the persistent stores contains a value for the key, then the client is attempting
-            // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
-        } catch {
-            throw error
-        }
-    }
-    
-    func validateOverrideValueSync<Value>(_ value: Value, forKey key: FeatureFlagKey) throws {
-        try validateValue(value)
-        
-        do {
-            let _: Value = try retrieveFirstValueSync(forKey: key)
-        } catch Error.valueNotFoundInStores {
-            // If none of the persistent stores contains a value for the key, then the client is attempting
-            // to set a new value (instead of overriding an existing one). That’s an acceptable use case.
-        } catch {
-            throw error
-        }
     }
     
 }
