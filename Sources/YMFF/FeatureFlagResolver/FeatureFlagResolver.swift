@@ -34,7 +34,7 @@ final public class FeatureFlagResolver {
     ///
     /// - Parameter stores: *Required.* The array of feature flag stores.
     public convenience init(stores: [any FeatureFlagStore]) {
-        let configuration: any FeatureFlagResolverConfiguration = Configuration(stores: stores)
+        let configuration = Configuration(stores: stores)
         self.init(configuration: configuration)
     }
     
