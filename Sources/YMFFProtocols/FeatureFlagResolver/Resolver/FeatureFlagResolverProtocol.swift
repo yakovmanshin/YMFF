@@ -19,11 +19,11 @@ public protocol FeatureFlagResolverProtocol {
     /// - Parameters:
     ///   - newValue: *Required.* The override value.
     ///   - key: *Required.* The feature flag key.
-    func setValue<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) async throws
+    func setValue<Value>(_ value: Value, for key: FeatureFlagKey) async throws
     
     /// Removes the value from the first mutable feature flag store which has one for the specified key.
     ///
     /// - Parameter key: *Required.* The feature flag key.
-    func removeValueFromMutableStore(using key: FeatureFlagKey) async throws
+    func removeValue(for key: FeatureFlagKey) async throws
     
 }

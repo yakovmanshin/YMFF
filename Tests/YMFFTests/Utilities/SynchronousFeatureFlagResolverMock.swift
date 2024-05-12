@@ -45,15 +45,15 @@ extension SynchronousFeatureFlagResolverMock: SynchronousFeatureFlagResolverProt
         }
     }
     
-    func setValueSync<Value>(_ newValue: Value, toMutableStoreUsing key: FeatureFlagKey) throws {
+    func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) throws {
         setValueSync_invocationCount += 1
-        setValueSync_keyValuePairs.append((key, newValue))
+        setValueSync_keyValuePairs.append((key, value))
         if case .failure(let error) = setValueSync_result {
             throw error
         }
     }
     
-    func removeValueFromMutableStoreSync(using key: FeatureFlagKey) throws {
+    func removeValueSync(for key: FeatureFlagKey) throws {
         removeValueFromMutableStoreSync_invocationCount += 1
         removeValueFromMutableStoreSync_keys.append(key)
         if case .failure(let error) = removeValueFromMutableStoreSync_result {
