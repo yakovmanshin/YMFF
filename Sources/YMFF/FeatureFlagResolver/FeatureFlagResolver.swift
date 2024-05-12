@@ -55,7 +55,6 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
     
     public func value<Value>(for key: FeatureFlagKey) async throws -> Value {
         let retrievedValue: Value = try await retrieveFirstValue(forKey: key)
-        try validateValue(retrievedValue)
         
         return retrievedValue
     }
@@ -65,8 +64,6 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         guard !mutableStores.isEmpty else {
             throw Error.noStoreAvailable
         }
-        
-        try validateValue(newValue)
         
         for store in getStores() {
             if
@@ -119,7 +116,6 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
     
     public func valueSync<Value>(for key: FeatureFlagKey) throws -> Value {
         let retrievedValue: Value = try retrieveFirstValueSync(forKey: key)
-        try validateValue(retrievedValue)
         
         return retrievedValue
     }
@@ -129,8 +125,6 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
         guard !syncMutableStores.isEmpty else {
             throw Error.noStoreAvailable
         }
-        
-        try validateValue(newValue)
         
         for store in getSyncStores() {
             if
@@ -251,16 +245,6 @@ extension FeatureFlagResolver {
         }
         
         throw Error.valueNotFoundInStores(key: key)
-    }
-    
-    func validateValue<Value>(_ value: Value) throws {
-        if valueIsOptional(value) {
-            throw Error.optionalValuesNotAllowed
-        }
-    }
-    
-    func valueIsOptional<Value>(_ value: Value) -> Bool {
-        value is ExpressibleByNilLiteral
     }
     
 }
