@@ -37,7 +37,7 @@ final class MutableFeatureFlagStoreMock {
 
 extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
     
-    func value<Value>(forKey key: String) async -> Result<Value, FeatureFlagStoreError> {
+    func value<Value>(for key: FeatureFlagKey) async -> Result<Value, FeatureFlagStoreError> {
         value_invocationCount += 1
         value_keys.append(key)
         switch value_result! {
@@ -51,7 +51,7 @@ extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
         }
     }
     
-    func setValue<Value>(_ value: Value, forKey key: String) async throws {
+    func setValue<Value>(_ value: Value, for key: FeatureFlagKey) async throws {
         setValue_invocationCount += 1
         setValue_keyValuePairs.append((key, value))
         if case .failure(let error) = setValue_result {
@@ -59,7 +59,7 @@ extension MutableFeatureFlagStoreMock: MutableFeatureFlagStore {
         }
     }
     
-    func removeValue(forKey key: String) async throws {
+    func removeValue(for key: FeatureFlagKey) async throws {
         removeValue_invocationCount += 1
         removeValue_keys.append(key)
         if case .failure(let error) = removeValue_result {

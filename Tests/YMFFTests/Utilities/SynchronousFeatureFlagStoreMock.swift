@@ -26,7 +26,7 @@ final class SynchronousFeatureFlagStoreMock {
 
 extension SynchronousFeatureFlagStoreMock: SynchronousFeatureFlagStore {
     
-    func valueSync<Value>(forKey key: String) -> Result<Value, FeatureFlagStoreError> {
+    func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError> {
         valueSync_invocationCount += 1
         valueSync_keys.append(key)
         switch valueSync_result! {

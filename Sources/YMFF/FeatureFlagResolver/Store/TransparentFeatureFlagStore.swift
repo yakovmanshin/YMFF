@@ -19,7 +19,7 @@ public typealias TransparentFeatureFlagStore = [String: Any]
 
 extension TransparentFeatureFlagStore: SynchronousFeatureFlagStore, FeatureFlagStore {
     
-    public func valueSync<V>(forKey key: String) -> Result<V, FeatureFlagStoreError> {
+    public func valueSync<V>(for key: FeatureFlagKey) -> Result<V, FeatureFlagStoreError> {
         guard let anyValue = self[key] else { return .failure(.valueNotFound) }
         guard let value = anyValue as? V else { return .failure(.typeMismatch) }
         return .success(value)

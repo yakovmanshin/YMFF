@@ -34,17 +34,17 @@ final public class UserDefaultsStore {
 
 extension UserDefaultsStore: SynchronousMutableFeatureFlagStore {
     
-    public func valueSync<Value>(forKey key: String) -> Result<Value, FeatureFlagStoreError> {
+    public func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError> {
         guard let anyValue = userDefaults.object(forKey: key) else { return .failure(.valueNotFound) }
         guard let value = anyValue as? Value else { return .failure(.typeMismatch) }
         return .success(value)
     }
     
-    public func setValueSync<Value>(_ value: Value, forKey key: String) {
+    public func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) {
         userDefaults.set(value, forKey: key)
     }
     
-    public func removeValueSync(forKey key: String) {
+    public func removeValueSync(for key: FeatureFlagKey) {
         userDefaults.removeObject(forKey: key)
     }
     

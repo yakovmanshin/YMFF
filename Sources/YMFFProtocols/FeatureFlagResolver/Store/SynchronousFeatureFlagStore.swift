@@ -11,7 +11,7 @@ public protocol SynchronousFeatureFlagStore: FeatureFlagStore {
     /// Retrieves a feature flag value by its key.
     ///
     /// - Parameter key: *Required.* The key that points to a feature flag value in the store.
-    func valueSync<Value>(forKey key: String) -> Result<Value, FeatureFlagStoreError>
+    func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError>
     
 }
 
@@ -19,8 +19,8 @@ public protocol SynchronousFeatureFlagStore: FeatureFlagStore {
 
 extension SynchronousFeatureFlagStore {
     
-    public func value<Value>(forKey key: String) async -> Result<Value, FeatureFlagStoreError> {
-        valueSync(forKey: key)
+    public func value<Value>(for key: FeatureFlagKey) async -> Result<Value, FeatureFlagStoreError> {
+        valueSync(for: key)
     }
     
 }

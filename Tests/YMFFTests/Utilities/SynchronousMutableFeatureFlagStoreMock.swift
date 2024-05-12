@@ -37,7 +37,7 @@ final class SynchronousMutableFeatureFlagStoreMock {
 
 extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagStore {
     
-    func valueSync<Value>(forKey key: String) -> Result<Value, FeatureFlagStoreError> {
+    func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError> {
         valueSync_invocationCount += 1
         valueSync_keys.append(key)
         switch valueSync_result! {
@@ -51,7 +51,7 @@ extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagS
         }
     }
     
-    func setValueSync<Value>(_ value: Value, forKey key: String) throws {
+    func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) throws {
         setValueSync_invocationCount += 1
         setValueSync_keyValuePairs.append((key, value))
         if case .failure(let error) = setValueSync_result {
@@ -59,7 +59,7 @@ extension SynchronousMutableFeatureFlagStoreMock: SynchronousMutableFeatureFlagS
         }
     }
     
-    func removeValueSync(forKey key: String) throws {
+    func removeValueSync(for key: FeatureFlagKey) throws {
         removeValueSync_invocationCount += 1
         removeValueSync_keys.append(key)
         if case .failure(let error) = removeValueSync_result {

@@ -27,18 +27,18 @@ final class TransparentFeatureFlagStoreTests: XCTestCase {
         store["TEST_key1"] = "TEST_value1"
         store["TEST_key2"] = "TEST_value2"
         
-        let value1: String = try await store.value(forKey: "TEST_key1").get()
+        let value1: String = try await store.value(for: "TEST_key1").get()
         XCTAssertEqual(value1, "TEST_value1")
         
         do {
-            let _: Int = try await store.value(forKey: "TEST_key2").get()
+            let _: Int = try await store.value(for: "TEST_key2").get()
             XCTFail("Expected an error")
         } catch FeatureFlagStoreError.typeMismatch { } catch {
             XCTFail("Unexpected error: \(error.localizedDescription)")
         }
         
         do {
-            let _: Bool = try await store.value(forKey: "TEST_key3").get()
+            let _: Bool = try await store.value(for: "TEST_key3").get()
             XCTFail("Expected an error")
         } catch FeatureFlagStoreError.valueNotFound { } catch {
             XCTFail("Unexpected error: \(error.localizedDescription)")
@@ -49,18 +49,18 @@ final class TransparentFeatureFlagStoreTests: XCTestCase {
         store["TEST_key1"] = "TEST_value1"
         store["TEST_key2"] = "TEST_value2"
         
-        let value1: String = try store.valueSync(forKey: "TEST_key1").get()
+        let value1: String = try store.valueSync(for: "TEST_key1").get()
         XCTAssertEqual(value1, "TEST_value1")
         
         do {
-            let _: Int = try store.valueSync(forKey: "TEST_key2").get()
+            let _: Int = try store.valueSync(for: "TEST_key2").get()
             XCTFail("Expected an error")
         } catch FeatureFlagStoreError.typeMismatch { } catch {
             XCTFail("Unexpected error: \(error.localizedDescription)")
         }
         
         do {
-            let _: Bool = try store.valueSync(forKey: "TEST_key3").get()
+            let _: Bool = try store.valueSync(for: "TEST_key3").get()
             XCTFail("Expected an error")
         } catch FeatureFlagStoreError.valueNotFound { } catch {
             XCTFail("Unexpected error: \(error.localizedDescription)")

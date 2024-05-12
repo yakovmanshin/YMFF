@@ -65,7 +65,7 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         
         for store in getStores() {
             if
-                case .failure(let error) = await store.value(forKey: key) as Result<Value, _>,
+                case .failure(let error) = await store.value(for: key) as Result<Value, _>,
                 case .typeMismatch = error
             {
                 throw Error.storeError(error)
@@ -75,7 +75,7 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         var lastErrorFromStore: (any Swift.Error)?
         for store in mutableStores {
             do {
-                try await store.setValue(newValue, forKey: key)
+                try await store.setValue(newValue, for: key)
             } catch {
                 lastErrorFromStore = error
             }
@@ -95,7 +95,7 @@ extension FeatureFlagResolver: FeatureFlagResolverProtocol {
         var lastErrorFromStore: (any Swift.Error)?
         for store in mutableStores {
             do {
-                try await store.removeValue(forKey: key)
+                try await store.removeValue(for: key)
             } catch {
                 lastErrorFromStore = error
             }
@@ -124,7 +124,7 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
         
         for store in getSyncStores() {
             if
-                case .failure(let error) = store.valueSync(forKey: key) as Result<Value, _>,
+                case .failure(let error) = store.valueSync(for: key) as Result<Value, _>,
                 case .typeMismatch = error
             {
                 throw Error.storeError(error)
@@ -134,7 +134,7 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
         var lastErrorFromStore: (any Swift.Error)?
         for store in syncMutableStores {
             do {
-                try store.setValueSync(newValue, forKey: key)
+                try store.setValueSync(newValue, for: key)
             } catch {
                 lastErrorFromStore = error
             }
@@ -154,7 +154,7 @@ extension FeatureFlagResolver: SynchronousFeatureFlagResolverProtocol {
         var lastErrorFromStore: (any Swift.Error)?
         for store in syncMutableStores {
             do {
-                try store.removeValueSync(forKey: key)
+                try store.removeValueSync(for: key)
             } catch {
                 lastErrorFromStore = error
             }
@@ -200,7 +200,7 @@ extension FeatureFlagResolver {
         }
         
         for store in matchingStores {
-            switch await store.value(forKey: key) as Result<Value, _> {
+            switch await store.value(for: key) as Result<Value, _> {
             case .success(let value):
                 return value
             case .failure(let error):
@@ -225,7 +225,7 @@ extension FeatureFlagResolver {
         }
         
         for store in matchingStores {
-            switch store.valueSync(forKey: key) as Result<Value, _> {
+            switch store.valueSync(for: key) as Result<Value, _> {
             case .success(let value):
                 return value
             case .failure(let error):
