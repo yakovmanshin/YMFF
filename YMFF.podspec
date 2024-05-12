@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   # Root
   
   s.name              = "YMFF"
-  s.version           = "3.1.0"
+  s.version           = "4.0.0"
   s.swift_version     = "5.8"
   s.authors           = { "Yakov Manshin" => "git@yakovmanshin.com" }
   s.license           = { :type => "Apache License, version 2.0", :file => "LICENSE" }
