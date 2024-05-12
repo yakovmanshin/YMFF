@@ -1,6 +1,6 @@
 //
 //  RuntimeOverridesStoreTests.swift
-//  YMFF
+//  YMFFTests
 //
 //  Created by Yakov Manshin on 9/26/20.
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.

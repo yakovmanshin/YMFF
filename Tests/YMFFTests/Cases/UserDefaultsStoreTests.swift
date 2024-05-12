@@ -1,6 +1,6 @@
 //
 //  UserDefaultsStoreTests.swift
-//  YMFF
+//  YMFFTests
 //
 //  Created by Yakov Manshin on 3/21/21.
 //  Copyright © 2021 Yakov Manshin. See the LICENSE file for license info.

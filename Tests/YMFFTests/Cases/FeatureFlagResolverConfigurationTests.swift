@@ -1,6 +1,6 @@
 //
 //  FeatureFlagResolverConfigurationTests.swift
-//  YMFF
+//  YMFFTests
 //
 //  Created by Yakov Manshin on 5/17/21.
 //  Copyright © 2021 Yakov Manshin. See the LICENSE file for license info.
