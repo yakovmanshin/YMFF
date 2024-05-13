@@ -54,4 +54,14 @@ extension UserDefaultsStore: SynchronousMutableFeatureFlagStore {
     
 }
 
+// MARK: - Error
+
+extension UserDefaultsStore {
+    
+    enum Error: Swift.Error {
+        case optionalValuesAreNotSupported
+    }
+    
+}
+
 #endif
