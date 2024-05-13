@@ -10,18 +10,18 @@
 import YMFFProtocols
 #endif
 
-/// An object that facilitates access to feature flag values.
+/// The object which provides easy access to feature-flag values.
 @propertyWrapper
 final public class FeatureFlag<RawValue, Value> {
     
     // MARK: Properties
     
-    /// The key used to retrieve feature flag values.
+    /// The key used to retrieve feature-flag values.
     public let key: FeatureFlagKey
     
     private let transformer: FeatureFlagValueTransformer<RawValue, Value>
     
-    /// The fallback value returned when no store is able to provide the real one.
+    /// The fallback value returned when the actual one cannot be retrieved.
     public let defaultValue: Value
     
     private let resolver: any SynchronousFeatureFlagResolverProtocol
@@ -29,11 +29,11 @@ final public class FeatureFlag<RawValue, Value> {
     // MARK: Initializers
     
     /// Creates a new `FeatureFlag`.
-    ///
+    /// 
     /// - Parameters:
-    ///   - key: *Required.* The key used to address feature flag values in stores.
-    ///   - transformer: *Required.* The object that transforms raw values into values, and vice versa.
-    ///   - defaultValue: *Required.* The value returned in case all stores fail to provide a value.
+    ///   - key: *Required.* The key used to address feature-flag values in stores.
+    ///   - transformer: *Required.* The object that transforms raw values into client-type values, and vice versa.
+    ///   - defaultValue: *Required.* The value returned in case no feature-flag store is able provide a value.
     ///   - resolver: *Required.* The resolver object used to retrieve values from stores.
     public init(
         _ key: FeatureFlagKey,
@@ -47,11 +47,11 @@ final public class FeatureFlag<RawValue, Value> {
         self.resolver = resolver
     }
     
-    /// Creates a new `FeatureFlag` with value and raw value of the same type.
+    /// Creates a new `FeatureFlag` whose value and raw value are of the same type.
     ///
     /// - Parameters:
-    ///   - key: *Required.* The key used to address feature flag values in stores.
-    ///   - defaultValue: *Required.* The value returned in case all stores fail to provide a value.
+    ///   - key: *Required.* The key used to address feature-flag values in stores.
+    ///   - defaultValue: *Required.* The value returned in case no feature-flag store is able provide a value.
     ///   - resolver: *Required.* The resolver object used to retrieve values from stores.
     public convenience init(
         _ key: FeatureFlagKey,
@@ -79,12 +79,12 @@ final public class FeatureFlag<RawValue, Value> {
     
     // MARK: Projected Value
     
-    /// The object returned when referencing the feature flag with a dollar sign (`$`).
+    /// The feature-flag object itself, returned when the feature flag is referenced with a dollar sign (`$`).
     public var projectedValue: FeatureFlag<RawValue, Value> { self }
     
     // MARK: Mutable Value Removal
     
-    /// Removes the value from the first mutable feature flag store which contains one for `key`.
+    /// Removes the value from all *synchronous* mutable feature-flag stores.
     ///
     /// + Errors thrown by `resolver` are ignored.
     public func removeValueFromMutableStores() {

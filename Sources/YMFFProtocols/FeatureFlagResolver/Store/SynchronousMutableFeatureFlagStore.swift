@@ -6,16 +6,17 @@
 //  Copyright © 2022 Yakov Manshin. See the LICENSE file for license info.
 //
 
+/// The synchronous version of `MutableFeatureFlagStore`.
 public protocol SynchronousMutableFeatureFlagStore: SynchronousFeatureFlagStore, MutableFeatureFlagStore {
     
-    /// Adds the value to the store so it can be retrieved with the key later.
+    /// Synchronously adds the value to the store so it can be retrieved with the key later.
     ///
     /// - Parameters:
-    ///   - value: *Required.* The value to record.
-    ///   - key: *Required.* The key used to address the value.
+    ///   - value: *Required.* The value to add.
+    ///   - key: *Required.* The feature-flag key.
     func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) throws
     
-    /// Removes the value from the store.
+    /// Synchronously removes the value from the store.
     ///
     /// - Parameter key: *Required.* The key used to address the value.
     func removeValueSync(for key: FeatureFlagKey) throws

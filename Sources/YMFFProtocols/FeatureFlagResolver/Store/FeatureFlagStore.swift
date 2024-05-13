@@ -6,12 +6,12 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
-/// An object that stores feature flag values, and provides them at the resolver's request.
+/// The object which stores and provides feature-flag values.
 public protocol FeatureFlagStore {
     
-    /// Retrieves a feature flag value by its key.
+    /// Retrieves a feature-flag value by its key.
     ///
-    /// - Parameter key: *Required.* The key that points to a feature flag value in the store.
+    /// - Parameter key: *Required.* The key that points to a feature-flag value in the store.
     func value<Value>(for key: FeatureFlagKey) async -> Result<Value, FeatureFlagStoreError>
     
 }

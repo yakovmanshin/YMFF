@@ -6,11 +6,12 @@
 //  Copyright © 2022 Yakov Manshin. See the LICENSE file for license info.
 //
 
+/// The synchronous version of `FeatureFlagStore`.
 public protocol SynchronousFeatureFlagStore: FeatureFlagStore {
     
-    /// Retrieves a feature flag value by its key.
+    /// Synchronously retrieves a feature-flag value by its key.
     ///
-    /// - Parameter key: *Required.* The key that points to a feature flag value in the store.
+    /// - Parameter key: *Required.* The key that points to a feature-flag value in the store.
     func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError>
     
 }

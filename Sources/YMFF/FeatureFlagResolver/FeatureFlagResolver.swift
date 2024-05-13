@@ -12,7 +12,7 @@ import YMFFProtocols
 
 // MARK: - FeatureFlagResolver
 
-/// A concrete, YMFF-supplied implementation of the feature flag resolver.
+/// The concrete, YMFF-supplied implementation of the *synchronous* feature-flag resolver.
 final public class FeatureFlagResolver {
     
     // MARK: Properties
@@ -21,18 +21,18 @@ final public class FeatureFlagResolver {
     
     // MARK: Initializers
     
-    /// Initializes the resolver with an object that conforms to `FeatureFlagResolverConfiguration`.
+    /// Initializes the resolver with an object which conforms to `FeatureFlagResolverConfiguration`.
     ///
-    /// - Parameter configuration: *Required.* The configuration used to read and write feature flag values.
+    /// - Parameter configuration: *Required.* The configuration used to read and write feature-flag values.
     public init(configuration: any FeatureFlagResolverConfiguration) {
         self.configuration = configuration
     }
     
-    /// Initializes the resolver with the list of feature flag stores.
+    /// Initializes the resolver with an array of feature-flag stores.
     ///
-    /// + Passing in an empty array will produce the `noStoreAvailable` error on next read attempt.
+    /// + Passing an empty array will result in a `noStoreAvailable` error on the next read attempt.
     ///
-    /// - Parameter stores: *Required.* The array of feature flag stores.
+    /// - Parameter stores: *Required.* The array of feature-flag stores.
     public convenience init(stores: [any FeatureFlagStore]) {
         let configuration = Configuration(stores: stores)
         self.init(configuration: configuration)
