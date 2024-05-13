@@ -59,43 +59,48 @@ Firebase Remote Config is one of the most popular tools to control feature flags
 import FirebaseRemoteConfig
 import YMFFProtocols
 
-extension RemoteConfig: FeatureFlagStoreProtocol {
+extension RemoteConfig: SynchronousFeatureFlagStore {
     
-    public func containsValue(forKey key: String) -> Bool {
-        self.allKeys(from: .remote).contains(key)
-    }
-    
-    public func value<Value>(forKey key: String) -> Value? {
+    public func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError> {
         // Remote Config returns a default value if the requested key doesn’t exist,
         // so you need to check the key for existence explicitly.
-        guard containsValue(forKey: key) else { return nil }
+        guard allKeys(from: .remote).contains(key) else {
+            return .failure(.valueNotFound)
+        }
         
         let remoteConfigValue = self[key]
         
+        let value: Value?
         // You need to use different `RemoteConfigValue` methods, depending on the return type.
         // I know, it doesn’t look fancy.
         switch Value.self {
         case is Bool.Type:
-            return remoteConfigValue.boolValue as? Value
+            value = remoteConfigValue.boolValue as? Value
         case is Data.Type:
-            return remoteConfigValue.dataValue as? Value
+            value = remoteConfigValue.dataValue as? Value
         case is Double.Type:
-            return remoteConfigValue.numberValue.doubleValue as? Value
+            value = remoteConfigValue.numberValue.doubleValue as? Value
         case is Int.Type:
-            return remoteConfigValue.numberValue.intValue as? Value
+            value = remoteConfigValue.numberValue.intValue as? Value
         case is String.Type:
-            return remoteConfigValue.stringValue as? Value
+            value = remoteConfigValue.stringValue as? Value
         default:
-            return nil
+            value = nil
+        }
+        
+        if let value {
+            return .success(value)
+        } else {
+            return .failure(.typeMismatch)
         }
     }
     
 }
 ```
 
-Now, `RemoteConfig` is a valid *feature-flag store*.
+`RemoteConfig` is now a valid *feature-flag store*.
 
-Alternatively, you can create a custom wrapper object. That’s what I tend to do in my projects to achieve greater flexibility and avoid tight coupling.
+Alternatively, you can create a custom wrapper object. That’s what I do in my projects to avoid tight coupling.
 
 </details>
 
