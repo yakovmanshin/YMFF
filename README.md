@@ -32,16 +32,16 @@ You’re then prompted to select the version to install and indicate the desired
 If you need to use YMFF in another Swift package, add it to the `Package.swift` file as a dependency:
 
 ```swift
-.package(url: "https://github.com/yakovmanshin/YMFF", .upToNextMajor(from: "3.1.0"))
+.package(url: "https://github.com/yakovmanshin/YMFF", from: "4.0.0")
 ```
 
 ### CocoaPods
-YMFF alternatively supports installation via [CocoaPods](https://youtu.be/iEAjvNRdZa0).
+YMFF supports installation via [CocoaPods](https://youtu.be/iEAjvNRdZa0), but please keep in mind this support is provided on the best-effort basis.
 
 Add the following to your Podfile:
 
 ```ruby
-pod 'YMFF', '~> 3.1'
+pod 'YMFF', '~> 4.0'
 ```
 
 </details>
