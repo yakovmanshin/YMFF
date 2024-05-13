@@ -21,6 +21,7 @@ I’m sure you know how to install dependencies. YMFF supports both SPM and Coco
 <summary>Need Help?</summary>
 
 ### Swift Package Manager (SPM)
+
 To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Add Package Dependencies, and paste the following URL into the search field:
 
 ```
@@ -36,6 +37,7 @@ If you need to use YMFF in another Swift package, add it to the `Package.swift` 
 ```
 
 ### CocoaPods
+
 YMFF supports installation via [CocoaPods](https://youtu.be/iEAjvNRdZa0), but please keep in mind this support is provided on the best-effort basis.
 
 Add the following to your Podfile:
@@ -47,9 +49,11 @@ pod 'YMFF', '~> 4.0'
 </details>
 
 ## Setup
+
 YMFF relies on the concept of *feature-flag stores*—“sources of truth” for feature-flag values.
 
 ### Firebase Remote Config
+
 Firebase Remote Config is one of the most popular tools to control feature flags remotely. YMFF integrates with Remote Config seamlessly, although with some manual action.
 
 <details>
@@ -105,6 +109,7 @@ Alternatively, you can create a custom wrapper object. That’s what I do in my 
 </details>
 
 ## Usage
+
 Here’s how you declare feature flags with YMFF:
 
 ```swift
