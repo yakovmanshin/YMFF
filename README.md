@@ -1,15 +1,15 @@
 # YMFF: Feature management made easy
 
-YMFF is a nice little library that makes managing features with feature flags—and managing feature flags themselves—a bliss, thanks to Swift’s [macros](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros) and [property wrappers](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/#Property-Wrappers).
+YMFF is a nice little library that makes managing features with feature flags—and managing feature flags themselves—a bliss, thanks to Swift’s [property wrappers](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/properties/#Property-Wrappers) and (in the future) [macros](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/macros).
 
 <details>
 <summary>Why & How</summary>
 
-Every company I worked for needed a way to manage availability of features in the apps already shipped to users. Surprisingly enough, [*feature flags*](https://en.wikipedia.org/wiki/Feature_toggle) (a.k.a. *feature toggles* a.k.a. *feature switches*) tend to cause a lot of struggle.
+Every company I worked for needed a way to manage availability of features in the apps already shipped to the users. Surprisingly, [*feature flags*](https://en.wikipedia.org/wiki/Feature_toggle) (a.k.a. *feature toggles* a.k.a. *feature switches*) tend to cause a lot of struggle.
 
 **I aspire to change that.**
 
-YMFF ships completely ready-to-use, right out of the box: you get everything you need to get started in just a few minutes. But you can also replace nearly any component of the system with your own, customized implementation. The supplied implementation and the protocols are kept in two separate targets (YMFF and YMFFProtocols, respectively).
+YMFF ships completely ready-to-use, right out of the box: you get everything you need to get started in just a few lines of code.
 
 </details>
 
