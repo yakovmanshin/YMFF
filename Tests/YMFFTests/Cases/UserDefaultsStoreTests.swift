@@ -91,11 +91,11 @@ final class UserDefaultsStoreTests: XCTestCase {
         XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_newValue2")
     }
     
-    func test_setValueSync() {
+    func test_setValueSync() throws {
         userDefaults.set("TEST_value1", forKey: "TEST_key1")
         
-        store.setValueSync("TEST_newValue1", for: "TEST_key1")
-        store.setValueSync("TEST_newValue2", for: "TEST_key2")
+        try store.setValueSync("TEST_newValue1", for: "TEST_key1")
+        try store.setValueSync("TEST_newValue2", for: "TEST_key2")
         
         XCTAssertEqual(userDefaults.string(forKey: "TEST_key1"), "TEST_newValue1")
         XCTAssertEqual(userDefaults.string(forKey: "TEST_key2"), "TEST_newValue2")

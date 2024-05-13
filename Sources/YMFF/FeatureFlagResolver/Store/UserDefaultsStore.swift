@@ -44,7 +44,7 @@ extension UserDefaultsStore: SynchronousMutableFeatureFlagStore {
         return .success(value)
     }
     
-    public func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) {
+    public func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) throws {
         userDefaults.set(value, forKey: key)
     }
     
