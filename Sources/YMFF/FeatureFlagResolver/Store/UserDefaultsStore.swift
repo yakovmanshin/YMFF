@@ -39,12 +39,20 @@ final public class UserDefaultsStore {
 extension UserDefaultsStore: SynchronousMutableFeatureFlagStore {
     
     public func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError> {
+        guard !(Value.self is ExpressibleByNilLiteral.Type) else {
+            return .failure(.otherError(Error.optionalValuesAreNotSupported))
+        }
+        
         guard let anyValue = userDefaults.object(forKey: key) else { return .failure(.valueNotFound) }
         guard let value = anyValue as? Value else { return .failure(.typeMismatch) }
         return .success(value)
     }
     
     public func setValueSync<Value>(_ value: Value, for key: FeatureFlagKey) throws {
+        guard !(value is ExpressibleByNilLiteral) else {
+            throw FeatureFlagStoreError.otherError(Error.optionalValuesAreNotSupported)
+        }
+        
         userDefaults.set(value, forKey: key)
     }
     
