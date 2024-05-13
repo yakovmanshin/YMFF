@@ -205,8 +205,3 @@ Feel free to browse the source files to learn more about the available options!
 * [[#144](https://github.com/yakovmanshin/YMFF/issues/144)] Minimum compiler version: Swift 5.9 (Xcode 15)
 
 This version is expected in late 2024, after Swift 6 is released.
-
-## License and Copyright
-YMFF is licensed under the Apache License. See the [LICENSE file](https://github.com/yakovmanshin/YMFF/blob/main/LICENSE) for details.
-
-© 2020–2024 Yakov Manshin
