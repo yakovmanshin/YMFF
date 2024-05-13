@@ -8,7 +8,7 @@
 
 // MARK: - Transformer
 
-/// An object used by `FeatureFlag` to transform raw values into native values, and vice versa.
+/// The object used to transform raw values into client-type values, and vice versa.
 public struct FeatureFlagValueTransformer<RawValue, Value> {
     
     let valueFromRawValue: (RawValue) -> Value?

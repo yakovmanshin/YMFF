@@ -12,7 +12,7 @@ import YMFFProtocols
 
 // MARK: - RuntimeOverridesStore
 
-/// A YMFF-supplied implementation of the object that stores feature flag values used in runtime.
+/// A YMFF-supplied implementation of an object which stores feature-flag values with no persistence.
 final public class RuntimeOverridesStore {
     
     var store: TransparentFeatureFlagStore

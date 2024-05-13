@@ -6,7 +6,7 @@
 //  Copyright © 2020 Yakov Manshin. See the LICENSE file for license info.
 //
 
-/// The object which provides the key resources to the resolver.
+/// The object which provides the resources crucial to the functioning of the resolver.
 public protocol FeatureFlagResolverConfiguration: AnyObject {
     
     /// An array of stores which contain feature-flag values.

@@ -12,7 +12,7 @@ import YMFFProtocols
 
 // MARK: - TransparentFeatureFlagStore
 
-/// A simple dictionary used to store and retrieve feature flag values.
+/// A simple dictionary used to store and retrieve feature-flag values.
 public typealias TransparentFeatureFlagStore = [String: Any]
 
 // MARK: - SynchronousFeatureFlagStore

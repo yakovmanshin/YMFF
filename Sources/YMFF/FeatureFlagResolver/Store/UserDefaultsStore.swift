@@ -15,7 +15,7 @@ import YMFFProtocols
 
 // MARK: - UserDefaultsStore
 
-/// An object that provides read and write access to feature flag values store in `UserDefaults`.
+/// The object which provides read and write access to feature-flag values stored in `UserDefaults`.
 final public class UserDefaultsStore {
     
     private let userDefaults: UserDefaults
