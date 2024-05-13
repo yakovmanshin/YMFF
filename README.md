@@ -113,22 +113,16 @@ import YMFF
 // For convenience, organize feature flags in a separate namespace using an enum.
 enum FeatureFlags {
     
-    // `resolver` references one or more feature flag stores.
-    private static var resolver = FeatureFlagResolver(configuration: .init(stores: [
-        // If you want to change feature flag values from within your app, you’ll need at least one mutable store.
-        // `RuntimeOverridesStore` is a YMFF-supplied object. It stores modified values until the app restarts.
-        .mutable(RuntimeOverridesStore()),
-        // `MyFeatureFlagStore.shared` is your object, conforming to `FeatureFlagStoreProtocol`.
-        .immutable(MyFeatureFlagStore.shared),
-    ]))
+    // `resolver` references one or more feature-flag stores.
+    private static let resolver = FeatureFlagResolver(stores: [MyFeatureFlagStore.shared])
     
     // Feature flags are initialized with three pieces of data:
     // a key string, the default (fallback) value, and the resolver.
-    @FeatureFlag("promo_enabled", default: false, resolver: resolver)
-    static var promoEnabled
+    @FeatureFlag("ads_enabled", default: false, resolver: Self.resolver)
+    static var adsEnabled
     
     // Feature flags aren’t limited to booleans. You can use any type of value!
-    @FeatureFlag("number_of_banners", default: 3, resolver: resolver)
+    @FeatureFlag("number_of_banners", default: 3, resolver: Self.resolver)
     static var numberOfBanners
     
     // Advanced: Sometimes you want to map raw values from the store
@@ -136,21 +130,21 @@ enum FeatureFlags {
     // stores values as strings, while the app uses an enum.
     // To switch between them, you use a `FeatureFlagValueTransformer`.
     @FeatureFlag(
-        "promo_unit_kind",
-        FeatureFlagValueTransformer { string in
-            PromoUnitKind(rawValue: string)
-        } rawValueFromValue: { kind in
-            kind.rawValue
+        "ad_unit_kind",
+        transformer: FeatureFlagValueTransformer { rawValue in
+            AdUnitKind(rawValue: rawValue)
+        } rawValueFromValue: { value in
+            value.rawValue
         },
         default: .image,
-        resolver: resolver
+        resolver: Self.resolver
     )
-    static var promoUnitKind
+    static var adUnitKind
     
 }
 
 // You can use custom types for feature-flag values.
-enum PromoUnitKind: String {
+enum AdUnitKind: String {
     case text
     case image
     case video
@@ -160,44 +154,42 @@ enum PromoUnitKind: String {
 To the code that makes use of a feature flag, the flag acts just like the type of its value:
 
 ```swift
-if FeatureFlags.promoEnabled {
-    switch FeatureFlags.promoUnitKind {
+if FeatureFlags.adsEnabled {
+    switch FeatureFlags.adUnitKind {
     case .text:
-        displayPromoText()
+        displayAdText()
     case .image:
-        displayPromoBanners(count: FeatureFlags.numberOfBanners)
+        displayAdBanners(count: FeatureFlags.numberOfBanners)
     case .video:
-        playPromoVideo()
+        playAdVideo()
     }
 }
 ```
 
 ### Overriding Values
 
-YMFF lets you override feature flag values in mutable stores from within your app. When you do, the new value is set to the first mutable store found in resolver configuration.
-
-Overriding a feature flag value is as simple as assigning a new value to the flag.
+YMFF lets you write feature-flag values to mutable stores. It’s as simple as assigning a new value to the flag:
 
 ```swift
-FeatureFlags.promoEnabled = true
+FeatureFlags.adsEnabled = true
 ```
 
-If you can set a value, you should also be able to remove it. And you can, indeed. Calling `removeValueFromMutableStore()` on `FeatureFlag`’s *projected value* (i.e. the `FeatureFlag` instance itself, as opposed to its *wrapped value*) removes the value from the first mutable feature flag store which contains one.
+To remove the value, you call `removeValueFromMutableStores()` on `FeatureFlag`’s *projected value* (i.e. the `FeatureFlag` instance itself, as opposed to its *wrapped value*):
 
 ```swift
-// Here `FeatureFlags.$promoEnabled` has the type `FeatureFlag<Bool>`, 
-// while `FeatureFlags.promoEnabled` is of type `Bool`.
-FeatureFlags.$promoEnabled.removeValueFromMutableStore()
+// Here `FeatureFlags.$adsEnabled` has the type `FeatureFlag<Bool>`, 
+// while `FeatureFlags.adsEnabled` is of type `Bool`.
+FeatureFlags.$adsEnabled.removeValueFromMutableStore()
 ```
 
 ### `UserDefaults`
 
-You can use `UserDefaults` to read and write feature flag values. Your changes will persist when the app is restarted.
+You can use `UserDefaults` to read and write feature-flag values. Your changes will persist when the app restarts.
 
 ```swift
 import YMFF
 
-private static var resolver = FeatureFlagResolver(configuration: .init(stores: [.mutable(UserDefaultsStore())]))
+private static let resolver = FeatureFlagResolver(stores: [UserDefaultsStore()])
 ```
 
 That’s it!
