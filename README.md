@@ -21,13 +21,13 @@ I’m sure you know how to install dependencies. YMFF supports both SPM and Coco
 <summary>Need Help?</summary>
 
 ### Swift Package Manager (SPM)
-To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Swift Packages → Add Package Dependency, and paste the following URL into the search field:
+To add YMFF to your project, use Xcode’s built-in support for Swift packages. Click File → Add Package Dependencies, and paste the following URL into the search field:
 
 ```
 https://github.com/yakovmanshin/YMFF
 ```
 
-You’re then prompted to select the version to install and indicate the desired update policy. I recommend starting with the latest version (it’s selected automatically), and choosing “up to next major” as the preferred update rule. Once you click Next, the package is fetched. Then select the target you’re going to use YMFF in. Click Finish, and you’re ready to go.
+You’re then prompted to select the version to install and indicate the desired update policy. I recommend starting with the latest version (it’s selected automatically), and choosing “up to next major” as the update rule. Then select the target you want to link YMFF to. Click Finish—and you’re ready to go!
 
 If you need to use YMFF in another Swift package, add it to the `Package.swift` file as a dependency:
 
