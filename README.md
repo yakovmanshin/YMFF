@@ -110,6 +110,8 @@ Alternatively, you can create a custom wrapper object. That’s what I do in my 
 
 ## Usage
 
+### Declaring Feature Flags
+
 Here’s how you declare feature flags with YMFF:
 
 ```swift
@@ -156,6 +158,8 @@ enum AdUnitKind: String {
 }
 ```
 
+### Reading Values
+
 To the code that makes use of a feature flag, the flag acts just like the type of its value:
 
 ```swift
@@ -171,7 +175,7 @@ if FeatureFlags.adsEnabled {
 }
 ```
 
-### Overriding Values
+### Writing Values
 
 YMFF lets you write feature-flag values to mutable stores. It’s as simple as assigning a new value to the flag:
 
@@ -201,12 +205,18 @@ That’s it!
 
 ### More
 
-Feel free to browse the source files to learn more about the available options!
+You can browse the source files to learn more about the available options.
 
-## [Next-Version Roadmap](https://github.com/yakovmanshin/YMFF/milestone/11)
+## What’s in Store
+
+### [Next-Version Roadmap](https://github.com/yakovmanshin/YMFF/milestone/11)
 * [[#124](https://github.com/yakovmanshin/YMFF/issues/124)] Swift macros for easier setup
 * [[#113](https://github.com/yakovmanshin/YMFF/issues/113)] Thread-safety improvements
 * [[#150](https://github.com/yakovmanshin/YMFF/issues/150)] Support for optional values in `UserDefaultsStore`
 * [[#144](https://github.com/yakovmanshin/YMFF/issues/144)] Minimum compiler version: Swift 5.9 (Xcode 15)
 
 This version is expected in late 2024, after Swift 6 is released.
+
+### Ideas & Bug Reports
+
+Feel free to open a new issue if something’s not working—or if you have a suggestion.
