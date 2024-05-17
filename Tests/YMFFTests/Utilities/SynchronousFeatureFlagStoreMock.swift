@@ -29,14 +29,14 @@ extension SynchronousFeatureFlagStoreMock: SynchronousFeatureFlagStore {
     func valueSync<Value>(for key: FeatureFlagKey) -> Result<Value, FeatureFlagStoreError> {
         valueSync_invocationCount += 1
         valueSync_keys.append(key)
-        switch valueSync_result! {
+        return switch valueSync_result! {
         case .success(let anyValue):
             if let value = anyValue as? Value {
-                return .success(value)
+                .success(value)
             } else {
-                return .failure(.typeMismatch)
+                .failure(.typeMismatch)
             }
-        case .failure(let error): return .failure(error)
+        case .failure(let error): .failure(error)
         }
     }
     
