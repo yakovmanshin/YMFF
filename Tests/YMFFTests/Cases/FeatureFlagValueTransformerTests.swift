@@ -81,23 +81,16 @@ final class FeatureFlagValueTransformerTests: XCTestCase {
     func test_valueFromRawValue_enumFromInt() {
         let transformer = FeatureFlagValueTransformer { (age: Int) -> AgeGroup in
             switch age {
-            case ..<13:
-                return .under13
-            case 13...17:
-                return .between13And17
-            case 18...:
-                return .over17
-            default:
-                return .under13
+            case ..<13: .under13
+            case 13...17: .between13And17
+            case 18...: .over17
+            default: .under13
             }
         } rawValueFromValue: { group in
             switch group {
-            case .under13:
-                return 13
-            case .between13And17:
-                return 17
-            case .over17:
-                return 18
+            case .under13: 13
+            case .between13And17: 17
+            case .over17: 18
             }
         }
         
