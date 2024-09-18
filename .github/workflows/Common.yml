@@ -16,15 +16,18 @@ on:
         type: boolean
         required: true
 env:
-  XCODE_PATH: "/Applications/Xcode_15.3.app"
+  XCODE_PATH: "/Applications/Xcode_16.0.app"
 jobs:
   spm_tests_macos:
     name: SPM Tests (Swift ${{ matrix.SWIFT_VERSION }} on macOS)
     runs-on: ${{ matrix.OS }}
     strategy:
       matrix:
-        SWIFT_VERSION: ["5.10", "5.9"]
+        SWIFT_VERSION: ["6.0", "5.10", "5.9"]
         include:
+          - SWIFT_VERSION: "6.0"
+            OS: macos-14
+            XCODE_APP_NAME: "Xcode_16.0"
           - SWIFT_VERSION: "5.10"
             OS: macos-14
             XCODE_APP_NAME: "Xcode_15.3"
