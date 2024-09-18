@@ -17,12 +17,19 @@ let package = Package(
     targets: [
         .target(
             name: "YMFF",
-            dependencies: ["YMFFProtocols"]
+            dependencies: ["YMFFProtocols"],
+            swiftSettings: swiftSettings
         ),
-        .target(name: "YMFFProtocols"),
+        .target(name: "YMFFProtocols", swiftSettings: swiftSettings),
         .testTarget(
             name: "YMFFTests",
-            dependencies: ["YMFF"]
+            dependencies: ["YMFF"],
+            swiftSettings: swiftSettings
         ),
     ]
 )
+
+fileprivate let swiftSettings: [SwiftSetting] = [
+    .enableExperimentalFeature("StrictConcurrency"),
+    .enableUpcomingFeature("StrictConcurrency"),
+]
