@@ -26,7 +26,8 @@ let package = Package(
             dependencies: ["YMFF"],
             swiftSettings: swiftSettings
         ),
-    ]
+    ],
+    swiftLanguageModes: [.v5, .v6]
 )
 
 fileprivate let swiftSettings: [SwiftSetting] = [
