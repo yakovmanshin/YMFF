@@ -3,7 +3,7 @@ on:
   release:
     types: [published]
 env:
-  XCODE_PATH: "/Applications/Xcode_15.3.app"
+  XCODE_PATH: "/Applications/Xcode_16.0.app"
 jobs:
   run_common_checks:
     uses: ./.github/workflows/Common.yml
