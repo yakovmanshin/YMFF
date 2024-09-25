@@ -38,7 +38,7 @@ jobs:
         swift test -v
   spm_tests_linux:
     name: SPM Tests (Linux)
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
     - name: Run Tests
