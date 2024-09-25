@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   
   s.name              = "YMFF"
   s.version           = "4.0.0"
-  s.swift_version     = "5.9"
+  s.swift_version     = "6.0"
   s.authors           = { "Yakov Manshin" => "git@yakovmanshin.com" }
   s.license           = { :type => "Apache License, version 2.0", :file => "LICENSE" }
   s.homepage          = "https://github.com/yakovmanshin/YMFF"
