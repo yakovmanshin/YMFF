@@ -16,7 +16,7 @@ on:
         type: boolean
         required: true
 env:
-  XCODE_PATH: "/Applications/Xcode_16.0.app"
+  XCODE_PATH: "/Applications/Xcode_16.2.app"
 jobs:
   spm_tests_macos:
     name: SPM Tests (Swift ${{ matrix.SWIFT_VERSION }} on macOS)
@@ -27,7 +27,7 @@ jobs:
         include:
           - SWIFT_VERSION: "6.0"
             OS: macos-15
-            XCODE_APP_NAME: "Xcode_16.0"
+            XCODE_APP_NAME: "Xcode_16.2"
     steps:
     - uses: actions/checkout@v4
     - name: Select Xcode Version
