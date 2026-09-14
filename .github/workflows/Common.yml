@@ -16,7 +16,7 @@ on:
         type: boolean
         required: true
 env:
-  XCODE_PATH: "/Applications/Xcode_16.0.app"
+  XCODE_PATH: "/Applications/Xcode_16.2.app"
 jobs:
   spm_tests_macos:
     name: SPM Tests (Swift ${{ matrix.SWIFT_VERSION }} on macOS)
@@ -26,8 +26,8 @@ jobs:
         SWIFT_VERSION: ["6.0"]
         include:
           - SWIFT_VERSION: "6.0"
-            OS: macos-14
-            XCODE_APP_NAME: "Xcode_16.0"
+            OS: macos-15
+            XCODE_APP_NAME: "Xcode_16.2"
     steps:
     - uses: actions/checkout@v4
     - name: Select Xcode Version
@@ -47,7 +47,7 @@ jobs:
         swift test -v
   cocoapods_podspec_lint:
     name: CocoaPods Podspec Linting
-    runs-on: macos-14
+    runs-on: macos-15
     if: ${{ inputs.force_all_checks || github.event_name == 'pull_request' }}
     needs: [spm_tests_macos, spm_tests_linux]
     steps:
